@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company — NOVA SM</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/company.css">
+  <link rel="stylesheet" href="./css/footer.css">
+  <script src="./js/common.js" defer></script>
+</head>
+
+<body>
+
+  <!-- 헤더 내용은 common.js에서 주입 -->
+  <header class="ms_header" id="cp_header"></header>
+
+  <main class="cp_main">
+
+    <!-- ══════════════════════════════
+         섹션 1 · WHO WE ARE
+    ══════════════════════════════ -->
+    <section class="cp_who" id="cp_who">
+      <!-- 배경 이미지 오버레이 -->
+      <div class="cp_who_bg" aria-hidden="true"></div>
+
+      <div class="cp_who_inner">
+        <!-- 좌: 대형 타이포 -->
+        <div class="cp_who_typo">
+          <span class="cp_who_w1">WHO</span>
+          <span class="cp_who_w2">WE</span>
+          <span class="cp_who_w3">ARE</span>
+        </div>
+
+        <!-- 우: 소개 텍스트 -->
+        <div class="cp_who_text">
+          <p class="cp_who_p1">
+            NOVA SM은 한국 메디컬 에스테틱 본야에 특화된<br>
+            통합 디지털 마케팅 기업입니다.
+          </p>
+          <p class="cp_who_p2">
+            연쇄 피부과 및 메디컬 브랜드의<br>
+            지속 가능한 성장을 위해<br>
+            맞춤형 마케팅 솔루션을 제공합니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 2 · 왜 NOVA SM인가?
+    ══════════════════════════════ -->
+    <section class="cp_why" id="cp_why">
+      <div class="cp_why_inner">
+        <!-- 좌: 제목 -->
+        <div class="cp_why_title_block">
+          <div class="cp_why_bar"></div>
+          <h2 class="cp_why_title">왜<br>NOVA<br>SM인가?</h2>
+        </div>
+
+        <!-- 우: 이유 카드 세로 스택 (이미지 좌 + 텍스트 우) -->
+        <div class="cp_why_cards">
+
+          <div class="cp_why_card">
+            <img class="cp_why_card_img" src="./img/hp_lobby_w.png" alt="피부과 협력" aria-hidden="true">
+            <p class="cp_why_card_text">
+              서울 내 10개 이상의<br>
+              연쇄 피부과 및 메디컬 기관과 장기 협력
+            </p>
+          </div>
+
+          <div class="cp_why_card">
+            <img class="cp_why_card_img" src="./img/한중지도_w.png" alt="한중 네트워크" aria-hidden="true">
+            <p class="cp_why_card_text">
+              한국과 중국 시장을 연결하는<br>
+              메디컬 마케팅 파트너
+            </p>
+          </div>
+
+          <div class="cp_why_card">
+            <img class="cp_why_card_img" src="./img/work_w.png" alt="통합 솔루션" aria-hidden="true">
+            <p class="cp_why_card_text">
+              브랜드 성장 전 과정을<br>
+              함께하는 통합 솔루션
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 3 · 우리의 강점 (동적 지도)
+    ══════════════════════════════ -->
+    <section class="cp_strength" id="cp_strength">
+      <div class="cp_strength_inner">
+
+        <!-- 타이틀 + 설명 -->
+        <div class="cp_strength_header">
+          <h2 class="cp_strength_title">우리의<br>강점</h2>
+          <div class="cp_strength_desc">
+            <div class="cp_strength_divider"></div>
+            <div>
+              <p class="cp_strength_p1">
+                중국 소비자 행동에 대한 깊은 이해와 풍부한 한국 메디컬 업계<br>
+                운영 경험을 바탕으로
+              </p>
+              <p class="cp_strength_p2">
+                한국 메디컬 브랜드의 중국 시장 진출과<br>
+                브랜드 영향력 확대를 지원합니다.
+              </p>
+
+                 <!-- 동적 지도 영역 -->
+        <div class="cp_map_wrap" id="cp_map_wrap">
+          <img class="cp_map_img" src="./img/한중지도.png" alt="한국-중국 연결 지도" id="cp_map_img">
+
+          <!-- SVG 오버레이: 라인 + 이동 포인트 (viewBox = 실제 이미지 1407×802) -->
+          <svg class="cp_map_svg" id="cp_map_svg" viewBox="0 0 1407 802" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- 연결선 그룹 (JS에서 채움) -->
+            <g id="cp_lines"></g>
+            <!-- 이동 포인트 그룹 (JS에서 채움) -->
+            <g id="cp_movers"></g>
+
+            <!-- 한국 허브: 서울 -->
+            <circle class="cp_hub" cx="1270" cy="485" r="11" />
+            <circle class="cp_hub_ring" cx="1270" cy="485" r="11" />
+
+            <!-- 중국 도시 포인트 (1407×802 기준) -->
+            <circle class="cp_city" cx="760"  cy="308" r="9" /><!-- 베이징 -->
+            <circle class="cp_city" cx="451"  cy="496" r="9" /><!-- 시안 -->
+            <circle class="cp_city" cx="690"  cy="444" r="9" /><!-- 정저우 -->
+            <circle class="cp_city" cx="594"  cy="600" r="9" /><!-- 우한 -->
+            <circle class="cp_city" cx="708"  cy="538" r="9" /><!-- 상하이 -->
+            <circle class="cp_city" cx="506"  cy="602" r="9" /><!-- 청두 -->
+            <circle class="cp_city" cx="647"  cy="664" r="9" /><!-- 광저우 -->
+          </svg>
+        </div>
+
+            </div>
+          </div>
+        </div>
+
+     
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 4 · 우리가 하는 일
+    ══════════════════════════════ -->
+    <section class="cp_work" id="cp_work">
+      <div class="cp_work_inner">
+
+        <h2 class="cp_work_title">우리가<br>하는 일</h2>
+
+        <div class="cp_work_grid">
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-01.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work1.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">1. 중국 시장<br>마케팅 전략 수립</p>
+            </div>
+          </div>
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-02.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work2.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">2. 샤오홍슈 및<br>SNS 운영</p>
+            </div>
+          </div>
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-03.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work3.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">3. 브랜드 콘텐츠<br>기획 및 제작</p>
+            </div>
+          </div>
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-04.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work4.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">4. 숏폼 영상 제작<br>및 홍보</p>
+            </div>
+          </div>
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-05.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work5.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">5. 브랜드 비주얼<br>디자인</p>
+            </div>
+          </div>
+
+          <div class="cp_work_item">
+            <!-- 배경 이미지: src="./img/work-06.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work6.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">6. 광고 집행 및<br>브랜드 마케팅</p>
+            </div>
+          </div>
+
+          <!-- 하단 전체 너비 -->
+          <div class="cp_work_item cp_work_item--wide">
+            <!-- 배경 이미지: src="./img/work-07.jpg" 로 교체 -->
+            <img class="cp_work_bg" src="./img/work7.png" alt="" aria-hidden="true">
+            <div class="cp_work_overlay">
+              <p class="cp_work_name">7. 영상 촬영 및 편집을 통한<br>홍보 콘텐츠 제작</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 5 · 우리의 이야기
+    ══════════════════════════════ -->
+    <section class="cp_story" id="cp_story">
+      <div class="cp_story_inner">
+
+        <div class="cp_story_text">
+          <span class="cp_story_label">우리의 이야기</span>
+          <h2 class="cp_story_title">
+            함께 성장하고,<br>
+            함께 새로운 기준을<br>
+            만들어갑니다.
+          </h2>
+          <p class="cp_story_desc">
+            NOVA SM은 다양한 분야의 전문가들이 모여<br>
+            메디컬 브랜드의 성장을 위해<br>
+            끊임없이 고민하고 도전하는 팀입니다.
+          </p>
+        </div>
+
+        <div class="cp_story_img_wrap">
+          <img class="cp_story_img" src="./img/novasm_team.png" alt="NOVA SM 팀 사진">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 6 · OUR SPACE
+    ══════════════════════════════ -->
+    <section class="cp_space" id="cp_space">
+      <div class="cp_space_inner">
+
+        <div class="cp_space_img_wrap">
+          <img class="cp_space_img" src="./img/our space.png" alt="NOVA SM 오피스 공간">
+        </div>
+
+        <div class="cp_space_text">
+          <span class="cp_space_label">Our Space</span>
+          <h2 class="cp_space_title">
+            창의적인 아이디어는<br>
+            좋은 공간에서 시작됩니다.
+          </h2>
+          <div class="cp_space_divider"></div>
+          <p class="cp_space_desc">
+            우리의 공간은 단순한 사무실이 아닙니다.<br>
+            최고의 결과를 만들어내기 위한<br>
+            영감과 협업의 중심지입니다.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         섹션 7 · 마무리 멘트
+    ══════════════════════════════ -->
+    <section class="cp_closing" id="cp_closing">
+
+      <div class="cp_closing_inner">
+        <p class="cp_closing_sub">우리는 단순히 마케팅을 하지 않습니다.</p>
+        <h2 class="cp_closing_title">
+          브랜드의 <strong>성장</strong>을 <strong>디자인</strong>합니다.
+        </h2>
+        <a class="cp_closing_cta" href="./index.html#contact">
+          함께 시작하기
+          <span class="cp_closing_arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 공통 푸터: common.js가 내용을 주입 -->
+  <footer class="ms_footer"></footer>
+
+  <script src="./js/company.js"></script>
+</body>
+
+</html>

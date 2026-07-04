@@ -1,0 +1,824 @@
+/* ═══════════════════════════════════════════════
+   COMPANY PAGE — company.css
+   index.css / common.css 변수 그대로 활용
+═══════════════════════════════════════════════ */
+
+/* 현재 페이지 네비 활성 표시 */
+.ms_nav_link--active {
+  color: var(--border);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+}
+
+/* 메인 컨테이너 */
+.cp_main {
+  background: var(--mainbg);
+}
+
+/* ══════════════════════════════
+   공통 섹션 reveal 애니메이션
+══════════════════════════════ */
+@keyframes cp_fade_up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cp_fade_in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes cp_slide_left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes cp_slide_right {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ══════════════════════════════
+   섹션 1 · WHO WE ARE
+══════════════════════════════ */
+.cp_who {
+  position: relative;
+  min-height: calc(100vh - 144px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--subbg);
+}
+
+/* 배경 그라디언트 오버레이 */
+.cp_who_bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,194,163,0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cp_who_inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  display: flex;
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+/* 대형 타이포 블록 */
+.cp_who_typo {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.88;
+  user-select: none;
+}
+
+/* WHO: outline */
+.cp_who_w1 {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 13vw, 200px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--gray3);
+  display: block;
+  opacity: 0;
+}
+
+/* WE: 채움 */
+.cp_who_w2 {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 13vw, 200px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text1);
+  display: block;
+  opacity: 0;
+}
+
+/* ARE: 채움 */
+.cp_who_w3 {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 13vw, 200px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text1);
+  display: block;
+  opacity: 0;
+}
+
+/* 섹션 진입 시 순차 애니메이션 */
+.cp_who.cp_in .cp_who_w1 { animation: cp_slide_left  0.9s cubic-bezier(0.22,1,0.36,1) 0s    forwards; }
+.cp_who.cp_in .cp_who_w2 { animation: cp_fade_up      0.9s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+.cp_who.cp_in .cp_who_w3 { animation: cp_slide_right  0.9s cubic-bezier(0.22,1,0.36,1) 0.3s  forwards; }
+
+/* 우측 텍스트 */
+.cp_who_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  opacity: 0;
+}
+.cp_who.cp_in .cp_who_text { animation: cp_fade_up 0.85s ease 0.5s forwards; }
+
+.cp_who_p1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.6vw, 20px);
+  color: var(--text1);
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+.cp_who_p2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.3vw, 17px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.03em;
+  border-left: 2px solid var(--border);
+  padding-left: 24px;
+}
+
+/* ══════════════════════════════
+   섹션 2 · 왜 NOVA SM인가?
+══════════════════════════════ */
+.cp_why {
+  background: var(--mainbg);
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+}
+
+.cp_why_inner {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(40px, 8vw, 260px);
+}
+
+/* 좌: 제목 블록 */
+.cp_why_title_block {
+  flex: 0 0 260px;
+  display: flex;
+  gap: 28px;
+  opacity: 0;
+}
+.cp_why.cp_in .cp_why_title_block { animation: cp_fade_up 0.8s ease 0s forwards; }
+
+/* 골드 세로 막대 */
+.cp_why_bar {
+  width: 3px;
+  height: 90px;
+  background: var(--border);
+}
+
+.cp_why_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* 우: 카드 세로 스택 */
+.cp_why_cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 개별 카드: 이미지 좌 + 텍스트 우 */
+.cp_why_card {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  opacity: 0;
+  transition: transform 0.3s ease;
+}
+.cp_why_card:hover {
+  transform: translateX(6px);
+}
+
+/* 스태거 진입 */
+.cp_why.cp_in .cp_why_card:nth-child(1) { animation: cp_fade_up 0.7s ease 0.1s forwards; }
+.cp_why.cp_in .cp_why_card:nth-child(2) { animation: cp_fade_up 0.7s ease 0.25s forwards; }
+.cp_why.cp_in .cp_why_card:nth-child(3) { animation: cp_fade_up 0.7s ease 0.4s forwards; }
+
+/* 카드 이미지 */
+.cp_why_card_img {
+  flex: 0 0 220px;
+  width: 250px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 4px;
+  /* 이미지 없을 때 플레이스홀더 */
+  background-color: #C8BDB0;
+  display: block;
+}
+
+/* 카드 텍스트 */
+.cp_why_card_text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: var(--text2);
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+/* ══════════════════════════════
+   섹션 3 · 우리의 강점 (지도)
+══════════════════════════════ */
+.cp_strength {
+  min-height: calc(100vh - 144px); /* 고정 height → min-height, 모바일에서 내용 넘침 방지 */
+  background: var(--subbg);
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px) clamp(48px, 6vw, 80px);
+  overflow: hidden;
+}
+
+.cp_strength_inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 상단 헤더 블록 */
+.cp_strength_header {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+  opacity: 0;
+}
+.cp_strength.cp_in .cp_strength_header { animation: cp_fade_up 0.85s ease 0s forwards; }
+
+.cp_strength_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(48px, 6vw, 88px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.cp_strength_desc {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  padding-top: 12px;
+}
+
+/* 골드 세로 구분선 */
+.cp_strength_divider {
+  width: 2px;
+  min-height: 150px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.cp_strength_p1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.3vw, 17px);
+  color: var(--text1);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+}
+
+.cp_strength_p2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.3vw, 17px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.02em;
+}
+
+/* 지도 래퍼: 이미지 크기 제한 + 중앙 정렬 */
+.cp_map_wrap {
+  position: relative;
+  width: 68%;          /* 지도 크기 축소 */
+  max-width: 900px;
+  margin: 0 ;
+  opacity: 0;
+  margin-top: 50px;
+}
+.cp_strength.cp_in .cp_map_wrap { animation: cp_fade_in 1s ease 0.4s forwards; }
+
+/* 지도 이미지 */
+.cp_map_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0.88;
+  border-radius: 4px;
+}
+
+/* SVG 오버레이: 이미지 위에 절대 위치 */
+.cp_map_svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 한국 허브 포인트: 골드 + 펄스 링 */
+.cp_hub {
+  fill: var(--border);
+  opacity: 0.95;
+}
+
+/* 펄스 링 애니메이션 */
+@keyframes cp_pulse {
+  0%   { r: 11; opacity: 0.8; }
+  70%  { r: 36; opacity: 0; }
+  100% { r: 36; opacity: 0; }
+}
+.cp_hub_ring {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+  animation: cp_pulse 2.2s ease-out infinite;
+}
+
+/* 중국 도시 포인트 */
+.cp_city {
+ fill: var(--border);
+  opacity: 0.85;
+  filter: url(#glow);
+}
+
+/* 연결선 스타일 (JS에서 생성) */
+.cp_line {
+  stroke: var(--border);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 6 4;
+  opacity: 0.55;
+}
+
+/* 이동 포인트 (JS에서 생성) */
+.cp_mover {
+  fill: #fff;
+  filter: url(#glow);
+}
+
+/* ══════════════════════════════
+   섹션 4 · 우리가 하는 일
+══════════════════════════════ */
+.cp_work {
+  background: var(--mainbg);
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+}
+
+.cp_work_inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+}
+
+/* 제목 */
+.cp_work_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  flex: 0 0 260px;
+  position: sticky;
+  top: 160px;
+  opacity: 0;
+}
+.cp_work.cp_in .cp_work_title { animation: cp_fade_up 0.8s ease 0s forwards; }
+
+/* 서비스 그리드: 2열 */
+.cp_work_grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* 개별 서비스 아이템 */
+.cp_work_item {
+  background: var(--subbg);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.cp_work_item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(21,31,52,0.10);
+}
+
+/* 7번 아이템: 전체 너비 */
+.cp_work_item--wide {
+  grid-column: 1 / -1;
+}
+
+/* 스태거 진입 */
+.cp_work.cp_in .cp_work_item:nth-child(1) { animation: cp_fade_up 0.65s ease 0.05s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(2) { animation: cp_fade_up 0.65s ease 0.12s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(3) { animation: cp_fade_up 0.65s ease 0.19s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(4) { animation: cp_fade_up 0.65s ease 0.26s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(5) { animation: cp_fade_up 0.65s ease 0.33s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(6) { animation: cp_fade_up 0.65s ease 0.40s forwards; }
+.cp_work.cp_in .cp_work_item:nth-child(7) { animation: cp_fade_up 0.65s ease 0.47s forwards; }
+
+/* 배경 이미지: 카드 전체 채움 */
+.cp_work_bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* 이미지 없을 때 플레이스홀더 배경 */
+  background-color: #C4C9D8;
+}
+
+/* 이미지 위 어두운 그라디언트 오버레이 */
+.cp_work_overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  padding: 28px;
+}
+
+/* 카드 높이 고정 (이미지 없어도 형태 유지) */
+.cp_work_item {
+  aspect-ratio: 2 / 1;
+}
+.cp_work_item--wide {
+  aspect-ratio: 4 / 1;
+}
+
+.cp_work_name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.3vw, 18px);
+  color: var(--text1);
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+}
+
+/* ══════════════════════════════
+   섹션 5 · 우리의 이야기
+══════════════════════════════ */
+.cp_story {
+  background: var(--subbg);
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+}
+
+.cp_story_inner {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+/* 좌: 텍스트 */
+.cp_story_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  opacity: 0;
+}
+.cp_story.cp_in .cp_story_text { animation: cp_slide_left 0.85s cubic-bezier(0.22,1,0.36,1) 0s forwards; }
+
+/* "우리의 이야기" 레이블 */
+.cp_story_label {
+  font-family: var(--logo_text);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.cp_story_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+
+.cp_story_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.2vw, 16px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  border-left: 2px solid var(--border);
+  padding-left: 24px;
+}
+
+/* 우: 이미지 */
+.cp_story_img_wrap {
+  flex: 1;
+  opacity: 0;
+}
+.cp_story.cp_in .cp_story_img_wrap { animation: cp_slide_right 0.85s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+
+.cp_story_img {
+  width: 100%;
+  background-color: #C8BDB0;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center top;
+}
+
+/* ══════════════════════════════
+   섹션 6 · OUR SPACE
+══════════════════════════════ */
+.cp_space {
+  background: var(--mainbg);
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+}
+
+.cp_space_inner {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+/* 좌: 이미지 */
+.cp_space_img_wrap {
+  flex: 1;
+  opacity: 0;
+}
+.cp_space.cp_in .cp_space_img_wrap { animation: cp_slide_left 0.85s cubic-bezier(0.22,1,0.36,1) 0s forwards; }
+
+.cp_space_img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: #B5C4C8;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 우: 텍스트 */
+.cp_space_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+}
+.cp_space.cp_in .cp_space_text { animation: cp_slide_right 0.85s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+
+/* "Our Space" 레이블 */
+.cp_space_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.cp_space_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+
+/* 골드 구분선 */
+.cp_space_divider {
+  width: 60px;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 28px;
+}
+
+.cp_space_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.2vw, 16px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.02em;
+}
+
+/* ══════════════════════════════
+   섹션 7 · 마무리 멘트
+══════════════════════════════ */
+.cp_closing {
+  position: relative;
+  background: var(--subbg);
+  min-height: calc(100vh - 144px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+}
+
+/* 배경 골드웨이브 */
+.cp_closing_wave {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 70%;
+  max-width: 1400px;
+  height: auto;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.cp_closing_inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+}
+.cp_closing.cp_in .cp_closing_inner { animation: cp_fade_up 1s ease 0s forwards; }
+
+.cp_closing_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(16px, 2vw, 24px);
+  color: var(--text2);
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+
+.cp_closing_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 4vw, 64px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin-bottom: 56px;
+}
+
+/* '성장' · '디자인' — 글자 안에서 빛이 통과하는 sweep 효과 */
+.cp_closing_title strong {
+  font-size: 1.25em;
+  font-weight: 500;
+
+  /* 그라디언트를 글자 모양으로 클리핑 — 빛이 글자 획 안에서만 보임 */
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    var(--border) 44%,
+    rgba(161, 150, 132, 0.6) 47%,   /* 빛 진입부 */
+    rgba(221, 207, 184, 0.6) 50%,  /* 빛 중심 */
+    rgba(161, 150, 132, 0.6) 53%,   /* 빛 퇴장부 */
+    var(--border) 56%,
+    var(--border) 100%
+  );
+  background-size: 300% 100%;
+  background-position-x: 100%;     /* 초기: 빛이 왼쪽 밖에 대기 */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: none;
+}
+
+/* 성장: 진입 후 0.5s 뒤 빛 통과 */
+.cp_closing.cp_in .cp_closing_title strong:nth-of-type(1) {
+  animation: cp_light_sweep 0.9s ease-in-out 0.5s forwards;
+}
+
+/* 디자인: 성장 빛이 빠진 뒤 이어서 통과 */
+.cp_closing.cp_in .cp_closing_title strong:nth-of-type(2) {
+  animation: cp_light_sweep 0.9s ease-in-out 0.95s forwards;
+}
+
+@keyframes cp_light_sweep {
+  /* 0%: 빛(그라디언트 중심 50%)이 오른쪽 밖에 위치 */
+  0%   { background-position-x: 100%; }
+  100% { background-position-x: 0%; }
+}
+
+/* CTA 버튼 */
+.cp_closing_cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--logo_text);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: #fff;
+  background: var(--text1);
+  border: 1px solid var(--text1);
+  padding: 20px 52px;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.cp_closing_cta:hover {
+  background: transparent;
+  color: var(--text1);
+  border-color: var(--text1);
+}
+
+.cp_closing_arrow {
+  font-size: 18px;
+  transition: transform 0.25s ease;
+}
+
+.cp_closing_cta:hover .cp_closing_arrow {
+  transform: translateX(6px);
+}
+
+/* ═══════════════════════════════════
+   반응형 미디어쿼리 — company
+═══════════════════════════════════ */
+
+/* ── 1024px 이하: 태블릿 가로 ── */
+@media (max-width: 1024px) {
+  /* WHY 내부 gap 추가 축소 */
+  .cp_why_inner { gap: clamp(32px, 4vw, 80px); }
+  .cp_why_title_block { flex: 0 0 200px; }
+
+  /* WORK 제목 고정 폭 축소 */
+  .cp_work_title { flex: 0 0 200px; }
+  .cp_work_inner { gap: 48px; }
+
+  /* STORY / SPACE 좌우 gap 축소 */
+  .cp_story_inner { gap: clamp(32px, 4vw, 60px); }
+  .cp_space_inner { gap: clamp(32px, 4vw, 60px); }
+}
+
+/* ── 768px 이하: 태블릿 세로 ── */
+@media (max-width: 768px) {
+  /* WHO: 좌우 → 상하 */
+  .cp_who_inner { flex-direction: column; align-items: flex-start; gap: 40px; }
+
+  /* WHY: 좌우 → 상하 */
+  .cp_why { min-height: 0; }
+  .cp_why_inner { flex-direction: column; gap: 40px; }
+  .cp_why_title_block { flex: none; }
+
+  /* STRENGTH: 고정 높이 해제, 헤더 상하 배치 */
+  .cp_strength { min-height: 0; overflow: visible; }
+  .cp_strength_header { flex-direction: column; gap: 32px; }
+  .cp_strength_desc { gap: 20px; }
+  .cp_strength_divider { min-height: 40px; }
+  .cp_map_wrap { width: 100%; margin-top: 32px; }
+
+  /* WORK: 제목이 그리드 위로 올라오는 구조로 전환 */
+  .cp_work_inner { flex-direction: column; gap: 32px; }
+
+  /* sticky 해제 */
+  .cp_work_title { flex: none; width: 100%; position: static; }
+
+  /* 그리드: column flex 안에서 너비 명시 — aspect-ratio가 정상 계산되도록 */
+  .cp_work_grid { width: 100%; gap: 12px; }
+
+  /* 카드 비율 조정 */
+  .cp_work_item { aspect-ratio: 3 / 2; border-radius: 14px; }
+  .cp_work_item--wide { aspect-ratio: 5 / 2; }
+  .cp_work_overlay { padding: 18px; }
+
+  /* STORY: 상하 배치 — 텍스트 먼저 */
+  .cp_story_inner { flex-direction: column; gap: 40px; }
+
+  /* SPACE: 상하 배치 — 이미지 먼저 */
+  .cp_space_inner { flex-direction: column; gap: 40px; }
+
+  /* WHY 카드 이미지 크기 축소 */
+  .cp_why_card_img { flex: 0 0 160px; width: 160px; }
+}
+
+/* ── 480px 이하: 모바일 ── */
+@media (max-width: 480px) {
+  /* WHY 카드: 이미지 위 + 텍스트 아래 */
+  .cp_why_card { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .cp_why_card_img { flex: none; width: 100%; }
+
+  /* WORK 그리드: 2열 → 1열 */
+  .cp_work_grid { grid-template-columns: 1fr; gap: 10px; }
+  .cp_work_item { aspect-ratio: 16 / 7; border-radius: 12px; }
+  .cp_work_item--wide { grid-column: auto; aspect-ratio: 16 / 7; }
+  .cp_work_overlay { padding: 14px; }
+
+  /* CLOSING CTA 버튼 패딩 축소 */
+  .cp_closing_cta { padding: 16px 32px; }
+}

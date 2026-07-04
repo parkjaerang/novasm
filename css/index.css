@@ -1,0 +1,1006 @@
+@import url(./common.css);
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--mainbg);
+  overflow-y: auto;
+  overflow-x: hidden; /* 가로 스크롤 차단 */
+}
+
+/* ═══════════════════════════════════
+   MAIN SITE
+═══════════════════════════════════ */
+#main_site {
+  background: var(--mainbg);
+}
+
+/* ── 히어로 섹션 ── */
+.ms_hero {
+  background: var(--mainbg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 118px); /* 뷰포트에서 헤더 높이 제외, min-height로 내용 넘침 허용 */
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 6vw, 100px) clamp(40px, 5vw, 60px);
+  position: relative;
+}
+
+/* 골드 구분선 */
+.ms_divider {
+  width: 0;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: clamp(48px, 9vw, 130px); /* 좁은 화면에서 간격 자동 축소 */
+  transition: width 0.8s ease 0.2s;
+}
+
+/* 메인 헤드라인: 위에서 내려오는 입장 */
+.ms_headline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(36px, 4vw, 88px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: clamp(32px, 5.5vw, 80px); /* 좁은 화면에서 헤드라인 하단 간격 축소 */
+  opacity: 0;
+  transform: translateY(-36px); /* 위에서 내려옴 */
+  transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s, transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s;
+}
+
+/* 본문: 약간 위에서 내려오며 등장 */
+.ms_body {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 2vw, 18px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(-16px); /* 위에서 내려옴 */
+  transition: opacity 0.7s ease 0.6s, transform 0.7s ease 0.6s;
+}
+
+/* ═══════════════════════════════════
+   WHO WE ARE — 슬로건 섹션
+═══════════════════════════════════ */
+.ms_who {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 50vh;
+  padding: clamp(48px, 7vw, 90px) clamp(20px, 6vw, 100px);
+  background: var(--subbg);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 슬로건 타이포 컨테이너 */
+.ms_who_slogan {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 0.9;
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+/* WHO — outline 텍스트, 좌정렬 */
+.ms_ww_who {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 14vw, 180px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--gray3); /* 어두운 외곽선 — 밝은 배경 대응 */
+  display: block;
+  align-self: flex-start;
+}
+
+/* WE — 채운 텍스트, 중앙 정렬, 설명 태그 포함 */
+.ms_ww_we {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 14vw, 180px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text1); /* 밝은 배경 위 어두운 텍스트 */
+  display: flex;
+  align-items: center;
+  align-self: center;
+  gap: clamp(12px, 2.5vw, 40px); /* 좁은 화면에서 태그와의 간격 축소 */
+}
+
+/* WE 옆 작은 설명 태그 */
+.ms_ww_tag {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(12px, 1.2vw, 16px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text2); /* 밝은 배경 위 중간 톤 */
+  line-height: 1.9;
+  border-left: 1.5px solid var(--border);
+  padding-left: 24px;
+  align-self: center;
+}
+
+/* ARE — 채운 텍스트, 우정렬 */
+.ms_ww_are {
+  font-family: var(--logo_text);
+  font-size: clamp(80px, 14vw, 180px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text1); /* 밝은 배경 위 어두운 텍스트 */
+  display: block;
+  align-self: flex-end;
+}
+
+/* 하단 설명 블록 */
+.ms_who_bottom {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* 골드 세로선 구분자 */
+.ms_who_bdivider {
+  width: 2px;
+  height: 56px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* 하단 서브 텍스트 */
+.ms_who_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.4vw, 17px);
+  color: var(--text2); /* 밝은 배경 위 중간 톤 */
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+/* ── goldwave 이미지: 우측 고정 ── */
+.ms_goldwave {
+  position: absolute;
+  right: 0;
+  bottom: 0; /* 히어로 섹션 하단에 딱 맞춤 */
+  width: 70%;
+  max-width: 1500px;
+  height: auto;
+  pointer-events: none;
+  display: block;
+  opacity: 0.4;
+}
+
+/* ═══════════════════════════════════
+   SERVICES — 핵심 서비스 섹션
+═══════════════════════════════════ */
+.ms_services {
+  background: var(--mainbg);  /* mainbg로 통일 */
+  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px) clamp(60px, 8vw, 120px);
+  /* 고정 높이 제거 — 모바일에서 2열/1열 전환 시 내용이 잘리지 않도록 */
+  min-height: calc(100vh - 118px);
+}
+
+/* 섹션 헤더 */
+.ms_svc_header {
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+
+/* "SERVICES" 레이블 */
+.ms_svc_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);  /* 골드 계열 */
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* 섹션 대제목 */
+.ms_svc_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 500;
+  color: var(--text1);
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+/* 섹션 부제 */
+.ms_svc_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.3vw, 16px);
+  color: var(--text2);
+  letter-spacing: 0.04em;
+}
+
+/* 4열 카드 그리드 */
+.ms_svc_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;           /* 카드 사이 여백 */
+  margin-bottom: 30px;
+}
+
+/* 개별 서비스 카드 */
+.ms_svc_card {
+  background: #fff;             /* 흰 배경으로 섹션과 대비 강화 */
+  border-top: 3px solid var(--border);  /* 골드 상단 강조선 */
+  padding: 40px 32px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: default;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);  /* 기본 그림자로 부각 */
+}
+
+/* 카드 hover: 위로 살짝 + 그림자 강화 */
+.ms_svc_card:hover {
+  background: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.13);
+}
+
+/* 번호 레이블 (01 ~ 04) */
+.ms_svc_num {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--border);   /* 골드 */
+  margin-bottom: 24px;
+}
+
+/* 번호 아래 구분선 */
+.ms_svc_num::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--border);
+  margin-top: 16px;
+}
+
+/* 서비스 이름 */
+.ms_svc_name {
+  font-family: var(--logo_text);
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 600;             /* 굵기 강화 */
+  color: var(--text1);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+/* 짧은 서비스 설명 */
+.ms_svc_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--text2);
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  border-top: 1px solid var(--subbg);  /* 설명 위 구분선 */
+  padding-top: 18px;
+}
+
+/* 자세히 보기 링크 */
+.ms_svc_more {
+  font-family: var(--logo_text);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text1);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);  /* 골드 밑줄 */
+  padding-bottom: 2px;
+  align-self: flex-start;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ms_svc_more:hover {
+  color: var(--border);    /* 골드로 변색 */
+  border-color: transparent;
+
+}
+
+/* ═══════════════════════════════════
+   PARTNERS — 협력 파트너 섹션
+═══════════════════════════════════ */
+.ms_partner {
+  background: var(--mainbg);
+  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+/* 좌우 2분할 레이아웃 */
+.ms_pt_inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+  width: 100%;
+}
+
+/* ── 좌측 제목 블록 ── */
+.ms_pt_text {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* "PARTNERS" 골드 소형 레이블 */
+.ms_pt_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 20px;
+}
+
+/* 섹션 대제목: 세리프 + 어두운 계열 */
+.ms_pt_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+}
+
+/* 골드 가로 구분선 */
+.ms_pt_bdivider {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 24px;
+}
+
+/* 부제 텍스트 */
+.ms_pt_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+/* ── 우측 슬라이더 영역 ── */
+.ms_pt_slider_wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* 카드 3장 가로 배치 */
+.ms_pt_slider {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* 개별 파트너 카드 */
+.ms_pt_card {
+  position: relative;
+  flex: 0 0 290px;
+  height: 420px; /* 고정 높이 — active 전환 시 레이아웃 이동 방지 */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  transition: flex-basis 0.4s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* 활성 카드: 더 넓고 앞으로 */
+.ms_pt_card--active {
+  flex-basis: 390px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+}
+
+/* 카드 이미지 영역 */
+.ms_pt_card_img {
+  width: 100%;
+  height: 100%; /* 부모 고정 높이에 맞춤, aspect-ratio 제거 */
+  background-size: cover;
+  background-position: center;
+}
+
+/* BLS Clinic: 웜 베이지 */
+.ms_pt_card--bls       { background-image: url(../img/partner1.png);}
+/* Toxnfill: 딥 레드 */
+.ms_pt_card--toxnfill  { background-image: url(../img/partner2.png); }
+/* 기타 브랜드: 밝은 오프화이트 */
+.ms_pt_card--more      { background-image: url(../img/partner3.png); }
+
+/* 카드 하단 정보 오버레이 */
+.ms_pt_card_info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 20px 18px;
+  background: linear-gradient(to top, rgba(21,31,52,0.72) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 파트너 이름 */
+.ms_pt_card_name {
+  font-family: var(--logo_text);
+  font-size: clamp(8px, 1.5vw, 16px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #fff;
+  line-height: 1.5;
+}
+
+/* 골드 짧은 밑줄 강조선 */
+.ms_pt_card_bar {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--border);
+}
+
+/* ── 슬라이더 네비게이션 ── */
+.ms_pt_nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 이전/다음 버튼 */
+.ms_pt_btn {
+  background: none;
+  border: 1px solid var(--gray2);
+  color: var(--text2);
+  font-size: 22px;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.ms_pt_btn:hover {
+  border-color: var(--border);
+  color: var(--border);
+}
+
+/* 페이지 점 목록 */
+.ms_pt_dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 개별 점 */
+.ms_pt_dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gray2);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* 활성 점 */
+.ms_pt_dot--active {
+  background: var(--border);
+  transform: scale(1.4);
+}
+
+/* ═══════════════════════════════════
+   PORTFOLIO — 프로젝트 페이지 티저 섹션
+═══════════════════════════════════ */
+.ms_portfolio {
+  background: var(--mainbg);
+  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  min-height: 72vh; /* 카드가 충분히 표시되도록 높이 확보 */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 좌우 2분할 레이아웃 */
+.ms_pf_inner {
+  display: flex;
+  align-items: stretch; /* 프리뷰가 텍스트 블록 높이만큼 늘어나도록 */
+  width: 100%;
+}
+
+/* ── 좌측 텍스트 블록 ── */
+.ms_pf_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* "PROJECTS" 골드 레이블 */
+.ms_pf_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 24px;
+}
+
+/* 섹션 대제목 */
+.ms_pf_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 3vw, 46px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+}
+
+/* 짧은 소개 문구 */
+.ms_pf_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(11px, 1.5vw, 16px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  margin-bottom: 48px;
+}
+
+/* 상세 페이지 CTA 버튼 */
+.ms_pf_cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--text1);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  align-self: flex-start;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ms_pf_cta:hover {
+  color: var(--border);
+  border-color: transparent;
+}
+
+.ms_pf_cta_arrow {
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.ms_pf_cta:hover .ms_pf_cta_arrow {
+  transform: translateX(4px);
+}
+
+/* ── 우측 프리뷰 카드 묶음 ── */
+/* grid로 카드를 같은 셀에 쌓아 중앙 정렬, transform으로만 위치 조정 */
+.ms_pf_preview {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  height: 420px;
+}
+
+/* 모든 카드: 같은 grid 셀 공유 → 자동 중앙 정렬 */
+
+.ms_pf_prev_card {
+  grid-area: 1 / 1;
+  width: 240px;
+  height: 320px; /* 3:4 비율 */
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* 카드 1: 왼쪽으로 오프셋 + 역방향 회전 */
+.ms_pf_prev_card--01 {
+  background-image: url(../img/portfolio1.png);
+  transform: translateX(-90px) rotate(-6deg);
+  z-index: 3;
+}
+
+/* 카드 2: 중앙, 미세 회전 */
+.ms_pf_prev_card--02 {
+  background-image: url(../img/portfolio2.png);
+  transform: translateY(-15px) rotate(1deg);
+  z-index: 2;
+}
+
+/* 카드 3: 오른쪽으로 오프셋 + 순방향 회전 */
+.ms_pf_prev_card--03 {
+  background-image: url(../img/portfolio3.png);
+  transform: translateX(90px) rotate(5deg);
+  z-index: 1;
+}
+
+/* 호버: 카드들 살짝 펼쳐짐 */
+.ms_pf_preview:hover .ms_pf_prev_card--01 { transform: translateX(-150px) rotate(-16deg); box-shadow: 0 12px 36px rgba(0,0,0,0.15); }
+.ms_pf_preview:hover .ms_pf_prev_card--02 { transform: translateY(-35px) rotate(0deg); box-shadow: 0 16px 40px rgba(0,0,0,0.18); }
+.ms_pf_preview:hover .ms_pf_prev_card--03 { transform: translateX(150px) rotate(16deg); box-shadow: 0 12px 36px rgba(0,0,0,0.15); }
+
+/* ═══════════════════════════════════
+   CONTACT — 문의 및 상담 안내 섹션
+═══════════════════════════════════ */
+.ms_contact {
+  background: var(--mainbg);
+  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(32px, 5vw, 80px);
+  border-top: 1px solid var(--gray2);
+}
+
+/* ── 좌측 텍스트 블록 ── */
+.ms_ct_text {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "CONTACT" 골드 레이블 */
+.ms_ct_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 20px;
+}
+
+/* 섹션 대제목 */
+.ms_ct_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+}
+
+/* 골드 구분선 */
+.ms_ct_bdivider {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 24px;
+}
+
+/* 부제 */
+.ms_ct_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: var(--text2);
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+/* ── 우측 폼 블록 ── */
+.ms_ct_form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 2열 행 */
+.ms_ct_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* 개별 필드 */
+.ms_ct_field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 전체 너비 필드 */
+.ms_ct_field--full {
+  width: 100%;
+}
+
+/* 필드 레이블 */
+.ms_ct_fieldlabel {
+  font-family: var(--logo_text);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text2);
+}
+
+/* 인풋 공통 스타일 */
+.ms_ct_input {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  color: var(--text1);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gray2);
+  padding: 12px 0;
+  outline: none;
+  transition: border-color 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.ms_ct_input::placeholder {
+  color: var(--gray3);
+  font-size: 13px;
+}
+
+.ms_ct_input:focus {
+  border-bottom-color: var(--border); /* 포커스 시 골드 밑줄 */
+}
+
+/* 문의내용 textarea */
+.ms_ct_textarea {
+  resize: none;
+  height: 140px;
+  line-height: 1.8;
+}
+
+/* 제출 버튼 */
+.ms_ct_submit {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: #fff;
+  background: var(--text1);
+  border: 1px solid var(--text1);
+  padding: 18px 40px;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 2px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.ms_ct_submit:hover {
+  background: transparent;
+  color: var(--text1);
+  border-color: var(--text1);
+}
+
+.ms_ct_arrow {
+  font-size: 16px;
+  transition: transform 0.25s ease;
+}
+
+.ms_ct_submit:hover .ms_ct_arrow {
+  transform: translateX(5px);
+}
+
+/* ── 진입 애니메이션 활성화 ── */
+#main_site.ms_visible .ms_divider  { width: 100px; }
+#main_site.ms_visible .ms_headline { opacity: 1; transform: translateY(0); }
+#main_site.ms_visible .ms_body     { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════
+   HERO — 배경 부유 골드 파티클
+═══════════════════════════════════ */
+@keyframes ms_float {
+  0%   { transform: translateY(0)     scale(1);   opacity: 0;   }
+  12%  { opacity: 0.7; }
+  88%  { opacity: 0.4; }
+  100% { transform: translateY(-140px) scale(0.2); opacity: 0;   }
+}
+
+/* 히어로 파티클 공통 */
+.ms_hero_particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--border);
+  pointer-events: none;
+  animation: ms_float linear infinite;
+  z-index: 0;
+}
+
+
+/* ═══════════════════════════════════
+   WHO — 글자 방향별 입장 애니메이션
+═══════════════════════════════════ */
+
+/* 초기: 숨김 */
+.ms_ww_who,
+.ms_ww_we,
+.ms_ww_are,
+.ms_who_bottom {
+  opacity: 0;
+}
+
+@keyframes ms_slide_from_left {
+  from { opacity: 0; transform: translateX(-70px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes ms_fade_up {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ms_slide_from_right {
+  from { opacity: 0; transform: translateX(70px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ms_in 클래스 추가 시 순차 등장 */
+.ms_who.ms_in .ms_ww_who    { animation: ms_slide_from_left  0.85s cubic-bezier(0.22,1,0.36,1) 0s    forwards; }
+.ms_who.ms_in .ms_ww_we     { animation: ms_fade_up           0.85s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+.ms_who.ms_in .ms_ww_are    { animation: ms_slide_from_right  0.85s cubic-bezier(0.22,1,0.36,1) 0.3s  forwards; }
+.ms_who.ms_in .ms_who_bottom { animation: ms_fade_up          0.75s ease                        0.5s  forwards; }
+
+/* ═══════════════════════════════════
+   SERVICES — 카드 스태거 입장
+═══════════════════════════════════ */
+
+/* 초기: 숨김 (opacity만, transform은 hover와 공유 X) */
+.ms_svc_card { opacity: 0; }
+.ms_svc_header { opacity: 0; }
+
+@keyframes ms_card_reveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 카드 개별 등장 — delay는 JS에서 inline으로 주입 */
+.ms_svc_card.ms_in       { animation: ms_card_reveal 0.65s cubic-bezier(0.22,1,0.36,1) forwards; }
+.ms_services.ms_in .ms_svc_header { animation: ms_fade_up 0.7s ease forwards; }
+
+/* ═══════════════════════════════════
+   PARTNERS — 섹션 reveal
+═══════════════════════════════════ */
+.ms_pt_text,
+.ms_pt_slider_wrap {
+  opacity: 0;
+}
+.ms_partner.ms_in .ms_pt_text       { animation: ms_fade_up 0.75s ease 0s    forwards; }
+.ms_partner.ms_in .ms_pt_slider_wrap { animation: ms_fade_up 0.75s ease 0.2s forwards; }
+
+/* ═══════════════════════════════════
+   PORTFOLIO — 섹션 reveal
+═══════════════════════════════════ */
+.ms_pf_text,
+.ms_pf_preview {
+  opacity: 0;
+}
+.ms_portfolio.ms_in .ms_pf_text    { animation: ms_fade_up 0.75s ease 0s    forwards; }
+.ms_portfolio.ms_in .ms_pf_preview { animation: ms_fade_up 0.75s ease 0.25s forwards; }
+
+/* ═══════════════════════════════════
+   CONTACT — 섹션 reveal
+═══════════════════════════════════ */
+.ms_ct_text,
+.ms_ct_form {
+  opacity: 0;
+}
+.ms_contact.ms_in .ms_ct_text { animation: ms_fade_up 0.75s ease 0s    forwards; }
+.ms_contact.ms_in .ms_ct_form { animation: ms_fade_up 0.75s ease 0.2s forwards; }
+
+/* ── 헤더 스크롤 시 배경 강화 ── */
+.ms_header.ms_scrolled {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: 0 2px 20px rgba(21,31,52,0.08);
+  transition: padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ═══════════════════════════════════
+   반응형 미디어쿼리
+═══════════════════════════════════ */
+
+/* ── 1024px 이하: 태블릿 가로 ── */
+@media (max-width: 1024px) {
+  /* 서비스 카드: 4열 → 2열 */
+  .ms_svc_grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* 서비스 섹션: 고정 높이 해제 */
+  .ms_services { min-height: 0; }
+
+  /* 포트폴리오 프리뷰 카드 크기 축소 */
+  .ms_pf_preview { height: 320px; }
+  .ms_pf_prev_card { width: 180px; height: 240px; }
+
+  /* 호버 펼침 범위도 카드 크기에 맞게 줄임 */
+  .ms_pf_preview:hover .ms_pf_prev_card--01 { transform: translateX(-110px) rotate(-16deg); }
+  .ms_pf_preview:hover .ms_pf_prev_card--03 { transform: translateX(110px) rotate(16deg); }
+
+  /* 파트너 텍스트 flex 고정 폭 해제 */
+  .ms_pt_text { flex: 0 0 200px; }
+
+  /* 컨택 텍스트 flex 고정 폭 해제 */
+  .ms_ct_text { flex: 0 0 200px; }
+}
+
+/* ── 768px 이하: 태블릿 세로 ── */
+@media (max-width: 768px) {
+  /* WHO 섹션: WE 옆 태그 숨김 (공간 부족) */
+  .ms_ww_tag { display: none; }
+
+  /* 파트너 섹션: 좌우 → 상하 배치 */
+  .ms_pt_inner {
+    flex-direction: column;
+    align-items: stretch; /* 자식들이 전체 너비를 가득 채우도록 */
+  }
+  .ms_pt_text { flex: none; width: 100%; }
+
+  /* 슬라이더 래퍼 + 슬라이더 가운데 정렬 */
+  .ms_pt_slider_wrap {
+    width: 100%;
+    align-items: center;
+  }
+
+  /* 카드 비율 기반 크기 — 3장이 컨테이너를 나눠 가짐 */
+  .ms_pt_slider { gap: 10px; width: 100%; justify-content: center; }
+  /* flex-grow로 크기 결정 — transition을 flex-grow·box-shadow 대상으로 변경해 모션 유지 */
+  .ms_pt_card { flex: 1; min-width: 0; height: 52vw; max-height: 280px; transition: flex-grow 0.4s ease, box-shadow 0.3s ease; }
+  .ms_pt_card--active { flex: 1.4; }
+
+  /* 포트폴리오 섹션: 좌우 → 상하 배치 */
+  .ms_pf_inner {
+    flex-direction: column;
+    gap: 48px;
+  }
+  .ms_pf_preview { height: 260px; }
+
+  /* 컨택 섹션: 좌우 → 상하 배치 */
+  .ms_contact {
+    flex-direction: column;
+  }
+  .ms_ct_text { flex: none; width: 100%; }
+
+  /* WHO 하단 블록 간격 줄임 */
+  .ms_who_bottom { gap: 16px; }
+}
+
+/* ── 480px 이하: 모바일 ── */
+@media (max-width: 480px) {
+  /* 서비스 카드: 2열 → 1열 */
+  .ms_svc_grid { grid-template-columns: 1fr; }
+
+  /* 컨택 폼 2열 행 → 1열로 */
+  .ms_ct_row { grid-template-columns: 1fr; }
+
+  /* 포트폴리오 프리뷰 숨김 (좁은 화면에서 카드가 겹쳐 보임) */
+  .ms_pf_preview { display: none; }
+
+  /* 파트너 카드: flex 비율로 3장이 남은 너비를 나눠 가짐 */
+  .ms_pt_slider { gap: 8px; width: 100%; }
+  .ms_pt_card { flex: 1; min-width: 0; height: 44vw; max-height: 200px; transition: flex-grow 0.4s ease, box-shadow 0.3s ease; }
+  .ms_pt_card--active { flex: 1.4; }
+
+  /* goldwave 비율 조정 */
+  .ms_goldwave { width: 100%; opacity: 0.25; }
+
+  /* WHO 슬로건: 최소 높이 제한 없앰 */
+  .ms_who { min-height: 0; }
+}

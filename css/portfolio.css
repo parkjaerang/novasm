@@ -1,0 +1,477 @@
+@import url(./common.css);
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--mainbg);
+  overflow-y: auto;
+  overflow-x: hidden; /* 가로 스크롤 차단 */
+}
+
+/* ═══════════════════════════════════
+   PORTFOLIO PAGE
+═══════════════════════════════════ */
+
+/* ── 히어로 섹션 ── */
+.pf_hero {
+  padding: 100px 100px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 배경 워터마크 로고 텍스트 */
+.pf_hero_watermark {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--logo_text);
+  font-size: clamp(120px, 16vw, 220px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(184, 168, 140, 0.18);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* 골드 소형 레이블 */
+.pf_hero_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 20px;
+}
+
+/* 히어로 골드 구분선 */
+.pf_hero_divider {
+  width: 48px;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 40px;
+}
+
+/* 메인 헤드라인 */
+.pf_hero_headline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(30px, 4.5vw, 68px);
+  font-weight: 500;
+  color: var(--text1);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* ── 필터 바 ── */
+.pf_filter {
+  padding: 0 100px 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 필터 버튼 공통 */
+.pf_filter_btn {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text2);
+  background: transparent;
+  border: 1px solid var(--gray2);
+  padding: 10px 22px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+  white-space: nowrap;
+}
+
+.pf_filter_btn:hover {
+  border-color: var(--border);
+  color: var(--text1);
+}
+
+/* 활성 필터 버튼 */
+.pf_filter_btn--active {
+  background: var(--text1);
+  color: #fff;
+  border-color: var(--text1);
+}
+
+.pf_filter_btn--active:hover {
+  background: var(--text1);
+  color: #fff;
+  border-color: var(--text1);
+}
+
+/* ── 프로젝트 그리드 ── */
+.pf_grid_section {
+  padding: 0 100px 120px;
+}
+
+/* 3열 카드 그리드 */
+.pf_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* ── 개별 프로젝트 카드 ── */
+.pf_card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(21, 31, 52, 0.07);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.35s ease;
+  opacity: 1;
+}
+
+/* 카드 숨김 (필터 미해당) */
+.pf_card--hidden {
+  display: none;
+}
+
+.pf_card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(21, 31, 52, 0.13);
+}
+
+/* 카드 상단: 번호 + 설명 */
+.pf_card_top {
+  padding: 28px 28px 20px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 번호 배지 */
+.pf_card_num {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+
+/* 카드 상단 설명 텍스트 */
+.pf_card_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text2);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  padding-top: 4px;
+}
+
+/* 카드 이미지 영역 */
+.pf_card_img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pf_card_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.pf_card:hover .pf_card_img img {
+  transform: scale(1.04);
+}
+
+/* 카드 하단 정보 */
+.pf_card_bottom {
+  padding: 22px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+/* 카드 하단 내용과 화살표 버튼 묶음 */
+.pf_card_row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* 프로젝트 이름 */
+.pf_card_name {
+  font-family: var(--logo_text);
+  font-size: clamp(16px, 1.6vw, 20px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text1);
+  line-height: 1.2;
+}
+
+/* 프로젝트 서브 설명 */
+.pf_card_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: var(--text2);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+
+/* 화살표 버튼 */
+.pf_card_arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--gray2);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+  text-decoration: none;
+  padding-bottom: 4px;
+}
+
+.pf_card_arrow:hover {
+  background: var(--text1);
+  border-color: var(--text1);
+  color: #fff;
+}
+
+/* 태그 목록 */
+.pf_card_tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 개별 태그 */
+.pf_card_tag {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text2);
+  background: var(--mainbg);
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--gray2);
+  white-space: nowrap;
+}
+
+/* ── 결과 없음 메시지 ── */
+.pf_empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 0;
+  display: none;
+}
+
+.pf_empty_text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px;
+  color: var(--gray3);
+  letter-spacing: 0.04em;
+}
+
+/* ── "VIEW ALL PROJECTS" 하단 링크 바 ── */
+.pf_viewall {
+  border-top: 1px solid var(--gray2);
+  padding: 28px 100px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.pf_viewall_link {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--text2);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.22s ease;
+}
+
+.pf_viewall_link:hover {
+  color: var(--border);
+}
+
+.pf_viewall_arrow {
+  font-size: 18px;
+  transition: transform 0.22s ease;
+}
+
+.pf_viewall_link:hover .pf_viewall_arrow {
+  transform: translateX(4px);
+}
+
+/* ── 카드 입장 애니메이션 ── */
+@keyframes pf_card_in {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pf_card.pf_card--animate {
+  animation: pf_card_in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 히어로 입장 */
+@keyframes pf_fade_up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pf_hero_label   { animation: pf_fade_up 0.6s ease 0.1s both; }
+.pf_hero_divider { animation: pf_fade_up 0.6s ease 0.2s both; }
+.pf_hero_headline { animation: pf_fade_up 0.7s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+.pf_filter       { animation: pf_fade_up 0.6s ease 0.5s both; }
+
+/* ═══════════════════════════════════
+   반응형 — 태블릿 (1024px 이하)
+═══════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* 히어로 패딩 축소 */
+  .pf_hero {
+    padding: 80px 60px 60px;
+  }
+
+  /* 필터 패딩 축소 */
+  .pf_filter {
+    padding: 0 60px 48px;
+  }
+
+  /* 그리드 섹션 패딩 축소 */
+  .pf_grid_section {
+    padding: 0 60px 100px;
+  }
+
+  /* 2열 그리드로 전환 */
+  .pf_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* VIEW ALL 패딩 축소 */
+  .pf_viewall {
+    padding: 28px 60px;
+  }
+}
+
+/* ═══════════════════════════════════
+   반응형 — 태블릿 세로 (768px 이하)
+═══════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 히어로 패딩 및 헤드라인 크기 조정 */
+  .pf_hero {
+    padding: 60px 32px 48px;
+  }
+
+  /* 워터마크 크기 축소 */
+  .pf_hero_watermark {
+    font-size: clamp(80px, 18vw, 140px);
+    right: -10px;
+  }
+
+  /* 필터 패딩 */
+  .pf_filter {
+    padding: 0 32px 40px;
+    gap: 8px;
+  }
+
+  /* 그리드 섹션 패딩 */
+  .pf_grid_section {
+    padding: 0 32px 80px;
+  }
+
+  /* 2열 유지, 간격 축소 */
+  .pf_grid {
+    gap: 20px;
+  }
+
+  /* VIEW ALL 패딩 */
+  .pf_viewall {
+    padding: 24px 32px;
+  }
+}
+
+/* ═══════════════════════════════════
+   반응형 — 모바일 (640px 이하)
+═══════════════════════════════════ */
+@media (max-width: 640px) {
+  /* 히어로 패딩 최소화 */
+  .pf_hero {
+    padding: 48px 20px 40px;
+  }
+
+  /* 워터마크 숨김 (좁은 화면에서 레이아웃 방해) */
+  .pf_hero_watermark {
+    display: none;
+  }
+
+  /* 필터 패딩 */
+  .pf_filter {
+    padding: 0 20px 32px;
+    gap: 8px;
+  }
+
+  /* 필터 버튼 크기 축소 */
+  .pf_filter_btn {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  /* 그리드 섹션 패딩 */
+  .pf_grid_section {
+    padding: 0 20px 60px;
+  }
+
+  /* 1열 그리드로 전환 */
+  .pf_grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* 카드 상단 고정 높이 해제 — 긴 설명 자동 확장 */
+  .pf_card_top {
+    height: auto;
+    padding: 22px 22px 16px;
+  }
+
+  /* 카드 하단 패딩 조정 */
+  .pf_card_bottom {
+    padding: 18px 22px 20px;
+  }
+
+  /* VIEW ALL 바 */
+  .pf_viewall {
+    padding: 20px 20px;
+  }
+}

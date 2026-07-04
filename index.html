@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVA SM</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/intro.css">
+  <script src="./js/common.js" defer></script>
+</head>
+
+<body>
+
+  <!-- 인트로 오버레이: intro.js가 내부 구조를 동적으로 생성 -->
+  <div id="intro_overlay" role="dialog" aria-label="NOVA SM 인트로" aria-modal="true"></div>
+
+  <!-- 헤더 내용은 common.js에서 주입 -->
+  <header class="ms_header"></header>
+
+  <main id="main_site" class="ms_visible">
+
+    <!-- 히어로 섹션 -->
+    <section class="ms_hero">
+      <div class="ms_divider"></div>
+      <h1 class="ms_headline">
+        한국 메디컬 마케팅의<br>새로운 기준
+      </h1>
+      <p class="ms_body">
+        NOVASM은 연쇄피부과 및 메디컬 브랜드를 대상으로<br>
+        브랜드 전략부터 콘텐츠제작, SNS운영, 중국 시장 마케팅까지<br>
+        브랜드 성장의 전 과정을 함께합니다.
+      </p>
+      <!-- goldwave: 뷰포트 우측·하단 벽면 밀착 -->
+      <img class="ms_goldwave" src="./img/goldwave.png" alt="" aria-hidden="true">
+    </section>
+
+    <!-- WHO WE ARE 슬로건 섹션 -->
+    <section class="ms_who" id="company">
+      <!-- 슬로건 타이포 블록 -->
+      <div class="ms_who_slogan">
+        <!-- WHO: 좌정렬 + outline 텍스트 -->
+        <span class="ms_ww_who">WHO</span>
+        <!-- WE: 중앙 + 설명 텍스트 인라인 -->
+        <span class="ms_ww_we">
+          WE
+          <span class="ms_ww_tag">한국 메디컬 에스테틱에 특화된<br>통합 디지털 마케팅 기업</span>
+        </span>
+        <!-- ARE: 우정렬 -->
+        <span class="ms_ww_are">ARE</span>
+      </div>
+
+      <!-- 하단 설명 블록 -->
+      <div class="ms_who_bottom">
+        <div class="ms_who_bdivider"></div>
+        <p class="ms_who_sub">
+          연쇄 피부과 및 메디컬 브랜드의 지속 가능한 성장을 위해<br>
+          맞춤형 마케팅 솔루션을 제공합니다.
+        </p>
+      </div>
+    </section>
+    <!-- 핵심 서비스 섹션 -->
+    <section class="ms_services" id="services">
+
+      <!-- 섹션 헤더 -->
+      <div class="ms_svc_header">
+        <span class="ms_svc_label">SERVICES</span>
+        <h2 class="ms_svc_title">핵심 서비스</h2>
+        <p class="ms_svc_sub">브랜드 성장의 전 과정을 함께합니다</p>
+      </div>
+
+      <!-- 서비스 카드 그리드 -->
+      <div class="ms_svc_grid">
+
+        <!-- SNS 채널 운영 -->
+        <div class="ms_svc_card">
+          <span class="ms_svc_num">01</span>
+          <h3 class="ms_svc_name">SNS Channel<br>Management</h3>
+          <p class="ms_svc_desc">타깃 고객과 가장 효과적으로 소통할 수 있는<br> SNS 채널 운영 전략을 제공합니다.</p>
+        </div>
+
+        <!-- 영상 기획 · 제작 -->
+        <div class="ms_svc_card">
+          <span class="ms_svc_num">02</span>
+          <h3 class="ms_svc_name">Video Planning<br><span style="font-family: Noto Serif KR; font-size: 16px;">&</span> Production</h3>
+          <p class="ms_svc_desc">브랜드의 전문성과 감성을 담은 고품질 영상 콘텐츠를<br> 제작합니다.</p>
+        </div>
+
+        <!-- 크리에이티브 디자인 -->
+        <div class="ms_svc_card">
+          <span class="ms_svc_num">03</span>
+          <h3 class="ms_svc_name">Creative<br>Design</h3>
+          <p class="ms_svc_desc">브랜드 아이덴티티를 강화하는 차별화된<br> 비주얼 디자인을 제공합니다.</p>
+        </div>
+
+        <!-- KOL / KOC 마케팅 -->
+        <div class="ms_svc_card">
+          <span class="ms_svc_num">04</span>
+          <h3 class="ms_svc_name">KOL / KOC<br>Marketing</h3>
+          <p class="ms_svc_desc">중국 현지 인플루언서 네트워크를 활용하여<br> 브랜드 인지도와 신뢰도를 높입니다.</p>
+        </div>
+      </div>
+      <a class="ms_svc_more" href="./service.html">자세히 보기 →</a>
+    </section>
+    <!-- 협력 파트너 섹션: 주요 파트너 브랜드 카드 슬라이더 -->
+    <section class="ms_partner" id="partners">
+      <div class="ms_pt_inner">
+
+        <!-- 좌측: 골드 레이블 + 세리프 제목 + 구분선 -->
+        <div class="ms_pt_text">
+          <span class="ms_pt_label">PARTNERS</span>
+          <h2 class="ms_pt_title">협력<br>파트너</h2>
+          <div class="ms_pt_bdivider"></div>
+          <p class="ms_pt_sub">신뢰를 바탕으로 함께<br>성장하는 브랜드들</p>
+        </div>
+
+        <!-- 우측: 카드 슬라이더 -->
+        <div class="ms_pt_slider_wrap">
+          <div class="ms_pt_slider" id="ptSlider">
+
+            <!-- 파트너 카드 1 -->
+            <div class="ms_pt_card">
+              <div class="ms_pt_card_img ms_pt_card--bls"></div>
+              <div class="ms_pt_card_info">
+                <span class="ms_pt_card_name">BLS Clinic</span>
+                <span class="ms_pt_card_bar"></span>
+              </div>
+            </div>
+
+            <!-- 파트너 카드 2 (기본 활성) -->
+            <div class="ms_pt_card ms_pt_card--active">
+              <div class="ms_pt_card_img ms_pt_card--toxnfill"></div>
+              <div class="ms_pt_card_info">
+                <span class="ms_pt_card_name">Toxnfill</span>
+                <span class="ms_pt_card_bar"></span>
+              </div>
+            </div>
+
+            <!-- 파트너 카드 3 -->
+            <div class="ms_pt_card">
+              <div class="ms_pt_card_img ms_pt_card--more"></div>
+              <div class="ms_pt_card_info">
+                <span class="ms_pt_card_name">그리고 다수의<br>한국 유명<br>메디컬 브랜드</span>
+                <span class="ms_pt_card_bar"></span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 슬라이더 네비게이션 -->
+          <div class="ms_pt_nav">
+            <button class="ms_pt_btn ms_pt_prev" id="ptPrev" aria-label="이전">&#8249;</button>
+            <div class="ms_pt_dots" id="ptDots">
+              <span class="ms_pt_dot"></span>
+              <span class="ms_pt_dot ms_pt_dot--active"></span>
+              <span class="ms_pt_dot"></span>
+            </div>
+            <button class="ms_pt_btn ms_pt_next" id="ptNext" aria-label="다음">&#8250;</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 포트폴리오 티저 섹션: 프로젝트 상세 페이지 진입 유도 -->
+    <section class="ms_portfolio" id="portfolio">
+
+      <!-- 좌: 텍스트 블록 / 우: 프리뷰 썸네일 묶음 -->
+      <div class="ms_pf_inner">
+
+        <!-- 좌측 텍스트 -->
+        <div class="ms_pf_text">
+          <span class="ms_pf_label">PROJECTS</span>
+          <h2 class="ms_pf_title">
+            메디컬 브랜드의 성장을 만들어온 <br>NOVA SM의 다양한 프로젝트
+          </h2>
+          <p class="ms_pf_desc">
+            BLS CLINIC, TOXNFILL, MAISON DE MOI 등<br>
+            다양한 메디컬 브랜드와 함께한<br>
+            NOVA SM의 성장 스토리를 확인하세요.
+          </p>
+          <!-- 상세 페이지로 이동하는 CTA 버튼 -->
+          <a class="ms_pf_cta" href="./portfolio.html">
+            VIEW ALL PROJECTS
+            <span class="ms_pf_cta_arrow">→</span>
+          </a>
+        </div>
+
+        <!-- 우측 프리뷰: 카드 3장을 살짝 겹쳐 배치 -->
+        <div class="ms_pf_preview" aria-hidden="true">
+          <div class="ms_pf_prev_card ms_pf_prev_card--01"></div>
+          <div class="ms_pf_prev_card ms_pf_prev_card--02"></div>
+          <div class="ms_pf_prev_card ms_pf_prev_card--03"></div>
+        </div>
+
+      </div>
+
+    </section>
+    <!-- 문의 및 상담 안내 섹션 -->
+    <section class="ms_contact" id="contact">
+
+      <!-- 좌측: 섹션 소개 -->
+      <div class="ms_ct_text">
+        <span class="ms_ct_label">CONTACT</span>
+        <h2 class="ms_ct_title">문의 및<br>상담 안내</h2>
+        <div class="ms_ct_bdivider"></div>
+        <p class="ms_ct_sub">
+          브랜드 성장을 위한 첫 걸음,<br>
+          NOVA SM과 함께 시작하세요.
+        </p>
+      </div>
+
+      <!-- 우측: 문의 폼 -->
+      <form class="ms_ct_form" id="contactForm">
+
+        <!-- 회사명 / 담당자명 -->
+        <div class="ms_ct_row">
+          <div class="ms_ct_field">
+            <label class="ms_ct_fieldlabel" for="ct_company">회사명</label>
+            <input class="ms_ct_input" type="text" id="ct_company" name="company" placeholder="회사명을 입력해주세요">
+          </div>
+          <div class="ms_ct_field">
+            <label class="ms_ct_fieldlabel" for="ct_name">담당자명</label>
+            <input class="ms_ct_input" type="text" id="ct_name" name="name" placeholder="담당자명을 입력해주세요">
+          </div>
+        </div>
+
+        <!-- 연락처 / 이메일 -->
+        <div class="ms_ct_row">
+          <div class="ms_ct_field">
+            <label class="ms_ct_fieldlabel" for="ct_tel">연락처</label>
+            <input class="ms_ct_input" type="tel" id="ct_tel" name="tel" placeholder="연락처를 입력해주세요">
+          </div>
+          <div class="ms_ct_field">
+            <label class="ms_ct_fieldlabel" for="ct_email">이메일</label>
+            <input class="ms_ct_input" type="email" id="ct_email" name="email" placeholder="이메일을 입력해주세요">
+          </div>
+        </div>
+
+        <!-- 제목 -->
+        <div class="ms_ct_field ms_ct_field--full">
+          <label class="ms_ct_fieldlabel" for="ct_subject">제목</label>
+          <input class="ms_ct_input" type="text" id="ct_subject" name="subject" placeholder="제목을 입력해주세요">
+        </div>
+
+        <!-- 문의내용 -->
+        <div class="ms_ct_field ms_ct_field--full">
+          <label class="ms_ct_fieldlabel" for="ct_message">문의내용</label>
+          <textarea class="ms_ct_input ms_ct_textarea" id="ct_message" name="message" placeholder="문의내용을 입력해주세요"></textarea>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button class="ms_ct_submit" type="submit">
+          문의하기
+          <span class="ms_ct_arrow">→</span>
+        </button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <!-- 공통 푸터: footer.js가 내용을 주입 -->
+  <footer class="ms_footer"></footer>
+
+  <script src="./js/index.js"></script>
+  <!-- 인트로 스크립트: body 마지막에 로드 -->
+  <script src="./js/intro.js"></script>
+</body>
+
+</html>

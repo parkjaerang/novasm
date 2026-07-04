@@ -1,0 +1,390 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+:root{
+    --mainbg : #F0F0F0;
+    --subbg : #DDDAD6;
+    --gray1 : #F2F3F2;
+    --gray2 : #B8B7B5;
+    --gray3 : #949495;
+    --text1 : #151F34;
+    --border :#b8a88c;
+    --text2 : #494F59;
+    --logo_text: "Playfair", serif;
+}
+
+/* ═══════════════════════════════════
+   HEADER
+═══════════════════════════════════ */
+/* 헤더는 #main_site 바깥에 위치 — 전체 너비, 좌우 패딩만 지정 */
+.ms_header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* 세로: 뷰포트에 따라 축소, 가로: 좁은 화면에서도 여백 유지 */
+  padding: clamp(14px, 2.5vw, 32px) clamp(20px, 6vw, 100px);
+  background: var(--mainbg);
+  border-bottom: 1px var(--gray2) solid;
+}
+
+.ms_header_i {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ms_logo {
+  font-family: var(--logo_text);
+  font-size: clamp(28px, 5vw, 64px); /* 모바일에서 로고 크기 자동 축소 */
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text1);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* ── 수평 네비게이션 ── */
+.ms_nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 44px); /* 뷰포트 축소 시 간격 자동 줄임 */
+}
+
+.ms_nav_link {
+  font-family: var(--logo_text);
+  font-size: clamp(13px, 1.6vw, 20px); /* 좁은 화면에서 네비 텍스트 축소 */
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text1);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.25s ease;
+}
+.ms_nav_link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--border);
+  transition: width 0.25s ease;
+}
+.ms_nav_link:hover { color: var(--gray3); }
+.ms_nav_link:hover::after { width: 100%; }
+
+/* 현재 페이지 활성 상태 — 호버와 동일한 스타일 유지 */
+.ms_nav_link--active { color: var(--gray3); }
+.ms_nav_link--active::after { width: 100%; }
+
+/* ═══════════════════════════════════
+   FOOTER — NOVA SM
+   공통 푸터: 모든 페이지에서 사용
+═══════════════════════════════════ */
+
+.ms_footer {
+  background: var(--text1);           /* #151F34 — 딥 네이비 다크 배경 */
+  color: var(--gray2);
+  /* 좌우 패딩을 뷰포트에 따라 자동 조정 */
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 6vw, 100px) clamp(24px, 3vw, 40px);
+}
+
+/* ── 상단 콘텐츠 영역 (로고 + 링크 + 문의) ── */
+.ms_footer_top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(212, 194, 163, 0.25); /* --border 반투명 */
+}
+
+/* ── 좌: 로고 + 슬로건 ── */
+.ms_footer_brand {
+  flex: 0 0 auto;
+}
+
+.ms_footer_logo {
+  font-family: var(--logo_text);
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.ms_footer_tagline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gray2);
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+/* ── 중앙: 사이트맵 내비 ── */
+.ms_footer_nav {
+  display: flex;
+  gap: 60px;
+  flex: 1;
+  justify-content: center;
+}
+
+.ms_footer_nav_col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ms_footer_nav_title {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--border);              /* 골드 강조 */
+  margin-bottom: 6px;
+}
+
+.ms_footer_nav_link {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray2);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s ease;
+}
+
+.ms_footer_nav_link:hover {
+  color: #fff;
+}
+
+/* ── 우: 연락처 정보 ── */
+.ms_footer_contact {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: right;
+}
+
+.ms_footer_contact_title {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--border);
+  margin-bottom: 6px;
+}
+
+.ms_footer_contact_item {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray2);
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+}
+
+.ms_footer_contact_item a {
+  color: var(--gray2);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ms_footer_contact_item a:hover {
+  color: #fff;
+}
+
+/* ── 중단: 사업자 정보 ── */
+.ms_footer_biz {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 40px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(212, 194, 163, 0.15);
+}
+
+.ms_footer_biz_item {
+  display: flex;
+  align-items: center; /* 여러 줄 값과 라벨 상단 정렬 */
+  gap: 14px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--gray3);
+  letter-spacing: 0.03em;
+  line-height: 1.8;
+  min-width: 260px; /* 열 너비 확보 */
+}
+
+/* 라벨 (Address, Tel ...) */
+.ms_footer_biz_label {
+  font-family: var(--logo_text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--border);              /* 골드 강조 */
+  white-space: nowrap;
+}
+
+/* 라벨·값 구분선 */
+.ms_footer_biz_label::after {
+  content: '';
+}
+
+.ms_footer_biz_value {
+  color: var(--gray3);
+}
+
+.ms_footer_biz_value a {
+  color: var(--gray3);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ms_footer_biz_value a:hover {
+  color: #fff;
+}
+
+/* ── 하단 카피라이트 바 ── */
+.ms_footer_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+}
+
+.ms_footer_copy {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--gray3);
+  letter-spacing: 0.04em;
+}
+
+/* 골드 구분선 액센트 */
+.ms_footer_accent {
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ═══════════════════════════════════
+   햄버거 버튼 — 모바일 전용
+═══════════════════════════════════ */
+.ms_hamburger {
+  display: none; /* 기본 숨김, 640px 이하에서 표시 */
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 300; /* 오버레이 위 */
+}
+
+/* 햄버거 선 3개 */
+.ms_hamburger span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background: var(--text1);
+  transition: transform 0.35s ease, opacity 0.35s ease, background 0.35s ease;
+}
+
+/* 메뉴 열린 상태: 선 색상을 흰색으로 (오버레이 위) */
+.ms_hamburger[aria-expanded="true"] span { background: #fff; }
+
+/* X 모양 변환 */
+.ms_hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.ms_hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.ms_hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* ═══════════════════════════════════
+   모바일 풀스크린 오버레이 메뉴
+═══════════════════════════════════ */
+
+/* 640px 이하: 풀스크린 오버레이로 전환 */
+@media (max-width: 640px) {
+  .ms_hamburger { display: flex; }
+
+  /* 풀스크린 오버레이 — 기본 숨김 */
+  .ms_nav {
+    display: flex;
+    position: fixed;
+    inset: 0; /* top/right/bottom/left 전부 0 — 화면 가득 */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: var(--text1); /* 딥 네이비 */
+    z-index: 200;
+    /* 기본: 안 보임 */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  /* 열린 상태: 페이드인 */
+  .ms_nav.ms_nav--open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 각 링크 — 대형 세리프 스타일 */
+  .ms_nav_link {
+    font-family: var(--logo_text);
+    font-size: clamp(28px, 8vw, 48px);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: #fff;
+    text-decoration: none;
+    padding: 18px 0;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    transition: color 0.25s ease;
+    /* 링크별 위로 올라오는 등장 효과 */
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease, color 0.2s ease;
+  }
+
+  /* 열린 상태: 링크 순차 등장 */
+  .ms_nav.ms_nav--open .ms_nav_link {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .ms_nav.ms_nav--open .ms_nav_link:nth-child(1) { transition-delay: 0.08s; }
+  .ms_nav.ms_nav--open .ms_nav_link:nth-child(2) { transition-delay: 0.14s; }
+  .ms_nav.ms_nav--open .ms_nav_link:nth-child(3) { transition-delay: 0.20s; }
+  .ms_nav.ms_nav--open .ms_nav_link:nth-child(4) { transition-delay: 0.26s; }
+
+  /* 링크 hover: 골드 */
+  .ms_nav_link:hover { color: var(--border); }
+
+  /* 활성 링크: 골드 */
+  .ms_nav_link--active { color: var(--border) !important; }
+  .ms_nav_link--active::after { display: none; }
+
+  /* 첫 번째 링크 위 골드 구분선 */
+  .ms_nav_link:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+}
+
+/* 768px 이하: 푸터 상단 블록 세로 배치 */
+@media (max-width: 768px) {
+  .ms_footer_top {
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .ms_footer_contact { text-align: left; }
+
+  .ms_footer_nav { gap: 32px; }
+}

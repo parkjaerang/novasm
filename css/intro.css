@@ -1,0 +1,729 @@
+﻿/* ═══════════════════════════════════
+   INTRO OVERLAY
+   전체화면 인트로 씬 — 애니메이션 완료 후 자동 제거
+═══════════════════════════════════ */
+
+/* --border(#b8a88c) 기반 투명도 변수 — intro 전용 */
+#intro_overlay {
+  --g90: color-mix(in srgb, var(--border) 90%, transparent);
+  --g60: color-mix(in srgb, var(--border) 60%, transparent);
+  --g40: color-mix(in srgb, var(--border) 40%, transparent);
+  --g20: color-mix(in srgb, var(--border) 20%, transparent);
+  --g10: color-mix(in srgb, var(--border) 10%, transparent);
+  --g05: color-mix(in srgb, var(--border)  5%, transparent);
+}
+
+/* 인트로 전체 래퍼: 화면 전체를 덮음 */
+#intro_overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--mainbg); /* #F0F0F0 */
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 인트로 종료 시 페이드아웃 */
+  transition: opacity 0.8s ease;
+}
+
+/* 인트로가 끝나면 js가 이 클래스를 붙임 */
+#intro_overlay.intro--done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── 골드 라이트 빔 ─────────────────── */
+/* 좌상→우하 대각선으로 빠르게 지나가는 빛줄기 */
+/* ─── 렌즈 플레어 이동 래퍼 ─────────────
+   우측 상단 → 좌측 하단으로 이동하는 컨테이너.
+   내부 요소들은 항상 중앙 기준으로 배치.
+─────────────────────────────────────── */
+.intro_beam {
+  position: absolute;
+  /* 우측 상단 바깥에서 출발하는 기준점 */
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  /* translateX/Y로 우상단 → 좌하단 이동 */
+  animation: beam_travel 2.4s ease-in-out 0.2s forwards;
+}
+
+@keyframes beam_travel {
+  /* 오른쪽 상단 → 왼쪽 하단 방향 */
+  0%   { transform: translate(130vw, -30vh); }
+  50%  { transform: translate(50vw,   50vh); }
+  100% { transform: translate(-30vw, 130vh); }
+}
+
+/* 발광 코어: 중심 강한 흰빛, 중앙 통과 시 한 번 반짝 */
+.intro_beam::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1)    0%,
+    rgba(255, 252, 225, 0.9)  10%,
+    rgba(255, 248, 200, 0.5)  25%,
+    color-mix(in srgb, var(--border) 20%, transparent) 50%,
+    transparent               70%
+  );
+  filter: blur(36px);
+  opacity: 0;
+  box-shadow:
+    0 0 60px 30px rgba(255, 252, 220, 0.8),
+    0 0 120px 60px color-mix(in srgb, var(--border) 40%, rgba(255,255,255,0)),
+    0 0 240px 120px color-mix(in srgb, var(--border) 15%, rgba(255,255,255,0));
+  /* 중앙(50%)에서 폭발적으로 반짝이고 소멸 */
+  animation: core_flash 2.4s ease-in-out 0.2s forwards;
+}
+
+@keyframes core_flash {
+  /* 진입~중앙 직전: 거의 보이지 않음 */
+  0%   { opacity: 0;   transform: translate(-50%, -50%) scale(0.4);  filter: blur(36px) brightness(0.5); }
+  38%  { opacity: 0;   transform: translate(-50%, -50%) scale(0.5);  filter: blur(34px) brightness(0.5); }
+  /* 서서히 밝아짐 */
+  48%  { opacity: 0.4; transform: translate(-50%, -50%) scale(1.4);  filter: blur(22px) brightness(1.8); }
+  /* 정점 */
+  55%  { opacity: 1;   transform: translate(-50%, -50%) scale(3.0);  filter: blur(10px) brightness(3.8); }
+  /* 천천히 수축 */
+  68%  { opacity: 0.5; transform: translate(-50%, -50%) scale(1.4);  filter: blur(28px) brightness(1.2); }
+  /* 서서히 소멸 */
+  85%  { opacity: 0.1; transform: translate(-50%, -50%) scale(0.6);  filter: blur(36px) brightness(0.6); }
+  100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.3);  filter: blur(40px) brightness(0.3); }
+}
+
+/* ─── 잔상 고스트 빔 ─────────────────────
+   JS에서 .intro_ghost 요소를 생성, 딜레이를 줘서 뒤따라오게 함
+─────────────────────────────────────── */
+.intro_ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  animation: beam_travel var(--ghost-dur, 2.4s) ease-in-out var(--ghost-delay, 0.4s) forwards;
+}
+
+/* 고스트 코어: 메인보다 더 흐리고 작음 */
+.intro_ghost::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--ghost-size, 140px);
+  height: var(--ghost-size, 140px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, var(--ghost-op, 0.4))  0%,
+    rgba(255, 248, 200, 0.2)                   20%,
+    color-mix(in srgb, var(--border) 12%, transparent) 50%,
+    transparent 75%
+  );
+  filter: blur(var(--ghost-blur, 36px));
+}
+
+/* 고스트 광선: 더 짧고 흐림 */
+.intro_ghost::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* 고스트도 동일 대각선 방향 */
+  transform: translate(-50%, -50%) rotate(-25deg);
+  width: 600px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--border) 15%, transparent) 30%,
+    rgba(255, 252, 220, var(--ghost-op, 0.3)) 50%,
+    color-mix(in srgb, var(--border) 15%, transparent) 70%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  opacity: var(--ghost-op, 0.3);
+}
+
+/* 긴 가로 빛줄기: 대각선 방향으로 길게 뻗는 주 광선 */
+.intro_beam::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* 오른쪽 상단 → 왼쪽 하단 대각선 방향 */
+  transform: translate(-50%, -50%) rotate(-25deg);
+  width: 900px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent                                          0%,
+    color-mix(in srgb, var(--border) 5%, transparent)   10%,
+    color-mix(in srgb, var(--border) 40%, transparent)  35%,
+    rgba(255, 252, 220, 1)                               50%,
+    color-mix(in srgb, var(--border) 40%, transparent)  65%,
+    color-mix(in srgb, var(--border) 5%, transparent)   90%,
+    transparent                                          100%
+  );
+  filter: blur(1px);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--border) 50%, rgba(255,255,255,0));
+}
+
+/* ─── 추가 광선들 (span 요소, JS에서 생성) ─ */
+
+/* 보조 광선 공통 스타일 */
+.intro_ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: left center;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 252, 220, 0.9)                            0%,
+    color-mix(in srgb, var(--border) 30%, transparent)  40%,
+    transparent                                         100%
+  );
+  filter: blur(0.5px);
+}
+
+/* 짧은 교차 광선 (45도 방향) */
+.intro_ray--cross {
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 220, 0.7)                            0%,
+    color-mix(in srgb, var(--border) 20%, transparent)  50%,
+    transparent                                         100%
+  );
+}
+
+/* 헤이즈: 코어 주변 부드러운 빛 번짐 */
+.intro_haze {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 250, 210, 0.35)                            0%,
+    color-mix(in srgb, var(--border) 12%, transparent)   40%,
+    transparent                                          70%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+/* ─── 렌즈 플레어 (더미) — 기존 호환용 빈 규칙 ─ */
+.intro_flare { display: none; }
+@keyframes flare_burst {}
+
+/* ─── 파티클 ────────────────────────── */
+/* 빔 경로에 흩어지는 미세 골드 점들 */
+.intro_particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--border) 140%, #fff), var(--border));
+  opacity: 0;
+  pointer-events: none;
+  animation: particle_float var(--dur, 1.2s) ease-out var(--delay, 0.6s) forwards;
+}
+
+@keyframes particle_float {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0); }
+  20%  { opacity: 0.9; transform: translate(var(--tx1, 20px), var(--ty1, -15px)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx2, 60px), var(--ty2, -40px)) scale(0.3); }
+}
+
+/* ─── 슬로건 텍스트 ─────────────────── */
+/* 빔 이후 서서히 등장하는 메탈 질감 텍스트 */
+.intro_slogan {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  pointer-events: none;
+}
+
+.intro_slogan_line {
+  font-family: "Playfair", serif;
+  font-size: clamp(18px, 3.5vw, 52px);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: transparent;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--border) 60%, #000) 0%,
+    var(--border)                                30%,
+    color-mix(in srgb, var(--border) 50%, #fff) 50%,
+    var(--border)                                70%,
+    color-mix(in srgb, var(--border) 60%, #000) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0;
+  animation:
+    slogan_fadein 0.9s ease   forwards var(--s-delay, 1.4s),
+    metal_shine   2.8s linear 1        var(--s-shine, 2s) forwards;
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--border) 40%, transparent),
+    0 0 30px color-mix(in srgb, var(--border) 20%, transparent);
+}
+
+@keyframes slogan_fadein {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes metal_shine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 슬로건 두 번째 줄: 약간 더 늦게 */
+.intro_slogan_line:nth-child(2) {
+  font-size: clamp(14px, 2.2vw, 34px);
+  letter-spacing: 0.35em;
+  --s-delay: 1.7s;
+  --s-shine: 2.3s;
+}
+
+/* ─── NOVASM 텍스트 로고 전환 ───────────
+   슬로건이 축소·블러되며 사라지는 동안
+   같은 중앙 위치에서 NOVA SM 텍스트가 확장하며 등장
+─────────────────────────────────────── */
+.intro_logo_wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  opacity: 0;
+  pointer-events: none;
+  /* 슬로건 페이드아웃(3.8s) 직후 등장 */
+  animation: logo_appear 1.1s cubic-bezier(0.2, 0, 0.1, 1) forwards 4.1s;
+}
+
+@keyframes logo_appear {
+  0%   { opacity: 0; transform: scale(1.15); filter: blur(14px); }
+  50%  { opacity: 1; filter: blur(3px); }
+  100% { opacity: 1; transform: scale(1);    filter: blur(0); }
+}
+
+/* NOVA — 큰 세리프 */
+.intro_logo_nova {
+  font-family: "Playfair", serif;
+  font-size: clamp(52px, 9vw, 140px);
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  line-height: 1;
+  color: transparent;
+
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--border) 65%, #000) 0%,
+    var(--border)                                25%,
+    color-mix(in srgb, var(--border) 55%, #fff) 45%,
+    var(--border)                                65%,
+    color-mix(in srgb, var(--border) 65%, #000) 85%,
+    var(--border)                                100%
+  );
+  background-size: 300% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  animation:
+    logo_shine_sweep 1.0s ease-out forwards 4.3s;
+
+  text-shadow:
+    0 0 20px color-mix(in srgb, var(--border) 45%, transparent),
+    0 0 50px color-mix(in srgb, var(--border) 20%, transparent);
+}
+
+/* SM — 작은 서브 텍스트 */
+.intro_logo_sm {
+  font-family: "Playfair", serif;
+  font-size: clamp(16px, 2.2vw, 38px);
+  font-weight: 300;
+  letter-spacing: 0.9em;
+  color: transparent;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--border) 65%, #000) 0%,
+    var(--border)                                35%,
+    color-mix(in srgb, var(--border) 55%, #fff) 50%,
+    var(--border)                                65%,
+    color-mix(in srgb, var(--border) 65%, #000) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation:
+    logo_shine_sweep 1.0s ease-out forwards 4.5s;
+
+  text-shadow:
+    0 0 14px color-mix(in srgb, var(--border) 40%, transparent);
+}
+
+/* 등장 시 한 번 빠르게 훑는 쉰 */
+@keyframes logo_shine_sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* 이후 은은하게 반복되는 쉰 */
+@keyframes logo_shine_idle {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 로고 등장 순간 골드 라이트 버스트 */
+.intro_logo_burst {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 252, 220, 0.55) 0%,
+    var(--g20)                30%,
+    transparent               70%
+  );
+  filter: blur(30px);
+  opacity: 0;
+  pointer-events: none;
+  animation: logo_burst 1.4s ease-out forwards 4.1s;
+}
+
+@keyframes logo_burst {
+  0%   { opacity: 0;   transform: scale(0.3); }
+  25%  { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.6); }
+}
+
+/* ─── 도시/의료 영상 섹션 ────────────── */
+/* 영상 대신 플레이스홀더 박스 사용 (영상 삽입 예정) */
+.intro_cities {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  opacity: 0;
+  pointer-events: none;
+  animation: cities_show 0.6s ease forwards 6.5s;
+}
+
+@keyframes cities_show {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 도시 영상 — 전체화면 단일 슬롯 */
+.intro_city_slot {
+  width: 100%;
+  height: 100%;
+  background: #111;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: city_reveal 0.8s ease forwards 6.5s;
+}
+
+/* 영상 삽입 전 임시 오버레이 텍스트 */
+.intro_city_slot::after {
+  content: "SEOUL";
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Playfair", serif;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  color: rgba(212, 175, 94, 0.7);
+  white-space: nowrap;
+}
+
+/* 영상 요소 전체 채우기 */
+.intro_city_slot video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes city_reveal {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ─── 의료 장면: 4칸 가로 나열, 위에서 내려오기 ── */
+.intro_medical {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  opacity: 0;
+  pointer-events: none;
+  animation: med_show 0.4s ease forwards 8.4s;
+}
+
+@keyframes med_show {
+  to { opacity: 1; }
+}
+
+.intro_med_panel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #0d0d0d;
+}
+
+/* 각 패널이 위에서 아래로 슬라이드 인 */
+.intro_med_panel:nth-child(1) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 8.5s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(2) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 8.8s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(3) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 9.1s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(4) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 9.4s; transform: translateY(-100%); }
+
+@keyframes panel_drop {
+  to { transform: translateY(0); }
+}
+
+/* 패널 내 비디오: 패널을 꽉 채우고 object-fit cover */
+.intro_med_video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 패널 내 라벨 */
+.intro_med_panel::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Playfair", serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--g60);
+  white-space: nowrap;
+}
+
+/* 각 패널 배경 (영상 대용) */
+.intro_med_panel:nth-child(1) { background: linear-gradient(180deg, #1a1208 0%, #0d0d0d 100%); }
+.intro_med_panel:nth-child(2) { background: linear-gradient(180deg, #080f12 0%, #0d0d0d 100%); }
+.intro_med_panel:nth-child(3) { background: linear-gradient(180deg, #100810 0%, #0d0d0d 100%); }
+.intro_med_panel:nth-child(4) { background: linear-gradient(180deg, #0a0f08 0%, #0d0d0d 100%); }
+
+/* 패널 구분 골드 라인 */
+.intro_med_panel + .intro_med_panel {
+  border-left: 1px solid var(--g20);
+}
+
+/* ─── 한중 지도 섹션 ────────────────── */
+.intro_map {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--mainbg);
+  opacity: 0;
+  pointer-events: none;
+  animation: map_show 0.8s ease forwards 10.5s;
+}
+
+@keyframes map_show {
+  to { opacity: 1; }
+}
+
+.intro_map_img {
+  width: clamp(280px, 55vw, 820px);
+  opacity: 0;
+  animation: map_img_in 1s ease forwards 10.8s;
+}
+
+@keyframes map_img_in {
+  0%   { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 한중 연결 골드 라인 (SVG로 오버레이) */
+.intro_map_line_svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.intro_map_gold_path {
+  fill: none;
+  stroke: url(#goldGrad);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--border) 60%, transparent));
+  /* 점(12.9s) 등장 후 0.4s 뒤에 곡선 그리기 시작 */
+  animation: draw_line 1.5s ease forwards 13.3s;
+}
+
+@keyframes draw_line {
+  to { stroke-dashoffset: 0; }
+}
+
+/* 지도 하단 텍스트 */
+.intro_map_tagline {
+  position: absolute;
+  bottom: clamp(30px, 6vh, 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Playfair", serif;
+  font-size: clamp(13px, 2vw, 24px);
+  letter-spacing: 0.4em;
+  text-align: center;
+  color: transparent;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--border) 70%, #000), var(--border), #fff8d6, var(--border), color-mix(in srgb, var(--border) 70%, #000));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  white-space: nowrap;
+  opacity: 0;
+  animation:
+    tagline_in  0.8s ease   forwards 12.2s,
+    metal_shine 3s   linear 1        12.8s forwards;
+}
+
+@keyframes tagline_in {
+  0%   { opacity: 0; letter-spacing: 0.6em; }
+  100% { opacity: 1; letter-spacing: 0.4em; }
+}
+
+/* ─── 최종 로고 씬: 모든 파티클이 중앙으로 모여 로고 형성 ── */
+.intro_final {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mainbg);
+  opacity: 0;
+  pointer-events: none;
+  /* 곡선 완료(14.8s) + 지도 노출 1.5s = 16.3s */
+  animation: final_show 1s ease forwards 16.3s;
+}
+
+@keyframes final_show {
+  to { opacity: 1; }
+}
+
+/* 최종 로고 */
+.intro_final_logo {
+  width: clamp(200px, 28vw, 460px);
+  opacity: 0;
+  transform: scale(0.7);
+  animation: final_logo_in 1.2s cubic-bezier(0.2, 0, 0.1, 1) forwards 16.6s;
+}
+
+@keyframes final_logo_in {
+  0%   { opacity: 0; transform: scale(0.7); filter: blur(12px); }
+  50%  { filter: blur(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 최종 파티클 수렴 효과 */
+.intro_converge_particle {
+  position: absolute;
+  border-radius: 50%;
+  width: var(--sz, 4px);
+  height: var(--sz, 4px);
+  background: radial-gradient(circle, color-mix(in srgb, var(--border) 140%, #fff), var(--border));
+  top: var(--py, 50%);
+  left: var(--px, 50%);
+  opacity: 0;
+  animation: converge_move 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards var(--cd, 16.4s);
+  pointer-events: none;
+}
+
+@keyframes converge_move {
+  0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
+  80%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(0.1); }
+}
+
+/* 최종 글로우 버스트 */
+.intro_final_glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--g60) 0%, transparent 70%);
+  opacity: 0;
+  animation: glow_burst 1.2s ease-out forwards 16.5s;
+  pointer-events: none;
+}
+
+@keyframes glow_burst {
+  0%   { opacity: 0; transform: scale(0.2); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(3); }
+}
+
+/* 지도 마커 점 나타나기 */
+@keyframes map_dot {
+  0%   { opacity: 0; r: 2; }
+  100% { opacity: 1; r: 5; }
+}
+
+/* ─── 건너뛰기 버튼 ─────────────────── */
+.intro_skip {
+  position: fixed;
+  bottom: 32px;
+  right: 40px;
+  z-index: 10000;
+  font-family: "Playfair", serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: rgba(150, 120, 60, 0.7);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+
+.intro_skip:hover {
+  color: rgba(212, 175, 94, 1);
+}
+
