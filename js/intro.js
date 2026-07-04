@@ -308,7 +308,16 @@
   }
 
   /* ── 진입점 ────────────────────────────────────── */
+  /* sessionStorage를 이용해 같은 탭 세션에서 인트로를 한 번만 재생 */
   document.addEventListener('DOMContentLoaded', function () {
+    if (sessionStorage.getItem('introPlayed')) {
+      /* 이미 재생된 경우 오버레이를 즉시 제거 */
+      var overlay = document.getElementById('intro_overlay');
+      if (overlay) overlay.remove();
+      return;
+    }
+
+    sessionStorage.setItem('introPlayed', '1');
     buildIntro();
     scheduleSloganFade();
     bindSkip();

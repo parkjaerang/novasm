@@ -2,6 +2,11 @@
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* sticky 헤더가 앵커 이동 시 콘텐츠를 가리지 않도록 오프셋 지정 */
+html {
+  scroll-padding-top: clamp(40px, 8vw, 80px);
+}
+
 body {
   background: var(--mainbg);
   overflow-y: auto;
