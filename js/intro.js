@@ -213,29 +213,33 @@
     /* 한중 지도 */
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_map" id="introMap">
-        <img class="intro_map_img" src="./img/한중지도.png" alt="한국-중국 연결 지도">
-        <!-- 골드 연결 라인 SVG -->
-        <svg class="intro_map_line_svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stop-color="#8a7040"/>
-              <stop offset="40%"  stop-color="#d4af5e"/>
-              <stop offset="60%"  stop-color="#fff8d6"/>
-              <stop offset="100%" stop-color="#8a7040"/>
-            </linearGradient>
-          </defs>
-          <!-- 서울(1290, 600) 먼저 등장, 베이징(976, 430) 동시 등장, 이후 곡선 연결 -->
-          <path class="intro_map_gold_path"
-            d="M 1290 590 C 1240 510, 1040 470, 995 485"/>
-          <!-- 서울 마커 -->
-          <circle cx="1290" cy="590" r="5" fill="#d4af5e" opacity="0"
-            style="animation: map_dot 0.3s ease forwards 12.9s;">
-          </circle>
-          <!-- 베이징 마커 -->
-          <circle cx="995"  cy="485" r="5" fill="#d4af5e" opacity="0"
-            style="animation: map_dot 0.3s ease forwards 12.9s;">
-          </circle>
-        </svg>
+        <!-- 이미지 위에 SVG를 정확히 겹치기 위한 래퍼 -->
+        <div class="intro_map_figure">
+          <img class="intro_map_img" src="./img/한중지도.png" alt="한국-중국 연결 지도">
+          <!-- 골드 연결 라인 SVG — viewBox를 이미지 비율(820×461)에 맞춰 좌표 재계산 -->
+          <!-- 서울: 이미지 내 90.2%, 60.8% → (740, 280) / 베이징: 54.3%, 38.1% → (445, 176) -->
+          <svg class="intro_map_line_svg" viewBox="0 0 820 461" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#8a7040"/>
+                <stop offset="40%"  stop-color="#d4af5e"/>
+                <stop offset="60%"  stop-color="#fff8d6"/>
+                <stop offset="100%" stop-color="#8a7040"/>
+              </linearGradient>
+            </defs>
+            <!-- 서울(740, 280) → 베이징(445, 176) 곡선 연결 -->
+            <path class="intro_map_gold_path"
+              d="M 740 280 C 690 201, 490 161, 445 176"/>
+            <!-- 서울 마커 -->
+            <circle cx="740" cy="280" r="3" fill="#d4af5e" opacity="0"
+              style="animation: map_dot 0.3s ease forwards 12.9s;">
+            </circle>
+            <!-- 베이징 마커 -->
+            <circle cx="445" cy="176" r="3" fill="#d4af5e" opacity="0"
+              style="animation: map_dot 0.3s ease forwards 12.9s;">
+            </circle>
+          </svg>
+        </div>
         <span class="intro_map_tagline">CONNECT KOREA, EXPAND CHINA</span>
       </div>
     `);
