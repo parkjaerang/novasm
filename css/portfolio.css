@@ -22,19 +22,38 @@ body {
 /* 배경 워터마크 로고 텍스트 */
 .pf_hero_watermark {
   position: absolute;
-  right: -20px;
-  top: 50%;
+  right: clamp(60px, 12vw, 210px);
+  top: 55%;
   transform: translateY(-50%);
   font-family: var(--logo_text);
-  font-size: clamp(120px, 16vw, 220px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(184, 168, 140, 0.18);
-  line-height: 1;
+  font-size: clamp(130px, 20vw, 190px);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.04em;
+  color: var(--border);
+  opacity: 0.15;
+  line-height: 0.72;
+  text-align: center;
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
+  z-index: 0;
+}
+
+.pf_hero_watermark span {
+  display: block;
+  line-height: 0.75;
+}
+
+.pf_hero_watermark span + span {
+  margin-top: -0.13em;
+}
+
+.pf_hero_label,
+.pf_hero_divider,
+.pf_hero_headline {
+  position: relative;
+  z-index: 1;
 }
 
 /* 골드 소형 레이블 */
@@ -403,8 +422,9 @@ body {
 
   /* 워터마크 크기 축소 */
   .pf_hero_watermark {
-    font-size: clamp(80px, 18vw, 140px);
-    right: -10px;
+    font-size: clamp(120px, 28vw, 200px);
+    opacity: 0.065;
+    right: -6px;
   }
 
   /* 필터 패딩 */
