@@ -50,7 +50,7 @@ body {
 
 /* 히어로 골드 구분선 */
 .pf_hero_divider {
-  width: 48px;
+  width: 60px;
   height: 2px;
   background: var(--border);
   margin-bottom: 40px;
