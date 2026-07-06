@@ -22,19 +22,34 @@ body {
 /* 배경 워터마크 로고 텍스트 */
 .pf_hero_watermark {
   position: absolute;
-  right: -20px;
+  right: clamp(-10px, -1vw, 20px);
   top: 50%;
   transform: translateY(-50%);
   font-family: var(--logo_text);
-  font-size: clamp(120px, 16vw, 220px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(184, 168, 140, 0.18);
-  line-height: 1;
+  font-size: clamp(160px, 24vw, 300px);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.04em;
+  color: var(--border);
+  opacity: 0.055;
+  line-height: 0.9;
+  text-align: center;
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
+  z-index: 0;
+}
+
+.pf_hero_watermark span {
+  display: block;
+  line-height: 0.88;
+}
+
+.pf_hero_label,
+.pf_hero_divider,
+.pf_hero_headline {
+  position: relative;
+  z-index: 1;
 }
 
 /* 골드 소형 레이블 */
@@ -59,7 +74,7 @@ body {
 /* 메인 헤드라인 */
 .pf_hero_headline {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(20px, 3vw, 68px);
+  font-size: clamp(24px, 3vw, 68px);
   font-weight: 500;
   color: var(--text1);
   line-height: 1.35;
@@ -403,8 +418,9 @@ body {
 
   /* 워터마크 크기 축소 */
   .pf_hero_watermark {
-    font-size: clamp(80px, 18vw, 140px);
-    right: -10px;
+    font-size: clamp(120px, 28vw, 200px);
+    opacity: 0.05;
+    right: -6px;
   }
 
   /* 필터 패딩 */
@@ -451,8 +467,8 @@ body {
 
   /* 필터 버튼 크기 축소 */
   .pf_filter_btn {
-    font-size: 13px;
-    padding: 8px 16px;
+    font-size: 11px;
+    padding: 6px 10px;
   }
 
   /* 그리드 섹션 패딩 */

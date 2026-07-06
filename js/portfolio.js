@@ -183,7 +183,7 @@
     main.innerHTML = `
       <!-- 히어로 섹션 -->
       <section class="pf_hero">
-        <div class="pf_hero_watermark">NSM</div>
+        <div class="pf_hero_watermark" aria-hidden="true"><span>N</span><span>SM</span></div>
         <span class="pf_hero_label">PROJECTS</span>
         <div class="pf_hero_divider"></div>
         <h1 class="pf_hero_headline">
