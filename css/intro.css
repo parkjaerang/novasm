@@ -11,20 +11,89 @@
   --g20: color-mix(in srgb, var(--border) 20%, transparent);
   --g10: color-mix(in srgb, var(--border) 10%, transparent);
   --g05: color-mix(in srgb, var(--border)  5%, transparent);
+  --metal-dark: #4a3a28;
+  --metal-bright: #fff8e8;
+  /* 반응형 스케일 — 미디어쿼리에서 덮어씀 */
+  --intro-pad-x: clamp(16px, 5vw, 48px);
+  --intro-core-hot: clamp(32px, 7vw, 48px);
+  --intro-core-gold: clamp(96px, 26vw, 180px);
+  --intro-core-bloom: clamp(168px, 46vw, 320px);
+  --intro-core-flash: clamp(72px, 18vw, 120px);
+  --intro-beam-line: min(1100px, 145vw);
+  --intro-ghost-line: min(700px, 95vw);
+  --intro-haze-w: clamp(220px, 62vw, 500px);
+  --intro-haze-h: clamp(124px, 35vw, 280px);
+  --intro-haze-outer-w: clamp(360px, 98vw, 800px);
+  --intro-haze-outer-h: clamp(180px, 50vw, 400px);
+  --intro-logo-burst: clamp(260px, 88vmin, 600px);
+  --intro-v-core: clamp(36px, 11vw, 80px);
+  --intro-final-glow: clamp(140px, 42vmin, 300px);
 }
 
 /* 인트로 전체 래퍼: 화면 전체를 덮음 */
 #intro_overlay {
   position: fixed;
   inset: 0;
-  background: var(--mainbg); /* #F0F0F0 */
+  width: 100%;
+  height: 100svh;
+  min-height: 100vh;
+  background: #ececec;
   z-index: 9999;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 인트로 종료 시 페이드아웃 */
   transition: opacity 0.8s ease;
+}
+
+/* 필름 그레인 — 영상미 질감 */
+.intro_grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: multiply;
+}
+
+/* 비네팅 */
+.intro_vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 75% 70% at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+
+/* 코어 피크 시 화면 플래시 */
+.intro_screen_flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    ellipse 60% 45% at 50% 50%,
+    rgba(255, 252, 235, 0.95) 0%,
+    rgba(255, 248, 210, 0.35) 35%,
+    transparent 70%
+  );
+  opacity: 0;
+  animation: screen_flash 2.6s ease-out 0.15s forwards;
+}
+
+@keyframes screen_flash {
+  0%, 38%  { opacity: 0; }
+  48%      { opacity: 0.15; }
+  52%      { opacity: 0.85; }
+  58%      { opacity: 0.35; }
+  68%      { opacity: 0.08; }
+  100%     { opacity: 0; }
 }
 
 /* 인트로가 끝나면 js가 이 클래스를 붙임 */
@@ -33,72 +102,171 @@
   pointer-events: none;
 }
 
-/* ─── 골드 라이트 빔 ─────────────────── */
-/* 좌상→우하 대각선으로 빠르게 지나가는 빛줄기 */
-/* ─── 렌즈 플레어 이동 래퍼 ─────────────
-   우측 상단 → 좌측 하단으로 이동하는 컨테이너.
-   내부 요소들은 항상 중앙 기준으로 배치.
-─────────────────────────────────────── */
+/* ─── 골드 라이트 빔 — 수평 시네마틱 패스 ─────── */
 .intro_beam {
   position: absolute;
-  /* 우측 상단 바깥에서 출발하는 기준점 */
   top: 0;
   left: 0;
   width: 0;
   height: 0;
   pointer-events: none;
-  /* translateX/Y로 우상단 → 좌하단 이동 */
-  animation: beam_travel 2.4s ease-in-out 0.2s forwards;
+  z-index: 4;
+  animation: beam_travel 2.6s cubic-bezier(0.42, 0, 0.2, 1) 0.15s forwards;
 }
 
 @keyframes beam_travel {
-  /* 오른쪽 상단 → 왼쪽 하단 방향 */
-  0%   { transform: translate(130vw, -30vh); }
-  50%  { transform: translate(50vw,   50vh); }
-  100% { transform: translate(-30vw, 130vh); }
+  0%   { transform: translate(-35vw, 50vh); }
+  45%  { transform: translate(50vw,  50vh); }
+  100% { transform: translate(135vw, 50vh); }
 }
 
-/* 발광 코어: 중심 강한 흰빛, 중앙 통과 시 한 번 반짝 */
+/* 아나모픽 수평 플레어 */
+.intro_anamorphic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160vw;
+  height: 3px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--border) 8%, transparent) 15%,
+    color-mix(in srgb, var(--border) 35%, transparent) 35%,
+    rgba(255, 255, 245, 1) 50%,
+    color-mix(in srgb, var(--border) 35%, transparent) 65%,
+    color-mix(in srgb, var(--border) 8%, transparent) 85%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  box-shadow:
+    0 0 20px 4px rgba(255, 252, 220, 0.6),
+    0 0 60px 12px color-mix(in srgb, var(--border) 35%, transparent),
+    0 0 120px 30px color-mix(in srgb, var(--border) 12%, transparent);
+  opacity: 0;
+  animation: anamorphic_pulse 2.6s ease-in-out 0.15s forwards;
+}
+
+@keyframes anamorphic_pulse {
+  0%, 30%  { opacity: 0; transform: translate(-50%, -50%) scaleX(0.3); }
+  48%      { opacity: 1; transform: translate(-50%, -50%) scaleX(1); }
+  55%      { opacity: 1; transform: translate(-50%, -50%) scaleX(1.08); filter: brightness(1.8); }
+  72%      { opacity: 0.4; transform: translate(-50%, -50%) scaleX(0.9); }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scaleX(0.5); }
+}
+
+/* 발광 코어 — 다층 레이어 */
+.intro_core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+/* ① 핫 화이트 코어 */
+.intro_core--hot {
+  width: var(--intro-core-hot);
+  height: var(--intro-core-hot);
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #fffef5 30%,
+    rgba(255, 252, 220, 0.6) 55%,
+    transparent 75%
+  );
+  filter: blur(2px);
+  opacity: 0;
+  animation: core_hot 2.6s ease-in-out 0.15s forwards;
+}
+
+@keyframes core_hot {
+  0%, 40%  { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  50%      { opacity: 1; transform: translate(-50%, -50%) scale(1.2); filter: blur(1px) brightness(2.5); }
+  54%      { opacity: 1; transform: translate(-50%, -50%) scale(1.8); filter: blur(0px) brightness(4); }
+  62%      { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+}
+
+/* ② 골드 링 */
+.intro_core--gold {
+  width: var(--intro-core-gold);
+  height: var(--intro-core-gold);
+  background: radial-gradient(
+    circle,
+    rgba(255, 252, 225, 0.95) 0%,
+    rgba(255, 248, 200, 0.7) 12%,
+    color-mix(in srgb, var(--border) 55%, #fff) 28%,
+    color-mix(in srgb, var(--border) 25%, transparent) 50%,
+    transparent 72%
+  );
+  filter: blur(18px);
+  opacity: 0;
+  animation: core_gold 2.6s ease-in-out 0.15s forwards;
+}
+
+@keyframes core_gold {
+  0%, 38%  { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  50%      { opacity: 0.9; transform: translate(-50%, -50%) scale(2.2); filter: blur(14px) brightness(2); }
+  56%      { opacity: 1; transform: translate(-50%, -50%) scale(3.4); filter: blur(10px) brightness(3); }
+  68%      { opacity: 0.45; transform: translate(-50%, -50%) scale(1.6); }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+}
+
+/* ③ 외곽 블룸 */
+.intro_core--bloom {
+  width: var(--intro-core-bloom);
+  height: var(--intro-core-bloom);
+  background: radial-gradient(
+    circle,
+    rgba(255, 250, 210, 0.4) 0%,
+    color-mix(in srgb, var(--border) 30%, transparent) 30%,
+    color-mix(in srgb, var(--border) 10%, transparent) 55%,
+    transparent 75%
+  );
+  filter: blur(42px);
+  opacity: 0;
+  box-shadow:
+    0 0 80px 40px rgba(255, 252, 220, 0.5),
+    0 0 160px 80px color-mix(in srgb, var(--border) 25%, transparent);
+  animation: core_bloom 2.6s ease-in-out 0.15s forwards;
+}
+
+@keyframes core_bloom {
+  0%, 36%  { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  52%      { opacity: 0.8; transform: translate(-50%, -50%) scale(2.8); }
+  58%      { opacity: 1; transform: translate(-50%, -50%) scale(4.2); filter: blur(36px) brightness(1.6); }
+  75%      { opacity: 0.2; transform: translate(-50%, -50%) scale(1.2); }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+}
+
+/* 레거시 ::before 코어 — 아나모픽 보조 */
 .intro_beam::before {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
+  width: var(--intro-core-flash);
+  height: var(--intro-core-flash);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 1)    0%,
-    rgba(255, 252, 225, 0.9)  10%,
-    rgba(255, 248, 200, 0.5)  25%,
-    color-mix(in srgb, var(--border) 20%, transparent) 50%,
-    transparent               70%
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 252, 225, 0.85) 15%,
+    transparent 60%
   );
-  filter: blur(36px);
+  filter: blur(20px);
   opacity: 0;
-  box-shadow:
-    0 0 60px 30px rgba(255, 252, 220, 0.8),
-    0 0 120px 60px color-mix(in srgb, var(--border) 40%, rgba(255,255,255,0)),
-    0 0 240px 120px color-mix(in srgb, var(--border) 15%, rgba(255,255,255,0));
-  /* 중앙(50%)에서 폭발적으로 반짝이고 소멸 */
-  animation: core_flash 2.4s ease-in-out 0.2s forwards;
+  animation: core_flash 2.6s ease-in-out 0.15s forwards;
 }
 
 @keyframes core_flash {
-  /* 진입~중앙 직전: 거의 보이지 않음 */
-  0%   { opacity: 0;   transform: translate(-50%, -50%) scale(0.4);  filter: blur(36px) brightness(0.5); }
-  38%  { opacity: 0;   transform: translate(-50%, -50%) scale(0.5);  filter: blur(34px) brightness(0.5); }
-  /* 서서히 밝아짐 */
-  48%  { opacity: 0.4; transform: translate(-50%, -50%) scale(1.4);  filter: blur(22px) brightness(1.8); }
-  /* 정점 */
-  55%  { opacity: 1;   transform: translate(-50%, -50%) scale(3.0);  filter: blur(10px) brightness(3.8); }
-  /* 천천히 수축 */
-  68%  { opacity: 0.5; transform: translate(-50%, -50%) scale(1.4);  filter: blur(28px) brightness(1.2); }
-  /* 서서히 소멸 */
-  85%  { opacity: 0.1; transform: translate(-50%, -50%) scale(0.6);  filter: blur(36px) brightness(0.6); }
-  100% { opacity: 0;   transform: translate(-50%, -50%) scale(0.3);  filter: blur(40px) brightness(0.3); }
+  0%, 42%  { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  52%      { opacity: 1; transform: translate(-50%, -50%) scale(2.5); filter: blur(8px) brightness(3.5); }
+  58%      { opacity: 0.8; transform: translate(-50%, -50%) scale(3.5); }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
 }
 
 /* ─── 잔상 고스트 빔 ─────────────────────
@@ -111,7 +279,8 @@
   width: 0;
   height: 0;
   pointer-events: none;
-  animation: beam_travel var(--ghost-dur, 2.4s) ease-in-out var(--ghost-delay, 0.4s) forwards;
+  z-index: 3;
+  animation: beam_travel var(--ghost-dur, 2.6s) cubic-bezier(0.42, 0, 0.2, 1) var(--ghost-delay, 0.4s) forwards;
 }
 
 /* 고스트 코어: 메인보다 더 흐리고 작음 */
@@ -134,15 +303,14 @@
   filter: blur(var(--ghost-blur, 36px));
 }
 
-/* 고스트 광선: 더 짧고 흐림 */
+/* 고스트 광선: 수평 잔상 */
 .intro_ghost::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  /* 고스트도 동일 대각선 방향 */
-  transform: translate(-50%, -50%) rotate(-25deg);
-  width: 600px;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: var(--intro-ghost-line);
   height: 1px;
   background: linear-gradient(
     90deg,
@@ -156,28 +324,29 @@
   opacity: var(--ghost-op, 0.3);
 }
 
-/* 긴 가로 빛줄기: 대각선 방향으로 길게 뻗는 주 광선 */
+/* 긴 가로 빛줄기 */
 .intro_beam::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  /* 오른쪽 상단 → 왼쪽 하단 대각선 방향 */
-  transform: translate(-50%, -50%) rotate(-25deg);
-  width: 900px;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: var(--intro-beam-line);
   height: 2px;
   background: linear-gradient(
     90deg,
     transparent                                          0%,
-    color-mix(in srgb, var(--border) 5%, transparent)   10%,
-    color-mix(in srgb, var(--border) 40%, transparent)  35%,
-    rgba(255, 252, 220, 1)                               50%,
-    color-mix(in srgb, var(--border) 40%, transparent)  65%,
-    color-mix(in srgb, var(--border) 5%, transparent)   90%,
+    color-mix(in srgb, var(--border) 5%, transparent)   8%,
+    color-mix(in srgb, var(--border) 45%, transparent)  32%,
+    rgba(255, 255, 245, 1)                             50%,
+    color-mix(in srgb, var(--border) 45%, transparent)  68%,
+    color-mix(in srgb, var(--border) 5%, transparent)   92%,
     transparent                                          100%
   );
-  filter: blur(1px);
-  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--border) 50%, rgba(255,255,255,0));
+  filter: blur(0.5px);
+  box-shadow:
+    0 0 12px 3px rgba(255, 252, 220, 0.7),
+    0 0 40px 8px color-mix(in srgb, var(--border) 40%, transparent);
 }
 
 /* ─── 추가 광선들 (span 요소, JS에서 생성) ─ */
@@ -217,17 +386,38 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 400px;
+  width: var(--intro-haze-w);
+  height: var(--intro-haze-h);
   border-radius: 50%;
   background: radial-gradient(
-    circle,
-    rgba(255, 250, 210, 0.35)                            0%,
-    color-mix(in srgb, var(--border) 12%, transparent)   40%,
-    transparent                                          70%
+    ellipse,
+    rgba(255, 250, 210, 0.45)                            0%,
+    color-mix(in srgb, var(--border) 18%, transparent)   45%,
+    transparent                                          75%
   );
-  filter: blur(20px);
+  filter: blur(24px);
   pointer-events: none;
+  opacity: 0;
+  animation: haze_pulse 2.6s ease-in-out 0.15s forwards;
+}
+
+.intro_haze--outer {
+  width: var(--intro-haze-outer-w);
+  height: var(--intro-haze-outer-h);
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--border) 12%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  animation-delay: 0.25s;
+}
+
+@keyframes haze_pulse {
+  0%, 35%  { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  52%      { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  65%      { opacity: 0.5; }
+  100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
 }
 
 /* ─── 렌즈 플레어 (더미) — 기존 호환용 빈 규칙 ─ */
@@ -235,14 +425,28 @@
 @keyframes flare_burst {}
 
 /* ─── 파티클 ────────────────────────── */
-/* 빔 경로에 흩어지는 미세 골드 점들 */
 .intro_particle {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--border) 140%, #fff), var(--border));
+  background: radial-gradient(circle, #fff8d6, var(--border));
   opacity: 0;
   pointer-events: none;
+  z-index: 5;
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--border) 60%, transparent);
   animation: particle_float var(--dur, 1.2s) ease-out var(--delay, 0.6s) forwards;
+}
+
+.intro_particle--streak {
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 248, 210, 0.9), transparent);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--border) 40%, transparent);
+  animation: particle_streak var(--dur, 1.4s) ease-out var(--delay, 0.5s) forwards;
+}
+
+@keyframes particle_streak {
+  0%   { opacity: 0; transform: translate(0, 0) scaleX(0); }
+  15%  { opacity: 0.85; }
+  100% { opacity: 0; transform: translate(var(--tx2, 80px), var(--ty2, 0)) scaleX(1); }
 }
 
 @keyframes particle_float {
@@ -256,53 +460,63 @@
 .intro_slogan {
   position: absolute;
   inset: 0;
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.4em;
+  padding: 0 var(--intro-pad-x);
   pointer-events: none;
 }
 
 .intro_slogan_line {
   font-family: "Playfair", serif;
-  font-size: clamp(18px, 3.5vw, 52px);
+  font-size: clamp(14px, 3.8vw, 52px);
   font-weight: 400;
   letter-spacing: 0.22em;
+  text-align: center;
+  max-width: 100%;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   color: transparent;
   background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--border) 60%, #000) 0%,
-    var(--border)                                30%,
-    color-mix(in srgb, var(--border) 50%, #fff) 50%,
-    var(--border)                                70%,
-    color-mix(in srgb, var(--border) 60%, #000) 100%
+    110deg,
+    var(--metal-dark) 0%,
+    var(--metal-dark) 42%,
+    var(--metal-bright) 50%,
+    var(--metal-dark) 58%,
+    var(--metal-dark) 100%
   );
-  background-size: 260% 100%;
+  background-size: 220% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
   opacity: 0;
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--border) 25%, transparent));
   animation:
-    slogan_fadein 0.9s ease   forwards var(--s-delay, 1.4s),
-    metal_shine   2.8s linear 1        var(--s-shine, 2s) forwards;
-  text-shadow:
-    0 0 12px color-mix(in srgb, var(--border) 40%, transparent),
-    0 0 30px color-mix(in srgb, var(--border) 20%, transparent);
+    slogan_fadein 1s ease        forwards var(--s-delay, 1.4s),
+    metal_shine   2.4s ease-in-out 1 var(--s-shine, 2s) forwards;
 }
 
 @keyframes slogan_fadein {
-  0%   { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(16px) scale(0.96); filter: blur(6px); }
+  60%  { filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* 밝은 띠 1개만 — 천천히 한 번 지나간 뒤 진한 톤 고정 */
 @keyframes metal_shine {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0%   { background-position: 100% 0; }
+  28%  { background-position: 100% 0; }
+  62%  { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
 }
 
 /* 슬로건 두 번째 줄: 약간 더 늦게 */
 .intro_slogan_line:nth-child(2) {
-  font-size: clamp(14px, 2.2vw, 34px);
+  font-size: clamp(11px, 2.6vw, 34px);
   letter-spacing: 0.35em;
   --s-delay: 1.7s;
   --s-shine: 2.3s;
@@ -315,183 +529,224 @@
 .intro_logo_wrap {
   position: absolute;
   inset: 0;
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.1em;
+  padding: 0 var(--intro-pad-x);
   opacity: 0;
   pointer-events: none;
-  /* 슬로건 페이드아웃(3.8s) 직후 등장 */
-  animation: logo_appear 1.1s cubic-bezier(0.2, 0, 0.1, 1) forwards 4.1s;
+  /* 등장(5.0s) → 유지 → 도시 씬 전 페이드아웃(8.2s) */
+  animation:
+    logo_appear 1.1s cubic-bezier(0.2, 0, 0.1, 1) forwards 5.0s,
+    logo_hide   0.55s ease-in forwards 8.2s;
 }
 
 @keyframes logo_appear {
   0%   { opacity: 0; transform: scale(1.15); filter: blur(14px); }
   50%  { opacity: 1; filter: blur(3px); }
-  100% { opacity: 1; transform: scale(1);    filter: blur(0); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
-/* NOVA — 큰 세리프 */
+@keyframes logo_hide {
+  0%   { opacity: 1; transform: scale(1); filter: blur(0); visibility: visible; }
+  100% { opacity: 0; transform: scale(1.06); filter: blur(10px); visibility: hidden; }
+}
+
+/* NOVA — 큰 세리프 + V 발광 코어 */
 .intro_logo_nova {
   font-family: "Playfair", serif;
-  font-size: clamp(52px, 9vw, 140px);
+  font-size: clamp(36px, 11vw, 140px);
   font-weight: 600;
   letter-spacing: 0.35em;
   line-height: 1;
+  max-width: 100%;
+  text-align: center;
   color: transparent;
-
+  position: relative;
   background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--border) 65%, #000) 0%,
-    var(--border)                                25%,
-    color-mix(in srgb, var(--border) 55%, #fff) 45%,
-    var(--border)                                65%,
-    color-mix(in srgb, var(--border) 65%, #000) 85%,
-    var(--border)                                100%
+    110deg,
+    var(--metal-dark) 0%,
+    var(--metal-dark) 42%,
+    var(--metal-bright) 50%,
+    var(--metal-dark) 58%,
+    var(--metal-dark) 100%
   );
-  background-size: 300% 100%;
-  background-position: 200% 0;
+  background-size: 220% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
+  animation: logo_shine_sweep 2s ease-in-out forwards 5.2s;
+  filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--border) 30%, transparent));
+}
 
-  animation:
-    logo_shine_sweep 1.0s ease-out forwards 4.3s;
+/* V 글자 위 발광 코어 (스토리보드 03) */
+.intro_logo_v {
+  position: relative;
+}
 
-  text-shadow:
-    0 0 20px color-mix(in srgb, var(--border) 45%, transparent),
-    0 0 50px color-mix(in srgb, var(--border) 20%, transparent);
+.intro_logo_v_core {
+  position: absolute;
+  top: 42%;
+  left: 58%;
+  width: var(--intro-v-core);
+  height: var(--intro-v-core);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 248, 200, 0.7) 25%,
+    color-mix(in srgb, var(--border) 40%, transparent) 55%,
+    transparent 75%
+  );
+  filter: blur(14px);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: logo_v_core 1.4s ease-out forwards 5.4s;
+}
+
+@keyframes logo_v_core {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  30%  { opacity: 1; transform: translate(-50%, -50%) scale(1.8); filter: blur(10px) brightness(2.5); }
+  60%  { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
 }
 
 /* SM — 작은 서브 텍스트 */
 .intro_logo_sm {
   font-family: "Playfair", serif;
-  font-size: clamp(16px, 2.2vw, 38px);
+  font-size: clamp(12px, 3vw, 38px);
   font-weight: 300;
   letter-spacing: 0.9em;
+  max-width: 100%;
+  text-align: center;
   color: transparent;
   background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--border) 65%, #000) 0%,
-    var(--border)                                35%,
-    color-mix(in srgb, var(--border) 55%, #fff) 50%,
-    var(--border)                                65%,
-    color-mix(in srgb, var(--border) 65%, #000) 100%
+    110deg,
+    var(--metal-dark) 0%,
+    var(--metal-dark) 42%,
+    var(--metal-bright) 50%,
+    var(--metal-dark) 58%,
+    var(--metal-dark) 100%
   );
-  background-size: 300% 100%;
-  background-position: 200% 0;
+  background-size: 220% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
-  animation:
-    logo_shine_sweep 1.0s ease-out forwards 4.5s;
+  animation: logo_shine_sweep 2s ease-in-out forwards 5.2s;
 
   text-shadow:
     0 0 14px color-mix(in srgb, var(--border) 40%, transparent);
 }
 
-/* 등장 시 한 번 빠르게 훑는 쉰 */
+/* 등장 시 한 번 번쩍인 뒤 진한 톤 유지 */
 @keyframes logo_shine_sweep {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -100% 0; }
-}
-
-/* 이후 은은하게 반복되는 쉰 */
-@keyframes logo_shine_idle {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0%   { background-position: 100% 0; }
+  28%  { background-position: 100% 0; }
+  62%  { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
 }
 
 /* 로고 등장 순간 골드 라이트 버스트 */
 .intro_logo_burst {
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: var(--intro-logo-burst);
+  height: var(--intro-logo-burst);
   border-radius: 50%;
+  z-index: 5;
   background: radial-gradient(
     circle,
-    rgba(255, 252, 220, 0.55) 0%,
-    var(--g20)                30%,
-    transparent               70%
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 252, 220, 0.5) 15%,
+    var(--g20) 35%,
+    transparent 70%
   );
-  filter: blur(30px);
+  filter: blur(36px);
   opacity: 0;
   pointer-events: none;
-  animation: logo_burst 1.4s ease-out forwards 4.1s;
+  animation: logo_burst 1.6s ease-out forwards 5.0s;
 }
 
 @keyframes logo_burst {
-  0%   { opacity: 0;   transform: scale(0.3); }
-  25%  { opacity: 0.9; transform: scale(1); }
-  100% { opacity: 0;   transform: scale(1.6); }
+  0%   { opacity: 0; transform: scale(0.2); }
+  20%  { opacity: 1; transform: scale(1.1); filter: blur(28px) brightness(2); }
+  45%  { opacity: 0.7; transform: scale(1.4); }
+  100% { opacity: 0; transform: scale(2); }
 }
 
-/* ─── 도시/의료 영상 섹션 ────────────── */
-/* 영상 대신 플레이스홀더 박스 사용 (영상 삽입 예정) */
+/* ─── 도시 몽타주: 단일 영상 + 지역 라벨 전환 ── */
 .intro_cities {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
+  z-index: 8;
   opacity: 0;
   pointer-events: none;
-  animation: cities_show 0.6s ease forwards 6.5s;
-}
-
-@keyframes cities_show {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-/* 도시 영상 — 전체화면 단일 슬롯 */
-.intro_city_slot {
-  width: 100%;
-  height: 100%;
   background: #111;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  animation: city_reveal 0.8s ease forwards 6.5s;
+  animation:
+    cities_show 0.6s ease forwards 8.5s,
+    cities_hide 0.5s ease forwards 10.75s;
 }
 
-/* 영상 삽입 전 임시 오버레이 텍스트 */
-.intro_city_slot::after {
-  content: "SEOUL";
+.intro_city_slot {
   position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: "Playfair", serif;
-  font-size: 13px;
-  letter-spacing: 0.4em;
-  color: rgba(212, 175, 94, 0.7);
-  white-space: nowrap;
+  inset: 0;
+  overflow: hidden;
 }
 
-/* 영상 요소 전체 채우기 */
-.intro_city_slot video {
+.intro_city_video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: saturate(0.9) contrast(1.03);
+  transform: scale(1.02);
+  will-change: auto;
 }
 
-@keyframes city_reveal {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+/* 지역명 라벨 */
+.intro_city_label {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Playfair", serif;
+  font-size: 12px;
+  letter-spacing: 0.45em;
+  color: rgba(212, 175, 94, 0.85);
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
-/* ─── 의료 장면: 4칸 가로 나열, 위에서 내려오기 ── */
+.intro_city_label--fade {
+  opacity: 0;
+}
+
+@keyframes cities_show {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cities_hide {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* 의료 장면: 밝고 클리니컬한 톤 */
 .intro_medical {
   position: absolute;
   inset: 0;
+  z-index: 9;
   display: flex;
   align-items: stretch;
   opacity: 0;
   pointer-events: none;
-  animation: med_show 0.4s ease forwards 8.4s;
+  animation: med_show 0.4s ease forwards 11.2s;
 }
 
 @keyframes med_show {
@@ -506,10 +761,10 @@
 }
 
 /* 각 패널이 위에서 아래로 슬라이드 인 */
-.intro_med_panel:nth-child(1) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 8.5s; transform: translateY(-100%); }
-.intro_med_panel:nth-child(2) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 8.8s; transform: translateY(-100%); }
-.intro_med_panel:nth-child(3) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 9.1s; transform: translateY(-100%); }
-.intro_med_panel:nth-child(4) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 9.4s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(1) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 11.3s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(2) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 11.55s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(3) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 11.8s; transform: translateY(-100%); }
+.intro_med_panel:nth-child(4) { animation: panel_drop 0.6s cubic-bezier(0.3,0,0.2,1) forwards 12.05s; transform: translateY(-100%); }
 
 @keyframes panel_drop {
   to { transform: translateY(0); }
@@ -522,6 +777,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: brightness(1.08) contrast(1.02);
 }
 
 /* 패널 내 라벨 */
@@ -553,14 +809,15 @@
 .intro_map {
   position: absolute;
   inset: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--mainbg);
+  background: #ececec;
   opacity: 0;
   pointer-events: none;
-  animation: map_show 0.8s ease forwards 10.5s;
+  animation: map_show 0.8s ease forwards 13.2s;
 }
 
 @keyframes map_show {
@@ -579,7 +836,7 @@
   height: auto;
   display: block;
   opacity: 0;
-  animation: map_img_in 1s ease forwards 10.8s;
+  animation: map_img_in 1s ease forwards 13.5s;
 }
 
 @keyframes map_img_in {
@@ -606,8 +863,8 @@
   stroke-dasharray: 350;
   stroke-dashoffset: 350;
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--border) 60%, transparent));
-  /* 점(12.9s) 등장 후 0.4s 뒤에 곡선 그리기 시작 */
-  animation: draw_line 1.5s ease forwards 13.3s;
+  /* 점(15.0s) 등장 후 0.4s 뒤에 곡선 그리기 시작 */
+  animation: draw_line 1.5s ease forwards 15.8s;
 }
 
 @keyframes draw_line {
@@ -621,19 +878,28 @@
   left: 50%;
   transform: translateX(-50%);
   font-family: "Playfair", serif;
-  font-size: clamp(13px, 2vw, 24px);
-  letter-spacing: 0.4em;
+  font-size: clamp(13px, 2vw, 22px);
+  letter-spacing: 0.35em;
+  line-height: 1.8;
   text-align: center;
   color: transparent;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--border) 70%, #000), var(--border), #fff8d6, var(--border), color-mix(in srgb, var(--border) 70%, #000));
-  background-size: 300% 100%;
+  background: linear-gradient(
+    110deg,
+    var(--metal-dark) 0%,
+    var(--metal-dark) 42%,
+    var(--metal-bright) 50%,
+    var(--metal-dark) 58%,
+    var(--metal-dark) 100%
+  );
+  background-size: 220% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
-  white-space: nowrap;
+  white-space: normal;
   opacity: 0;
   animation:
-    tagline_in  0.8s ease   forwards 12.2s,
-    metal_shine 3s   linear 1        12.8s forwards;
+    tagline_in  0.8s ease        forwards 14.0s,
+    metal_shine 2.4s ease-in-out 1    14.6s forwards;
 }
 
 @keyframes tagline_in {
@@ -645,14 +911,41 @@
 .intro_final {
   position: absolute;
   inset: 0;
+  z-index: 11;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--mainbg);
+  background: #ececec;
   opacity: 0;
   pointer-events: none;
-  /* 곡선 완료(14.8s) + 지도 노출 1.5s = 16.3s */
-  animation: final_show 1s ease forwards 16.3s;
+  animation: final_show 1s ease forwards 19.5s;
+}
+
+.intro_final_logo_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  padding: 0 var(--intro-pad-x);
+  max-width: 100%;
+}
+
+.intro_final_tagline {
+  font-family: "Playfair", serif;
+  font-size: clamp(9px, 2.4vw, 15px);
+  letter-spacing: 0.28em;
+  text-align: center;
+  max-width: 92vw;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--border) 80%, #333);
+  opacity: 0;
+  animation: final_tagline_in 0.8s ease forwards 20.3s;
+}
+
+@keyframes final_tagline_in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes final_show {
@@ -661,10 +954,12 @@
 
 /* 최종 로고 */
 .intro_final_logo {
-  width: clamp(200px, 28vw, 460px);
+  width: clamp(160px, 62vw, 460px);
+  max-width: 100%;
+  height: auto;
   opacity: 0;
   transform: scale(0.7);
-  animation: final_logo_in 1.2s cubic-bezier(0.2, 0, 0.1, 1) forwards 16.6s;
+  animation: final_logo_in 1.2s cubic-bezier(0.2, 0, 0.1, 1) forwards 19.8s;
 }
 
 @keyframes final_logo_in {
@@ -683,7 +978,7 @@
   top: var(--py, 50%);
   left: var(--px, 50%);
   opacity: 0;
-  animation: converge_move 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards var(--cd, 16.4s);
+  animation: converge_move 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards var(--cd, 19.6s);
   pointer-events: none;
 }
 
@@ -696,12 +991,12 @@
 /* 최종 글로우 버스트 */
 .intro_final_glow {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: var(--intro-final-glow);
+  height: var(--intro-final-glow);
   border-radius: 50%;
   background: radial-gradient(circle, var(--g60) 0%, transparent 70%);
   opacity: 0;
-  animation: glow_burst 1.2s ease-out forwards 16.5s;
+  animation: glow_burst 1.4s ease-out forwards 19.7s;
   pointer-events: none;
 }
 
@@ -717,80 +1012,11 @@
   100% { opacity: 1; r: 5; }
 }
 
-/* ═══════════════════════════════════
-   INTRO 반응형 — 태블릿 / 모바일
-═══════════════════════════════════ */
-
-/* ── 768px 이하: 태블릿 세로 ── */
-@media (max-width: 768px) {
-  /* 의료 패널: 4열 → 2×2 그리드 */
-  .intro_medical {
-    flex-wrap: wrap;
-  }
-  .intro_med_panel {
-    flex: 0 0 50%;
-    height: 50%;
-  }
-
-  /* 지도 이미지 래퍼: 전체 너비의 80%까지 허용 */
-  .intro_map_figure {
-    width: clamp(260px, 80vw, 820px);
-  }
-
-  /* 태그라인: 자간 줄여 줄바꿈 방지 */
-  .intro_map_tagline {
-    letter-spacing: 0.2em;
-    font-size: clamp(12px, 2.5vw, 20px);
-  }
-}
-
-/* ── 480px 이하: 모바일 ── */
-@media (max-width: 480px) {
-  /* 지도 이미지 래퍼: 화면 전체 너비 활용 */
-  .intro_map_figure {
-    width: 90vw;
-  }
-
-  /* 태그라인: 줄바꿈 허용, 자간 최소화 */
-  .intro_map_tagline {
-    letter-spacing: 0.1em;
-    font-size: clamp(11px, 3vw, 14px);
-    white-space: normal;
-    max-width: 90vw;
-    padding: 0 12px;
-  }
-
-  /* SKIP 버튼 우측 여백 축소 */
-  .intro_skip {
-    right: 20px;
-    bottom: 24px;
-  }
-
-  /* 로고 SM 자간: 넘침 방지 */
-  .intro_logo_sm {
-    letter-spacing: 0.5em;
-  }
-}
-
-/* ── 360px 이하: 소형 모바일 ── */
-@media (max-width: 360px) {
-  /* 의료 패널: 2×2 → 세로 1열로 변경 */
-  .intro_med_panel {
-    flex: 0 0 100%;
-    height: 25%;
-  }
-
-  /* 로고 NOVA 자간 */
-  .intro_logo_nova {
-    letter-spacing: 0.2em;
-  }
-}
-
 /* ─── 건너뛰기 버튼 ─────────────────── */
 .intro_skip {
   position: fixed;
-  bottom: 32px;
-  right: 40px;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  right: max(20px, env(safe-area-inset-right, 0px));
   z-index: 10000;
   font-family: "Playfair", serif;
   font-size: 12px;
@@ -799,11 +1025,277 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 12px 4px;
+  min-height: 44px;
+  min-width: 44px;
   transition: color 0.2s;
 }
 
 .intro_skip:hover {
   color: rgba(212, 175, 94, 1);
+}
+
+/* ═══════════════════════════════════
+   INTRO 반응형 — 태블릿 / 모바일
+═══════════════════════════════════ */
+
+/* ── 1024px 이하: 태블릿 ── */
+@media (max-width: 1024px) {
+  #intro_overlay {
+    --intro-pad-x: clamp(20px, 4vw, 40px);
+  }
+
+  .intro_map_figure {
+    width: clamp(260px, 72vw, 820px);
+  }
+
+  .intro_map_tagline {
+    letter-spacing: 0.28em;
+    font-size: clamp(12px, 2.2vw, 20px);
+  }
+}
+
+/* ── 768px 이하: 태블릿 세로 ── */
+@media (max-width: 768px) {
+  #intro_overlay {
+    --intro-core-bloom: clamp(140px, 52vw, 280px);
+    --intro-haze-outer-w: clamp(300px, 110vw, 640px);
+  }
+
+  .intro_slogan_line {
+    letter-spacing: 0.14em;
+  }
+
+  .intro_slogan_line:nth-child(2) {
+    letter-spacing: 0.22em;
+  }
+
+  .intro_logo_nova {
+    letter-spacing: 0.22em;
+  }
+
+  .intro_logo_sm {
+    letter-spacing: 0.55em;
+  }
+
+  /* 의료 패널: 4열 → 2×2 그리드 */
+  .intro_medical {
+    flex-wrap: wrap;
+  }
+
+  .intro_med_panel {
+    flex: 0 0 50%;
+    height: 50%;
+  }
+
+  .intro_med_panel + .intro_med_panel {
+    border-left: none;
+  }
+
+  .intro_med_panel:nth-child(odd) {
+    border-right: 1px solid var(--g20);
+  }
+
+  .intro_med_panel:nth-child(-n+2) {
+    border-bottom: 1px solid var(--g20);
+  }
+
+  .intro_med_panel::after {
+    bottom: 14px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    max-width: 90%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .intro_map_figure {
+    width: clamp(240px, 84vw, 820px);
+  }
+
+  .intro_map_tagline {
+    letter-spacing: 0.18em;
+    font-size: clamp(11px, 2.8vw, 18px);
+    bottom: clamp(20px, 5vh, 60px);
+  }
+
+  .intro_city_label {
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    font-size: 11px;
+    letter-spacing: 0.3em;
+  }
+}
+
+/* ── 480px 이하: 모바일 ── */
+@media (max-width: 480px) {
+  #intro_overlay {
+    --intro-pad-x: 16px;
+    --intro-core-gold: clamp(72px, 30vw, 140px);
+    --intro-logo-burst: clamp(220px, 95vmin, 420px);
+  }
+
+  .intro_slogan {
+    gap: 0.55em;
+  }
+
+  .intro_slogan_line {
+    letter-spacing: 0.08em;
+    font-size: clamp(11px, 4.6vw, 28px);
+  }
+
+  .intro_slogan_line:nth-child(2) {
+    letter-spacing: 0.14em;
+    font-size: clamp(10px, 3.6vw, 20px);
+  }
+
+  .intro_logo_nova {
+    font-size: clamp(28px, 14vw, 72px);
+    letter-spacing: 0.14em;
+  }
+
+  .intro_logo_sm {
+    letter-spacing: 0.38em;
+    font-size: clamp(10px, 3.8vw, 22px);
+  }
+
+  .intro_map_figure {
+    width: 92vw;
+  }
+
+  .intro_map_tagline {
+    letter-spacing: 0.08em;
+    font-size: clamp(10px, 3.2vw, 14px);
+    white-space: normal;
+    max-width: 92vw;
+    padding: 0 8px;
+    line-height: 1.7;
+  }
+
+  .intro_final_tagline {
+    letter-spacing: 0.14em;
+    font-size: clamp(8px, 2.8vw, 12px);
+  }
+
+  .intro_skip {
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    font-size: 11px;
+  }
+
+  .intro_city_label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    max-width: 92vw;
+    text-align: center;
+  }
+
+  .intro_med_panel::after {
+    bottom: 10px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ── 360px 이하: 소형 모바일 ── */
+@media (max-width: 360px) {
+  .intro_med_panel {
+    flex: 0 0 100%;
+    height: 25%;
+  }
+
+  .intro_med_panel:nth-child(odd) {
+    border-right: none;
+  }
+
+  .intro_med_panel:nth-child(-n+3) {
+    border-bottom: 1px solid var(--g20);
+  }
+
+  .intro_logo_nova {
+    letter-spacing: 0.1em;
+  }
+
+  .intro_logo_sm {
+    letter-spacing: 0.28em;
+  }
+
+  .intro_slogan_line {
+    letter-spacing: 0.05em;
+  }
+}
+
+/* ── 가로 모드 + 낮은 높이: 텍스트·지도 겹침 방지 ── */
+@media (max-height: 520px) and (orientation: landscape) {
+  .intro_slogan,
+  .intro_logo_wrap {
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .intro_slogan_line {
+    font-size: clamp(10px, 3.2vh, 22px);
+  }
+
+  .intro_slogan_line:nth-child(2) {
+    font-size: clamp(9px, 2.6vh, 16px);
+  }
+
+  .intro_logo_nova {
+    font-size: clamp(24px, 10vh, 64px);
+  }
+
+  .intro_logo_sm {
+    font-size: clamp(9px, 2.8vh, 18px);
+  }
+
+  .intro_map {
+    justify-content: flex-start;
+    padding-top: 12px;
+  }
+
+  .intro_map_figure {
+    width: min(52vh, 72vw);
+  }
+
+  .intro_map_tagline {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 10px;
+    font-size: clamp(9px, 2.4vh, 13px);
+  }
+
+  .intro_final_logo {
+    width: clamp(120px, 38vh, 280px);
+  }
+
+  .intro_skip {
+    bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ── 애니메이션 축소 선호 시 빔·파티클만 완화 ── */
+@media (prefers-reduced-motion: reduce) {
+  .intro_particle,
+  .intro_particle--streak,
+  .intro_converge_particle,
+  .intro_ghost {
+    display: none;
+  }
+
+  .intro_beam,
+  .intro_beam::before,
+  .intro_beam::after,
+  .intro_anamorphic,
+  .intro_core,
+  .intro_haze,
+  .intro_screen_flash,
+  .intro_ray {
+    animation-duration: 0.01ms !important;
+  }
 }
 

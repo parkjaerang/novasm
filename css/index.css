@@ -744,6 +744,8 @@ body {
 
 /* 인풋 공통 스타일 */
 .ms_ct_input {
+  width: 100%;
+  box-sizing: border-box;
   font-family: 'Noto Serif KR', serif;
   font-size: 14px;
   color: var(--text1);
@@ -982,6 +984,8 @@ body {
     flex-direction: column;
   }
   .ms_ct_text { flex: none; width: 100%; }
+  .ms_ct_form { width: 100%; }
+  .ms_ct_row { grid-template-columns: 1fr; }
 
   /* WHO 하단 블록 간격 줄임 */
   .ms_who_bottom { gap: 16px; }
@@ -991,9 +995,6 @@ body {
 @media (max-width: 480px) {
   /* 서비스 카드: 2열 → 1열 */
   .ms_svc_grid { grid-template-columns: 1fr; }
-
-  /* 컨택 폼 2열 행 → 1열로 */
-  .ms_ct_row { grid-template-columns: 1fr; }
 
   /* 포트폴리오 프리뷰 숨김 (좁은 화면에서 카드가 겹쳐 보임) */
   .ms_pf_preview { display: none; }

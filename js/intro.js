@@ -1,11 +1,24 @@
 /**
  * intro.js
  * NOVA SM 인트로 애니메이션 컨트롤러
- * 씬 순서: 골드빔 → 슬로건 → 로고 → 도시영상 → 의료장면 → 한중지도 → 최종로고
+ * 씬 순서: 수평 골드빔(발광코어) → 슬로건 → 로고 → 서울몽타주 → 의료장면 → 한중지도 → 최종로고
  */
 
 (function () {
   'use strict';
+
+  /** 뷰포트 너비 기준 이펙트 스케일 (0.42 ~ 1) */
+  function introScale() {
+    return Math.min(1, Math.max(0.42, window.innerWidth / 1280));
+  }
+
+  /** 화면 크기별 파티클 수 조절 */
+  function introParticleCount(base) {
+    if (window.innerWidth < 480) return Math.round(base * 0.4);
+    if (window.innerWidth < 768) return Math.round(base * 0.6);
+    if (window.innerWidth < 1024) return Math.round(base * 0.8);
+    return base;
+  }
 
   /* ── 렌즈 플레어 보조 광선 생성 ──────────────────── */
   /**
@@ -13,23 +26,26 @@
    * @param {HTMLElement} beam - .intro_beam 요소
    */
   function buildFlareRays(beam) {
-    /* 헤이즈(빛 번짐) */
-    const haze = document.createElement('div');
-    haze.className = 'intro_haze';
-    beam.appendChild(haze);
+    var scale = introScale();
 
-    /* 방사형 보조 광선 각도 목록 (도 단위, 코어 중심 기준) */
+    /* 헤이즈(빛 번짐) — 다층 */
+    ['intro_haze', 'intro_haze intro_haze--outer'].forEach(function (cls) {
+      const haze = document.createElement('div');
+      haze.className = cls;
+      beam.appendChild(haze);
+    });
+
+    /* 수평 주 광선 + 렌즈 플레어 보조 광선 — 길이는 뷰포트에 맞게 축소 */
     const rays = [
-      /* 주 대각선 방향 반대편 꼬리 */
-      { angle: 155, length: 700, opacity: 0.6 },
-      /* 위아래 짧은 수직 광선 */
-      { angle: 80,  length: 180, opacity: 0.45 },
-      { angle: 260, length: 180, opacity: 0.45 },
-      /* 대각 보조 광선 */
-      { angle: 45,  length: 250, opacity: 0.3 },
-      { angle: 225, length: 250, opacity: 0.3 },
-      { angle: 120, length: 130, opacity: 0.25 },
-      { angle: 300, length: 130, opacity: 0.25 },
+      { angle: 0,   length: Math.round(1400 * scale), opacity: 0.85, w: 2 },
+      { angle: 180, length: Math.round(900 * scale),  opacity: 0.4,  w: 1 },
+      { angle: 0,   length: Math.round(600 * scale),  opacity: 0.25, w: 6, blur: 4 },
+      { angle: 90,  length: Math.round(220 * scale),  opacity: 0.35, w: 1 },
+      { angle: 270, length: Math.round(220 * scale),  opacity: 0.35, w: 1 },
+      { angle: 25,  length: Math.round(320 * scale),  opacity: 0.22, w: 1 },
+      { angle: 335, length: Math.round(320 * scale),  opacity: 0.22, w: 1 },
+      { angle: 155, length: Math.round(280 * scale),  opacity: 0.18, w: 1 },
+      { angle: 205, length: Math.round(280 * scale),  opacity: 0.18, w: 1 },
     ];
 
     rays.forEach(function (r) {
@@ -37,43 +53,48 @@
       el.className = 'intro_ray';
       el.style.cssText = `
         width: ${r.length}px;
+        height: ${r.w || 1}px;
         transform: translate(-50%, -50%) rotate(${r.angle}deg);
         opacity: ${r.opacity};
+        filter: blur(${r.blur || 0.5}px);
         transform-origin: center center;
       `;
       beam.appendChild(el);
     });
   }
 
-  /* ── 파티클 생성 유틸 ──────────────────────────── */
   /**
-   * 빔이 지나간 대각선 경로(우상→좌하)에 미세 파티클을 흩뿌린다.
-   * @param {HTMLElement} container - 파티클을 붙일 부모 요소
-   * @param {number} count - 생성할 파티클 수
+   * 수평 빔 경로를 따라 미세 골드 파티클 생성
+   * @param {HTMLElement} container
+   * @param {number} count
    */
   function spawnBeamParticles(container, count) {
-    for (let i = 0; i < count; i++) {
+    var scale = introScale();
+    var total = introParticleCount(count);
+
+    for (let i = 0; i < total; i++) {
       const p = document.createElement('div');
-      p.className = 'intro_particle';
+      const isStreak = i % 5 === 0;
+      p.className = isStreak ? 'intro_particle intro_particle--streak' : 'intro_particle';
 
-      /* 우상→좌하 대각선 경로 기준 위치 */
-      const pct = i / count;
-      const baseX = 100 - pct * 110;  /* 우측(100vw)에서 왼쪽으로 */
-      const baseY = pct * 110 - 10;   /* 위(-10vh)에서 아래로 */
+      /* 좌→우 수평 경로 (화면 중앙 부근) */
+      const pct = i / Math.max(total - 1, 1);
+      const baseX = pct * 130 - 15;
+      const baseY = 50 + (Math.random() - 0.5) * 14;
 
-      const size = Math.random() * 4 + 1;
+      const size = isStreak ? Math.random() * 2 + 1 : Math.random() * 4 + 1;
 
       p.style.cssText = `
-        left: ${baseX + (Math.random() - 0.5) * 15}vw;
-        top:  ${baseY + (Math.random() - 0.5) * 15}vh;
-        width: ${size}px;
-        height: ${size}px;
-        --delay: ${0.5 + Math.random() * 0.8}s;
-        --dur: ${0.9 + Math.random() * 0.8}s;
-        --tx1: ${(Math.random() - 0.5) * 40}px;
-        --ty1: ${-10 - Math.random() * 20}px;
-        --tx2: ${(Math.random() - 0.5) * 80}px;
-        --ty2: ${-30 - Math.random() * 50}px;
+        left: ${baseX + (Math.random() - 0.5) * 8}vw;
+        top:  ${baseY + (Math.random() - 0.5) * 6}vh;
+        width: ${isStreak ? size * 8 : size}px;
+        height: ${isStreak ? size : size}px;
+        --delay: ${0.35 + Math.random() * 0.9}s;
+        --dur: ${0.8 + Math.random() * 1.1}s;
+        --tx1: ${Math.round((20 + Math.random() * 40) * scale)}px;
+        --ty1: ${(Math.random() - 0.5) * 24 * scale}px;
+        --tx2: ${Math.round((60 + Math.random() * 100) * scale)}px;
+        --ty2: ${(Math.random() - 0.5) * 40 * scale}px;
       `;
       container.appendChild(p);
     }
@@ -85,11 +106,13 @@
    * @param {HTMLElement} container
    */
   function spawnGhostBeams(container) {
+    var scale = introScale();
+
     /* [딜레이 오프셋, 불투명도, 크기, blur] */
     var ghosts = [
-      { offset: 0.22, op: 0.35, size: 160, blur: 38 },
-      { offset: 0.44, op: 0.20, size: 110, blur: 48 },
-      { offset: 0.66, op: 0.10, size:  80, blur: 56 },
+      { offset: 0.22, op: 0.35, size: Math.round(160 * scale), blur: Math.round(38 * scale) },
+      { offset: 0.44, op: 0.20, size: Math.round(110 * scale), blur: Math.round(48 * scale) },
+      { offset: 0.66, op: 0.10, size: Math.round(80 * scale),  blur: Math.round(56 * scale) },
     ];
 
     ghosts.forEach(function (g) {
@@ -97,8 +120,8 @@
       el.className = 'intro_ghost';
       /* 메인 빔 딜레이(0.2s) + 오프셋만큼 더 늦게 출발 → 뒤에서 따라옴 */
       el.style.cssText = `
-        --ghost-delay: ${0.2 + g.offset}s;
-        --ghost-dur: 2.4s;
+        --ghost-delay: ${0.15 + g.offset}s;
+        --ghost-dur: 2.6s;
         --ghost-op: ${g.op};
         --ghost-size: ${g.size}px;
         --ghost-blur: ${g.blur}px;
@@ -115,8 +138,9 @@
   function spawnConvergeParticles(container, count) {
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
+    const total = introParticleCount(count);
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < total; i++) {
       const p = document.createElement('div');
       p.className = 'intro_converge_particle';
 
@@ -130,7 +154,7 @@
       const dx = cx - sx;
       const dy = cy - sy;
 
-      const size = Math.random() * 5 + 2;
+      const size = (Math.random() * 5 + 2) * Math.max(introScale(), 0.65);
 
       p.style.cssText = `
         --sz: ${size}px;
@@ -138,7 +162,7 @@
         --py: ${startY}vh;
         --cx: ${dx}px;
         --cy: ${dy}px;
-        --cd: ${16.4 + Math.random() * 0.5}s;
+        --cd: ${19.5 + Math.random() * 0.6}s;
       `;
       container.appendChild(p);
     }
@@ -149,9 +173,17 @@
     const overlay = document.getElementById('intro_overlay');
     if (!overlay) return;
 
-    /* 렌즈 플레어 빔 */
+    /* 렌즈 플레어 빔 + 시네마틱 레이어 */
     overlay.insertAdjacentHTML('beforeend', `
-      <div class="intro_beam"></div>
+      <div class="intro_grain" aria-hidden="true"></div>
+      <div class="intro_vignette" aria-hidden="true"></div>
+      <div class="intro_screen_flash" aria-hidden="true"></div>
+      <div class="intro_beam">
+        <div class="intro_anamorphic" aria-hidden="true"></div>
+        <div class="intro_core intro_core--hot" aria-hidden="true"></div>
+        <div class="intro_core intro_core--gold" aria-hidden="true"></div>
+        <div class="intro_core intro_core--bloom" aria-hidden="true"></div>
+      </div>
     `);
     /* 빔 내부에 보조 광선 + 헤이즈 삽입 */
     buildFlareRays(overlay.querySelector('.intro_beam'));
@@ -160,7 +192,7 @@
     spawnGhostBeams(overlay);
 
     /* 빔 경로 파티클 */
-    spawnBeamParticles(overlay, 40);
+    spawnBeamParticles(overlay, 72);
 
     /* 슬로건 텍스트 */
     overlay.insertAdjacentHTML('beforeend', `
@@ -178,16 +210,19 @@
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_logo_burst"></div>
       <div class="intro_logo_wrap" id="introLogoWrap">
-        <span class="intro_logo_nova">NOVA</span>
+        <span class="intro_logo_nova">
+          N<span class="intro_logo_o">O</span><span class="intro_logo_v">V</span><span class="intro_logo_a">A</span>
+        </span>
         <span class="intro_logo_sm">SM</span>
+        <span class="intro_logo_v_core" aria-hidden="true"></span>
       </div>
     `);
 
-    /* 도시 장면 — 전체화면 단일 영상 슬롯 (영상 추후 삽입) */
+    /* 도시 장면 — 서울 단일 영상 + 지역 라벨 전환 */
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_cities" id="introCities">
         <div class="intro_city_slot">
-          <video src="./img/seoul_intro.mp4" autoplay muted playsinline loop></video>
+          <video class="intro_city_video" src="./img/seoul_intro.mp4" muted playsinline loop preload="auto"></video>
         </div>
       </div>
     `);
@@ -195,16 +230,16 @@
     /* 의료 장면: 4칸, 위에서 내려오기 — 파일명만 교체하면 바로 적용 */
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_medical" id="introMedical">
-        <div class="intro_med_panel" data-label="원장 상담">
+        <div class="intro_med_panel">
           <video class="intro_med_video" src="./img/medical_1.mp4" autoplay muted playsinline loop></video>
         </div>
-        <div class="intro_med_panel" data-label="시술 장면">
+        <div class="intro_med_panel">
           <video class="intro_med_video" src="./img/medical_2.mp4" autoplay muted playsinline loop></video>
         </div>
-        <div class="intro_med_panel" data-label="의료진 협업">
+        <div class="intro_med_panel">
           <video class="intro_med_video" src="./img/medical_3.mp4" autoplay muted playsinline loop></video>
         </div>
-        <div class="intro_med_panel" data-label="전문성 &amp; 신뢰">
+        <div class="intro_med_panel">
           <video class="intro_med_video" src="./img/medical_4.mp4" autoplay muted playsinline loop></video>
         </div>
       </div>
@@ -232,15 +267,15 @@
               d="M 740 280 C 690 201, 490 161, 445 176"/>
             <!-- 서울 마커 -->
             <circle cx="740" cy="280" r="3" fill="#d4af5e" opacity="0"
-              style="animation: map_dot 0.3s ease forwards 12.9s;">
+              style="animation: map_dot 0.3s ease forwards 15.4s;">
             </circle>
             <!-- 베이징 마커 -->
             <circle cx="445" cy="176" r="3" fill="#d4af5e" opacity="0"
-              style="animation: map_dot 0.3s ease forwards 12.9s;">
+              style="animation: map_dot 0.3s ease forwards 15.4s;">
             </circle>
           </svg>
         </div>
-        <span class="intro_map_tagline">CONNECT KOREA, EXPAND CHINA</span>
+        <span class="intro_map_tagline">CONNECT KOREA<br>EXPAND CHINA</span>
       </div>
     `);
 
@@ -248,13 +283,16 @@
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_final" id="introFinal">
         <div class="intro_final_glow"></div>
-        <img class="intro_final_logo" src="./img/novasm_logo.png" alt="NOVA SM">
+        <div class="intro_final_logo_wrap">
+          <img class="intro_final_logo" src="./img/novasm_logo.png" alt="NOVA SM">
+          <p class="intro_final_tagline">Nova seasoned marketers</p>
+        </div>
       </div>
     `);
 
     /* 수렴 파티클 — 최종 씬 컨테이너에 삽입 */
     const finalEl = document.getElementById('introFinal');
-    spawnConvergeParticles(finalEl, 60);
+    spawnConvergeParticles(finalEl, 90);
 
     /* 건너뛰기 버튼 */
     overlay.insertAdjacentHTML('beforeend', `
@@ -264,27 +302,79 @@
     `);
   }
 
-  /* ── 슬로건 → 로고 전환 타이밍 제어 ──────────── */
+  /* ── 슬로건 → 로고 전환 · 로고 페이드아웃 타이밍 ── */
   function scheduleSloganFade() {
     const slogan = document.getElementById('introSlogan');
     if (!slogan) return;
 
-    /* 3.6s 후 슬로건이 중앙으로 수축하며 blur — 로고 텍스트로 흘러드는 느낌 */
+    /* 5.2s 후 슬로건이 중앙으로 수축하며 blur — 로고 텍스트로 흘러드는 느낌 */
     setTimeout(function () {
       slogan.style.transition = 'opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease, letter-spacing 0.7s ease';
       slogan.style.opacity = '0';
       slogan.style.transform = 'scale(0.7)';
       slogan.style.filter = 'blur(8px)';
+      slogan.style.visibility = 'hidden';
 
-      /* letter-spacing 개별 라인에도 적용 */
       Array.from(slogan.querySelectorAll('.intro_slogan_line')).forEach(function (line) {
         line.style.transition = 'letter-spacing 0.7s ease';
         line.style.letterSpacing = '0.6em';
       });
-    }, 3600);
+    }, 5200);
   }
 
-  /* ── 인트로 종료 처리 ──────────────────────────── */
+  function scheduleLogoFade() {
+    /* 도시 씬(8.5s) 직전 NOVA SM 텍스트 제거 — CSS 애니메이션 보조 */
+    setTimeout(function () {
+      var logo = document.getElementById('introLogoWrap');
+      var burst = document.querySelector('.intro_logo_burst');
+
+      if (logo) {
+        logo.style.animation = 'none';
+        logo.style.transition = 'opacity 0.55s ease-in, transform 0.55s ease-in, filter 0.55s ease-in';
+        logo.style.opacity = '0';
+        logo.style.transform = 'scale(1.06)';
+        logo.style.filter = 'blur(10px)';
+        logo.style.visibility = 'hidden';
+        logo.style.zIndex = '1';
+      }
+
+      if (burst) {
+        burst.style.opacity = '0';
+        burst.style.visibility = 'hidden';
+      }
+    }, 8200);
+  }
+
+  function scheduleCityMontage() {
+    var label = document.getElementById('introCityLabel');
+    var video = document.querySelector('.intro_city_video');
+
+    /* 도시 씬 시작(8.5s)에 영상 1회 재생 */
+    setTimeout(function () {
+      if (video) {
+        video.currentTime = 0;
+        video.play().catch(function () {});
+      }
+    }, 8500);
+
+    if (!label) return;
+
+    /* GANGNAM은 HTML 기본값 — 이후 3개 지역만 라벨 전환 */
+    [
+      { name: 'HONGDAE',  at: 9150 },
+      { name: 'SEONGSU',  at: 9800 },
+      { name: 'CHEONGDAM', at: 10450 },
+    ].forEach(function (item) {
+      setTimeout(function () {
+        label.classList.add('intro_city_label--fade');
+        setTimeout(function () {
+          label.textContent = item.name;
+          label.classList.remove('intro_city_label--fade');
+        }, 200);
+      }, item.at);
+    });
+  }
+
   function endIntro() {
     const overlay = document.getElementById('intro_overlay');
     const skip    = document.getElementById('introSkip');
@@ -308,7 +398,7 @@
   /* ── 전체 인트로 타이머 ────────────────────────── */
   /* 총 약 16초 후 자동 종료 */
   function startIntroTimer() {
-    setTimeout(endIntro, 20000);
+    setTimeout(endIntro, 23500);
   }
 
   /* ── 진입점 ────────────────────────────────────── */
@@ -324,6 +414,8 @@
     sessionStorage.setItem('introPlayed', '1');
     buildIntro();
     scheduleSloganFade();
+    scheduleLogoFade();
+    scheduleCityMontage();
     bindSkip();
     startIntroTimer();
   });
