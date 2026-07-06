@@ -59,7 +59,7 @@ body {
 /* 메인 헤드라인 */
 .pf_hero_headline {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(30px, 4.5vw, 68px);
+  font-size: clamp(20px, 3vw, 68px);
   font-weight: 500;
   color: var(--text1);
   line-height: 1.35;
