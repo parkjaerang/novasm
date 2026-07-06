@@ -10,31 +10,42 @@
     --border :#b8a88c;
     --text2 : #494F59;
     --logo_text: "Playfair", serif;
+    --ms-header-h: 96px;
 }
 
 /* ═══════════════════════════════════
    HEADER
 ═══════════════════════════════════ */
-/* 헤더는 #main_site 바깥에 위치 — 전체 너비, 좌우 패딩만 지정 */
+/* 헤더는 #main_site 바깥에 위치 — 전체 너비, 높이 고정 */
 .ms_header {
   position: sticky;
   top: 0;
   z-index: 100;
-  /* 세로: 뷰포트에 따라 축소, 가로: 좁은 화면에서도 여백 유지 */
-  padding: clamp(14px, 2.5vw, 32px) clamp(20px, 6vw, 100px);
+  height: var(--ms-header-h);
+  padding: 0 clamp(20px, 6vw, 100px);
+  display: flex;
+  align-items: center;
   background: var(--mainbg);
   border-bottom: 1px var(--gray2) solid;
+  box-sizing: border-box;
+}
+
+.ms_header.ms_scrolled {
+  box-shadow: 0 2px 20px rgba(21, 31, 52, 0.08);
+  transition: box-shadow 0.3s ease;
 }
 
 .ms_header_i {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .ms_logo {
   font-family: var(--logo_text);
-  font-size: clamp(28px, 5vw, 64px); /* 모바일에서 로고 크기 자동 축소 */
+  font-size: 48px;
+  line-height: 1;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text1);
@@ -51,7 +62,8 @@
 
 .ms_nav_link {
   font-family: var(--logo_text);
-  font-size: clamp(13px, 1.6vw, 20px); /* 좁은 화면에서 네비 텍스트 축소 */
+  font-size: 18px;
+  line-height: 1;
   font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--text1);
@@ -311,6 +323,14 @@
 
 /* 640px 이하: 풀스크린 오버레이로 전환 */
 @media (max-width: 640px) {
+  :root {
+    --ms-header-h: 64px;
+  }
+
+  .ms_logo {
+    font-size: 28px;
+  }
+
   .ms_hamburger { display: flex; }
 
   /* 풀스크린 오버레이 — 기본 숨김 */

@@ -4,7 +4,7 @@
 
 /* sticky 헤더가 앵커 이동 시 콘텐츠를 가리지 않도록 오프셋 지정 */
 html {
-  scroll-padding-top: clamp(40px, 8vw, 80px);
+  scroll-padding-top: var(--ms-header-h);
 }
 
 body {
@@ -26,7 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: calc(100vh - 118px); /* 뷰포트에서 헤더 높이 제외, min-height로 내용 넘침 허용 */
+  min-height: calc(100vh - 100px); /* 뷰포트에서 헤더 높이 제외, min-height로 내용 넘침 허용 */
   padding: clamp(40px, 6vw, 80px) clamp(20px, 6vw, 100px) clamp(40px, 5vw, 60px);
   position: relative;
 }
@@ -182,7 +182,7 @@ body {
   background: var(--mainbg);  /* mainbg로 통일 */
   padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px) clamp(60px, 8vw, 120px);
   /* 고정 높이 제거 — 모바일에서 2열/1열 전환 시 내용이 잘리지 않도록 */
-  min-height: calc(100vh - 118px);
+  min-height: calc(100vh - 100px);
 }
 
 /* 섹션 헤더 */
@@ -912,14 +912,6 @@ body {
 }
 .ms_contact.ms_in .ms_ct_text { animation: ms_fade_up 0.75s ease 0s    forwards; }
 .ms_contact.ms_in .ms_ct_form { animation: ms_fade_up 0.75s ease 0.2s forwards; }
-
-/* ── 헤더 스크롤 시 배경 강화 ── */
-.ms_header.ms_scrolled {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  box-shadow: 0 2px 20px rgba(21,31,52,0.08);
-  transition: padding 0.3s ease, box-shadow 0.3s ease;
-}
 
 /* ═══════════════════════════════════
    반응형 미디어쿼리

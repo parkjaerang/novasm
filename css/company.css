@@ -40,7 +40,7 @@
 ══════════════════════════════ */
 .cp_who {
   position: relative;
-  min-height: calc(100vh - 144px);
+  min-height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -235,7 +235,7 @@
    섹션 3 · 우리의 강점 (지도)
 ══════════════════════════════ */
 .cp_strength {
-  min-height: calc(100vh - 144px); /* 고정 height → min-height, 모바일에서 내용 넘침 방지 */
+  min-height: calc(100vh - 100px); /* 고정 height → min-height, 모바일에서 내용 넘침 방지 */
   background: var(--subbg);
   padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px) clamp(48px, 6vw, 80px);
   overflow: hidden;
@@ -276,7 +276,7 @@
 /* 골드 세로 구분선 */
 .cp_strength_divider {
   width: 2px;
-  min-height: 150px;
+  min-height: 70px;
   background: var(--border);
   flex-shrink: 0;
   margin-top: 6px;
@@ -284,7 +284,7 @@
 
 .cp_strength_p1 {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(13px, 1.3vw, 17px);
+  font-size: clamp(14px, 1.3vw, 20px);
   color: var(--text1);
   line-height: 2;
   letter-spacing: 0.02em;
@@ -293,81 +293,109 @@
 
 .cp_strength_p2 {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(13px, 1.3vw, 17px);
+  font-size: clamp(14px, 1.3vw, 20px);
   color: var(--text2);
   line-height: 2;
   letter-spacing: 0.02em;
 }
 
-/* 지도 래퍼: 이미지 크기 제한 + 중앙 정렬 */
+/* 지도 래퍼 */
 .cp_map_wrap {
   position: relative;
-  width: 68%;          /* 지도 크기 축소 */
-  max-width: 900px;
-  margin: 0 ;
-  opacity: 0;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0;
   margin-top: 50px;
+  opacity: 0;
 }
 .cp_strength.cp_in .cp_map_wrap { animation: cp_fade_in 1s ease 0.4s forwards; }
 
-/* 지도 이미지 */
-.cp_map_img {
+/* SVG 지도 */
+.cp_map_svg {
   display: block;
   width: 100%;
   height: auto;
-  opacity: 0.88;
-  border-radius: 4px;
-}
-
-/* SVG 오버레이: 이미지 위에 절대 위치 */
-.cp_map_svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
 }
 
-/* 한국 허브 포인트: 골드 + 펄스 링 */
+/* 한국 허브 */
 .cp_hub {
-  fill: var(--border);
-  opacity: 0.95;
+  fill: #fff;
 }
 
-/* 펄스 링 애니메이션 */
+.cp_hub_glow {
+  opacity: 0.7;
+}
+
 @keyframes cp_pulse {
-  0%   { r: 11; opacity: 0.8; }
-  70%  { r: 36; opacity: 0; }
-  100% { r: 36; opacity: 0; }
+  0%   { r: 11; opacity: 0.75; }
+  70%  { r: 18; opacity: 0; }
+  100% { r: 18; opacity: 0; }
 }
 .cp_hub_ring {
   fill: none;
-  stroke: var(--border);
+  stroke: #fff;
   stroke-width: 1.5;
-  animation: cp_pulse 2.2s ease-out infinite;
+  animation: cp_pulse 2.4s ease-out infinite;
 }
 
-/* 중국 도시 포인트 */
+/* 중국 도시 노드 */
 .cp_city {
- fill: var(--border);
-  opacity: 0.85;
-  filter: url(#glow);
+  fill: #fff;
+  opacity: 0.92;
+}
+.cp_city--sm {
+  opacity: 0.65;
 }
 
-/* 연결선 스타일 (JS에서 생성) */
-.cp_line {
-  stroke: var(--border);
-  stroke-width: 1;
+/* 중국 내부 네트워크 */
+.cp_internal_line {
+  stroke: #fff;
+  stroke-width: 0.8;
   fill: none;
-  stroke-dasharray: 6 4;
-  opacity: 0.55;
+  opacity: 0;
+  stroke-linecap: round;
+}
+.cp_strength.cp_in .cp_internal_line {
+  animation: cp_internal_fade 1.2s ease forwards;
+}
+@keyframes cp_internal_fade {
+  to { opacity: 0.28; }
+}
+
+/* 국제 연결선 (JS에서 생성) */
+.cp_line {
+  stroke: url(#cp_arc_grad);
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.7));
 }
 
 /* 이동 포인트 (JS에서 생성) */
 .cp_mover {
   fill: #fff;
-  filter: url(#glow);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+}
+
+#cp_movers {
+  opacity: 0;
+}
+.cp_strength.cp_in #cp_movers {
+  opacity: 1;
+  transition: opacity 0.6s ease 1.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp_hub_ring,
+  .cp_internal_line {
+    animation: none !important;
+  }
+  .cp_internal_line { opacity: 0.28; }
+  .cp_line { stroke-dashoffset: 0 !important; transition: none !important; }
+  #cp_movers { opacity: 1; transition: none; }
 }
 
 /* ══════════════════════════════

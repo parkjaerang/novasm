@@ -9,7 +9,29 @@
 
   /** 뷰포트 너비 기준 이펙트 스케일 (0.42 ~ 1) */
   function introScale() {
-    return Math.min(1, Math.max(0.42, window.innerWidth / 1280));
+    var w = window.innerWidth;
+    var floor = w < 480 ? 0.32 : w < 768 ? 0.38 : 0.42;
+    return Math.min(1, Math.max(floor, w / 1280));
+  }
+
+  /**
+   * 모바일·태블릿에서 빔이 화면 밖으로 완전히 빠지도록
+   * beam_travel 키프레임용 CSS 변수를 설정한다.
+   * @param {HTMLElement} overlay
+   */
+  function applyBeamTravelVars(overlay) {
+    var w = window.innerWidth;
+
+    if (w < 480) {
+      overlay.style.setProperty('--beam-start-x', '-100vw');
+      overlay.style.setProperty('--beam-end-x', '265vw');
+    } else if (w < 768) {
+      overlay.style.setProperty('--beam-start-x', '-82vw');
+      overlay.style.setProperty('--beam-end-x', '230vw');
+    } else if (w < 1024) {
+      overlay.style.setProperty('--beam-start-x', '-58vw');
+      overlay.style.setProperty('--beam-end-x', '175vw');
+    }
   }
 
   /** 화면 크기별 파티클 수 조절 */
@@ -107,12 +129,14 @@
    */
   function spawnGhostBeams(container) {
     var scale = introScale();
+    var w = window.innerWidth;
+    var opMul = w < 480 ? 0.55 : w < 768 ? 0.75 : 1;
 
     /* [딜레이 오프셋, 불투명도, 크기, blur] */
     var ghosts = [
-      { offset: 0.22, op: 0.35, size: Math.round(160 * scale), blur: Math.round(38 * scale) },
-      { offset: 0.44, op: 0.20, size: Math.round(110 * scale), blur: Math.round(48 * scale) },
-      { offset: 0.66, op: 0.10, size: Math.round(80 * scale),  blur: Math.round(56 * scale) },
+      { offset: 0.22, op: 0.35 * opMul, size: Math.round(160 * scale), blur: Math.round(38 * scale) },
+      { offset: 0.44, op: 0.20 * opMul, size: Math.round(110 * scale), blur: Math.round(48 * scale) },
+      { offset: 0.66, op: 0.10 * opMul, size: Math.round(80 * scale),  blur: Math.round(56 * scale) },
     ];
 
     ghosts.forEach(function (g) {
@@ -173,6 +197,8 @@
     const overlay = document.getElementById('intro_overlay');
     if (!overlay) return;
 
+    applyBeamTravelVars(overlay);
+
     /* 렌즈 플레어 빔 + 시네마틱 레이어 */
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_grain" aria-hidden="true"></div>
@@ -211,10 +237,9 @@
       <div class="intro_logo_burst"></div>
       <div class="intro_logo_wrap" id="introLogoWrap">
         <span class="intro_logo_nova">
-          N<span class="intro_logo_o">O</span><span class="intro_logo_v">V</span><span class="intro_logo_a">A</span>
+          N<span class="intro_logo_o">O</span><span class="intro_logo_v">V<span class="intro_logo_v_core" aria-hidden="true"></span></span><span class="intro_logo_a">A</span>
         </span>
         <span class="intro_logo_sm">SM</span>
-        <span class="intro_logo_v_core" aria-hidden="true"></span>
       </div>
     `);
 

@@ -28,6 +28,10 @@
   --intro-logo-burst: clamp(260px, 88vmin, 600px);
   --intro-v-core: clamp(36px, 11vw, 80px);
   --intro-final-glow: clamp(140px, 42vmin, 300px);
+  /* beam_travel — JS에서 모바일 값 덮어씀 */
+  --beam-start-x: -35vw;
+  --beam-mid-x: 50vw;
+  --beam-end-x: 135vw;
 }
 
 /* 인트로 전체 래퍼: 화면 전체를 덮음 */
@@ -115,9 +119,9 @@
 }
 
 @keyframes beam_travel {
-  0%   { transform: translate(-35vw, 50vh); }
-  45%  { transform: translate(50vw,  50vh); }
-  100% { transform: translate(135vw, 50vh); }
+  0%   { transform: translate(var(--beam-start-x), 50vh); }
+  45%  { transform: translate(var(--beam-mid-x),  50vh); }
+  100% { transform: translate(var(--beam-end-x), 50vh); }
 }
 
 /* 아나모픽 수평 플레어 */
@@ -564,8 +568,13 @@
   line-height: 1;
   max-width: 100%;
   text-align: center;
-  color: transparent;
   position: relative;
+  filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--border) 30%, transparent));
+}
+
+.intro_logo_nova,
+.intro_logo_nova > span {
+  color: transparent;
   background: linear-gradient(
     110deg,
     var(--metal-dark) 0%,
@@ -579,30 +588,32 @@
   -webkit-background-clip: text;
   background-clip: text;
   animation: logo_shine_sweep 2s ease-in-out forwards 5.2s;
-  filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--border) 30%, transparent));
 }
 
-/* V 글자 위 발광 코어 (스토리보드 03) */
+/* V 글자 — 발광 코어가 글자 뒤에 오도록 */
 .intro_logo_v {
   position: relative;
+  display: inline-block;
+  isolation: isolate;
 }
 
 .intro_logo_v_core {
   position: absolute;
-  top: 42%;
-  left: 58%;
+  top: 50%;
+  left: 50%;
   width: var(--intro-v-core);
   height: var(--intro-v-core);
   border-radius: 50%;
   pointer-events: none;
+  z-index: -1;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 248, 200, 0.7) 25%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 248, 200, 0.55) 25%,
     color-mix(in srgb, var(--border) 40%, transparent) 55%,
     transparent 75%
   );
-  filter: blur(14px);
+  filter: blur(12px);
   opacity: 0;
   transform: translate(-50%, -50%);
   animation: logo_v_core 1.4s ease-out forwards 5.4s;
@@ -1058,8 +1069,22 @@
 /* ── 768px 이하: 태블릿 세로 ── */
 @media (max-width: 768px) {
   #intro_overlay {
-    --intro-core-bloom: clamp(140px, 52vw, 280px);
-    --intro-haze-outer-w: clamp(300px, 110vw, 640px);
+    --intro-core-bloom: clamp(120px, 44vw, 240px);
+    --intro-haze-outer-w: clamp(260px, 88vw, 560px);
+    --intro-beam-line: min(720px, 150vw);
+    --intro-ghost-line: min(520px, 72vw);
+  }
+
+  .intro_anamorphic {
+    width: 88vw;
+  }
+
+  @keyframes anamorphic_pulse {
+    0%, 30%  { opacity: 0; transform: translate(-50%, -50%) scaleX(0.3); }
+    48%      { opacity: 1; transform: translate(-50%, -50%) scaleX(1); }
+    55%      { opacity: 1; transform: translate(-50%, -50%) scaleX(1.08); filter: brightness(1.8); }
+    68%      { opacity: 0.15; transform: translate(-50%, -50%) scaleX(0.7); }
+    100%     { opacity: 0; transform: translate(-50%, -50%) scaleX(0.4); }
   }
 
   .intro_slogan_line {
@@ -1131,8 +1156,50 @@
 @media (max-width: 480px) {
   #intro_overlay {
     --intro-pad-x: 16px;
-    --intro-core-gold: clamp(72px, 30vw, 140px);
+    --intro-core-gold: clamp(64px, 26vw, 120px);
+    --intro-core-bloom: clamp(96px, 36vw, 180px);
+    --intro-haze-w: clamp(150px, 42vw, 280px);
+    --intro-haze-outer-w: clamp(200px, 62vw, 400px);
     --intro-logo-burst: clamp(220px, 95vmin, 420px);
+    --intro-v-core: clamp(28px, 9vw, 56px);
+    --intro-beam-line: min(480px, 128vw);
+    --intro-ghost-line: min(360px, 58vw);
+  }
+
+  .intro_anamorphic {
+    width: 68vw;
+    box-shadow:
+      0 0 14px 3px rgba(255, 252, 220, 0.45),
+      0 0 40px 8px color-mix(in srgb, var(--border) 28%, transparent),
+      0 0 80px 20px color-mix(in srgb, var(--border) 8%, transparent);
+  }
+
+  @keyframes core_gold {
+    0%, 38%  { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+    50%      { opacity: 0.85; transform: translate(-50%, -50%) scale(1.6); filter: blur(14px) brightness(1.8); }
+    56%      { opacity: 0.95; transform: translate(-50%, -50%) scale(2.2); filter: blur(10px) brightness(2.4); }
+    68%      { opacity: 0.35; transform: translate(-50%, -50%) scale(1.2); }
+    100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  }
+
+  @keyframes core_bloom {
+    0%, 36%  { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+    52%      { opacity: 0.7; transform: translate(-50%, -50%) scale(1.8); }
+    58%      { opacity: 0.85; transform: translate(-50%, -50%) scale(2.6); filter: blur(32px) brightness(1.4); }
+    75%      { opacity: 0.12; transform: translate(-50%, -50%) scale(1); }
+    100%     { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  }
+
+  .intro_core--bloom {
+    box-shadow:
+      0 0 50px 24px rgba(255, 252, 220, 0.35),
+      0 0 100px 48px color-mix(in srgb, var(--border) 18%, transparent);
+  }
+
+  .intro_beam::after {
+    box-shadow:
+      0 0 8px 2px rgba(255, 252, 220, 0.5),
+      0 0 24px 5px color-mix(in srgb, var(--border) 30%, transparent);
   }
 
   .intro_slogan {
@@ -1151,7 +1218,8 @@
 
   .intro_logo_nova {
     font-size: clamp(28px, 14vw, 72px);
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
+    padding-right: 0.1em;
   }
 
   .intro_logo_sm {

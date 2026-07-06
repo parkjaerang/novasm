@@ -60,7 +60,6 @@
 
         <!-- 우: 이유 카드 세로 스택 (이미지 좌 + 텍스트 우) -->
         <div class="cp_why_cards">
-
           <div class="cp_why_card">
             <img class="cp_why_card_img" src="./img/hp_lobby_w.png" alt="피부과 협력" aria-hidden="true">
             <p class="cp_why_card_text">
@@ -110,44 +109,94 @@
                 브랜드 영향력 확대를 지원합니다.
               </p>
 
-                 <!-- 동적 지도 영역 -->
-        <div class="cp_map_wrap" id="cp_map_wrap">
-          <img class="cp_map_img" src="./img/한중지도.png" alt="한국-중국 연결 지도" id="cp_map_img">
-
-          <!-- SVG 오버레이: 라인 + 이동 포인트 (viewBox = 실제 이미지 1407×802) -->
-          <svg class="cp_map_svg" id="cp_map_svg" viewBox="0 0 1407 802" preserveAspectRatio="xMidYMid meet">
+              <!-- 동적 지도 영역 -->
+              <div class="cp_map_wrap" id="cp_map_wrap">
+          <svg class="cp_map_svg" id="cp_map_svg" viewBox="0 0 1407 802" preserveAspectRatio="xMidYMid meet" role="img" aria-label="한국-중국 연결 지도">
             <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
-                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              <!-- 배경 그라데이션 -->
+              <radialGradient id="cp_map_bg" cx="50%" cy="45%" r="70%">
+                <stop offset="0%" stop-color="#DDDAD6"/>
+                <stop offset="100%" stop-color="#DDDAD6"/>
+              </radialGradient>
+
+              <!-- 육지 실루엣: 흰색→회색, 검정→투명 -->
+              <filter id="cp_land_filter" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+                <feColorMatrix type="matrix"
+                  values="0 0 0 0 0.78
+                          0 0 0 0 0.76
+                          0 0 0 0 0.74
+                          1 1 1 0 -2.2"/>
+                <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#fff" flood-opacity="0.5"/>
+                <feDropShadow dx="0" dy="6" stdDeviation="18" flood-color="#000" flood-opacity="0.05"/>
               </filter>
+
+              <!-- 노드 글로우 -->
+              <filter id="cp_node_glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+
+              <!-- 허브 강광 -->
+              <radialGradient id="cp_hub_grad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff"/>
+                <stop offset="55%" stop-color="#fff" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+              </radialGradient>
+
+              <!-- 연결선 그라데이션 (서울→중국) -->
+              <linearGradient id="cp_arc_grad" gradientUnits="userSpaceOnUse" x1="1270" y1="485" x2="400" y2="400">
+                <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+                <stop offset="30%" stop-color="#fff" stop-opacity="0.65"/>
+                <stop offset="100%" stop-color="#fff" stop-opacity="0.25"/>
+              </linearGradient>
             </defs>
 
-            <!-- 연결선 그룹 (JS에서 채움) -->
+            <!-- 배경 -->
+            <rect class="cp_map_bg" width="1407" height="802" fill="url(#cp_map_bg)"/>
+
+            <!-- 육지 실루엣 -->
+            <image class="cp_land_img" href="./img/한중지도.png" width="1407" height="802" filter="url(#cp_land_filter)"/>
+
+            <!-- 중국 내부 네트워크 (JS에서 채움) -->
+            <g id="cp_internal" class="cp_internal"></g>
+
+            <!-- 국제 연결선 (JS에서 채움) -->
             <g id="cp_lines"></g>
-            <!-- 이동 포인트 그룹 (JS에서 채움) -->
+
+            <!-- 이동 포인트 (JS에서 채움) -->
             <g id="cp_movers"></g>
 
-            <!-- 한국 허브: 서울 -->
-            <circle class="cp_hub" cx="1270" cy="485" r="11" />
-            <circle class="cp_hub_ring" cx="1270" cy="485" r="11" />
+            <!-- 중국 도시 노드 -->
+            <g class="cp_cities" filter="url(#cp_node_glow)">
+              <circle class="cp_city cp_city--sm" cx="850" cy="198" r="5"/>
+              <circle class="cp_city cp_city--sm" cx="820" cy="268" r="5"/>
+              <circle class="cp_city" cx="760" cy="308" r="7"/><!-- 베이징 -->
+              <circle class="cp_city cp_city--sm" cx="780" cy="348" r="5"/>
+              <circle class="cp_city" cx="451" cy="496" r="7"/><!-- 시안 -->
+              <circle class="cp_city" cx="690" cy="444" r="7"/><!-- 정저우 -->
+              <circle class="cp_city cp_city--sm" cx="740" cy="558" r="5"/>
+              <circle class="cp_city" cx="594" cy="600" r="7"/><!-- 우한 -->
+              <circle class="cp_city" cx="708" cy="538" r="7"/><!-- 상하이 -->
+              <circle class="cp_city" cx="506" cy="602" r="7"/><!-- 청두 -->
+              <circle class="cp_city" cx="647" cy="664" r="7"/><!-- 광저우 -->
+            </g>
 
-            <!-- 중국 도시 포인트 (1407×802 기준) -->
-            <circle class="cp_city" cx="760"  cy="308" r="9" /><!-- 베이징 -->
-            <circle class="cp_city" cx="451"  cy="496" r="9" /><!-- 시안 -->
-            <circle class="cp_city" cx="690"  cy="444" r="9" /><!-- 정저우 -->
-            <circle class="cp_city" cx="594"  cy="600" r="9" /><!-- 우한 -->
-            <circle class="cp_city" cx="708"  cy="538" r="9" /><!-- 상하이 -->
-            <circle class="cp_city" cx="506"  cy="602" r="9" /><!-- 청두 -->
-            <circle class="cp_city" cx="647"  cy="664" r="9" /><!-- 광저우 -->
+            <!-- 한국 허브: 서울 -->
+            <g class="cp_hub_group" transform="translate(1270, 485)">
+              <circle class="cp_hub_glow" r="42" fill="url(#cp_hub_grad)"/>
+              <circle class="cp_hub_ring" r="11"/>
+              <circle class="cp_hub" r="11"/>
+            </g>
           </svg>
-        </div>
+              </div>
 
             </div>
           </div>
         </div>
 
-     
       </div>
     </section>
 

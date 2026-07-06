@@ -35,7 +35,7 @@
   /* 한국 허브 좌표 (서울, viewBox 1407×802 기준) */
   const HUB = { x: 1270, y: 485 };
 
-  /* 중국 도시 좌표 — HTML circle과 동일 */
+  /* 중국 주요 도시 — 서울로 연결되는 아크 */
   const CITIES = [
     { x: 760, y: 308 }, /* 베이징 */
     { x: 451, y: 496 }, /* 시안 */
@@ -44,46 +44,72 @@
     { x: 708, y: 538 }, /* 상하이 */
     { x: 506, y: 602 }, /* 청두 */
     { x: 647, y: 664 }, /* 광저우 */
+    { x: 850, y: 198 }, /* 하얼빈 */
+    { x: 820, y: 268 }, /* 선양 */
+    { x: 740, y: 558 }, /* 항저우 */
+  ];
+
+  /* 중국 내부 네트워크 */
+  const INTERNAL = [
+    [850, 198, 820, 268],
+    [820, 268, 760, 308],
+    [760, 308, 780, 348],
+    [780, 348, 690, 444],
+    [690, 444, 708, 538],
+    [708, 538, 740, 558],
+    [740, 558, 594, 600],
+    [594, 600, 647, 664],
+    [451, 496, 690, 444],
+    [506, 602, 594, 600],
+    [690, 444, 594, 600],
   ];
 
   const svgNS = 'http://www.w3.org/2000/svg';
-  const linesGroup  = document.getElementById('cp_lines');
-  const moversGroup = document.getElementById('cp_movers');
+  const internalGroup = document.getElementById('cp_internal');
+  const linesGroup    = document.getElementById('cp_lines');
+  const moversGroup   = document.getElementById('cp_movers');
 
-  /* 각 도시마다 연결선 + 이동 포인트 생성 */
+  /* 중국 내부 연결선 */
+  INTERNAL.forEach(([x1, y1, x2, y2], i) => {
+    const seg = document.createElementNS(svgNS, 'line');
+    seg.setAttribute('x1', x1);
+    seg.setAttribute('y1', y1);
+    seg.setAttribute('x2', x2);
+    seg.setAttribute('y2', y2);
+    seg.setAttribute('class', 'cp_internal_line');
+    seg.style.animationDelay = `${0.15 + i * 0.05}s`;
+    internalGroup.appendChild(seg);
+  });
+
+  /* 각 도시 — 서울에서 중국으로 뻗는 곡선 + 이동 포인트 */
   CITIES.forEach((city, i) => {
-    /* ─ 연결선 ─ */
     const line = document.createElementNS(svgNS, 'path');
-    /* 곡선: 한국(허브) → 제어점(중간 위쪽) → 도시 */
-    const cx = (HUB.x + city.x) / 2;
-    const cy = Math.min(HUB.y, city.y) - 80;
+    /* 곡선: 서울 → 제어점(위쪽 아크) → 중국 도시 */
+    const cx = (HUB.x + city.x) / 2 + 30;
+    const cy = Math.min(HUB.y, city.y) - 90 - (i % 3) * 15;
     line.setAttribute('d', `M${HUB.x},${HUB.y} Q${cx},${cy} ${city.x},${city.y}`);
     line.setAttribute('class', 'cp_line');
     linesGroup.appendChild(line);
 
-    /* 선 길이를 구해 dashoffset 애니메이션에 활용 */
     const len = line.getTotalLength ? line.getTotalLength() : 300;
     line.style.strokeDasharray  = len;
     line.style.strokeDashoffset = len;
-    line.style.transition = `stroke-dashoffset 1.4s ease ${0.3 + i * 0.12}s`;
+    line.style.transition = `stroke-dashoffset 1.6s ease ${0.4 + i * 0.1}s`;
 
-    /* ─ 이동 포인트 (animateMotion) ─ */
     const circle = document.createElementNS(svgNS, 'circle');
-    circle.setAttribute('r', '4');
+    circle.setAttribute('r', '3.5');
     circle.setAttribute('class', 'cp_mover');
 
     const anim = document.createElementNS(svgNS, 'animateMotion');
-    anim.setAttribute('dur', `${2.4 + (i % 3) * 0.5}s`);
+    anim.setAttribute('dur', `${2.6 + (i % 4) * 0.4}s`);
     anim.setAttribute('repeatCount', 'indefinite');
-    /* 시작 지연: 섹션 진입 전에도 준비하되 opacity로 숨김 */
-    anim.setAttribute('begin', `${i * 0.35}s`);
+    anim.setAttribute('begin', `${0.8 + i * 0.3}s`);
 
-    const mpath = document.createElementNS(svgNS, 'mpath');
-    /* 같은 경로 재활용 — href로 참조 */
     const pathId = `cp_line_${i}`;
     line.setAttribute('id', pathId);
-    mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
 
+    const mpath = document.createElementNS(svgNS, 'mpath');
+    mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
     anim.appendChild(mpath);
     circle.appendChild(anim);
     moversGroup.appendChild(circle);
