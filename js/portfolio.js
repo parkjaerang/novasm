@@ -187,7 +187,7 @@
         <span class="pf_hero_label">PROJECTS</span>
         <div class="pf_hero_divider"></div>
         <h1 class="pf_hero_headline">
-          메디컬 브랜드의 성장을 만들어온<br class="pf_hero_br--desktop">
+          메디컬 브랜드의 성장을 만들어온<br>
           NOVA SM의 다양한 프로젝트를<br class="pf_hero_br--mobile">소개합니다.
         </h1>
       </section>
