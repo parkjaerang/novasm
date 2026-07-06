@@ -105,3 +105,41 @@
 
   if (strengthSec) mapObs.observe(strengthSec);
 })();
+
+/* ── 4. 마무리 섹션 — 스파클 입자 + 배경 패럴랙스 ── */
+(function () {
+  var closing = document.getElementById('cp_closing');
+  if (!closing) return;
+
+  /* 우측 광원 영역에 흰 스파클 입자 */
+  var particlesWrap = closing.querySelector('.cp_closing_particles');
+  if (particlesWrap) {
+    for (var i = 0; i < 18; i++) {
+      var p = document.createElement('div');
+      p.className = 'cp_closing_particle';
+      p.style.left = (Math.random() * 38 + 52) + '%';
+      p.style.top = (Math.random() * 70 + 10) + '%';
+      var size = (Math.random() * 2.5 + 0.8).toFixed(1);
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.setProperty('--dx', (Math.random() * 30 - 15).toFixed(0) + 'px');
+      p.style.animationDuration = (6 + Math.random() * 8).toFixed(1) + 's';
+      p.style.animationDelay = -(Math.random() * 12).toFixed(1) + 's';
+      particlesWrap.appendChild(p);
+    }
+  }
+
+  /* 스크롤 패럴랙스 — 배경 레이어만 미세 이동 */
+  var shadow = closing.querySelector('.cp_closing_shadow');
+  var glow = closing.querySelector('.cp_closing_glow');
+  var steps = closing.querySelector('.cp_closing_steps');
+
+  window.addEventListener('scroll', function () {
+    var rect = closing.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    var progress = 1 - Math.min(1, Math.max(0, (rect.top + rect.height * 0.3) / window.innerHeight));
+    if (shadow) shadow.style.transform = 'translateX(' + (progress * -12) + 'px)';
+    if (glow) glow.style.transform = 'translateY(' + (progress * 16) + 'px)';
+    if (steps) steps.style.transform = 'translateY(' + (progress * 8) + 'px)';
+  }, { passive: true });
+})();

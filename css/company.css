@@ -620,131 +620,191 @@
 
 /* ══════════════════════════════
    섹션 7 · 마무리 멘트
+   — 에디토리얼 럭셔리 무드
 ══════════════════════════════ */
 .cp_closing {
   position: relative;
-  background: var(--subbg);
-  min-height: calc(100vh - 144px);
+  min-height: min(100vh, 900px);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(80px, 10vw, 140px) clamp(20px, 6vw, 100px);
+  background: linear-gradient(160deg, #EDECE9 0%, #F5F4F2 45%, #E6E4E0 100%);
 }
 
-/* 배경 골드웨이브 */
-.cp_closing_wave {
+/* ── 배경 분위기 레이어 ── */
+.cp_closing_atmo {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 70%;
-  max-width: 1400px;
-  height: auto;
-  opacity: 0.3;
+  inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
+.cp_closing_shadow,
+.cp_closing_glow,
+.cp_closing_steps {
+  transition: transform 0.12s ease-out;
+}
+
+/* 좌측 대각선 빛·그림자 */
+.cp_closing_shadow {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -32deg,
+    transparent 0px,
+    transparent 52px,
+    rgba(21, 31, 52, 0.028) 52px,
+    rgba(21, 31, 52, 0.028) 54px
+  );
+  mask-image: linear-gradient(to right, #000 0%, transparent 50%);
+  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 50%);
+}
+
+/* 우측 은은한 광원 */
+.cp_closing_glow {
+  position: absolute;
+  right: -8%;
+  top: 5%;
+  width: 58%;
+  height: 90%;
+  background: radial-gradient(
+    ellipse at 55% 45%,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.2) 40%,
+    transparent 72%
+  );
+}
+
+/* 좌하단 계단 형태 */
+.cp_closing_steps {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: clamp(120px, 18vw, 240px);
+  height: clamp(60px, 10vw, 120px);
+  background:
+    linear-gradient(to top, rgba(255,255,255,0.55), transparent 70%),
+    linear-gradient(to top, rgba(230,228,224,0.9) 0%, rgba(230,228,224,0.9) 28%, transparent 28%),
+    linear-gradient(to top, rgba(220,218,214,0.7) 0%, rgba(220,218,214,0.7) 55%, transparent 55%);
+}
+
+/* 우하단 유동적 패브릭 */
+.cp_closing_fabric {
+  position: absolute;
+  right: -6%;
+  bottom: -12%;
+  width: 58%;
+  max-width: 900px;
+  height: auto;
+  opacity: 0.22;
+  filter: grayscale(1) brightness(2.2) contrast(0.85);
+  transform-origin: right bottom;
+  animation: cp_fabric_drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes cp_fabric_drift {
+  0%   { transform: translateY(0) scale(1) rotate(0deg); }
+  100% { transform: translateY(-18px) scale(1.03) rotate(1.5deg); }
+}
+
+/* 반짝이는 먼지 입자 */
+.cp_closing_particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+@keyframes cp_sparkle_float {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+  15%  { opacity: 0.85; }
+  85%  { opacity: 0.4; }
+  100% { transform: translate(var(--dx, 0), -80px) scale(0.3); opacity: 0; }
+}
+
+.cp_closing_particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+  animation: cp_sparkle_float ease-in-out infinite;
+}
+
+/* ── 텍스트 블록 — 중앙 정렬 ── */
 .cp_closing_inner {
   position: relative;
   z-index: 1;
-  text-align: center;
+  max-width: 880px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
-  opacity: 0;
+  text-align: center;
 }
-.cp_closing.cp_in .cp_closing_inner { animation: cp_fade_up 1s ease 0s forwards; }
 
 .cp_closing_sub {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(16px, 2vw, 24px);
-  color: var(--text2);
-  letter-spacing: 0.06em;
-  margin-bottom: 24px;
+  font-size: clamp(15px, 1.8vw, 22px);
+  font-weight: 300;
+  color: var(--text1);
+  letter-spacing: 0.1em;
+  line-height: 1.9;
+  margin-bottom: clamp(28px, 4vw, 52px);
+  opacity: 0;
+  transform: translateY(24px);
 }
 
 .cp_closing_title {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(28px, 4vw, 64px);
+  font-size: clamp(28px, 3.8vw, 56px);
   font-weight: 500;
   color: var(--text1);
-  line-height: 1.4;
+  line-height: 1.35;
   letter-spacing: -0.01em;
-  margin-bottom: 56px;
+  margin-bottom: clamp(48px, 6vw, 80px);
+  opacity: 0;
+  transform: translateY(32px);
 }
 
-/* '성장' · '디자인' — 글자 안에서 빛이 통과하는 sweep 효과 */
-.cp_closing_title strong {
-  font-size: 1.25em;
-  font-weight: 500;
-
-  /* 그라디언트를 글자 모양으로 클리핑 — 빛이 글자 획 안에서만 보임 */
-  background: linear-gradient(
-    90deg,
-    var(--border) 0%,
-    var(--border) 44%,
-    rgba(161, 150, 132, 0.6) 47%,   /* 빛 진입부 */
-    rgba(221, 207, 184, 0.6) 50%,  /* 빛 중심 */
-    rgba(161, 150, 132, 0.6) 53%,   /* 빛 퇴장부 */
-    var(--border) 56%,
-    var(--border) 100%
-  );
-  background-size: 300% 100%;
-  background-position-x: 100%;     /* 초기: 빛이 왼쪽 밖에 대기 */
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: none;
+@keyframes cp_closing_reveal {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 성장: 진입 후 0.5s 뒤 빛 통과 */
-.cp_closing.cp_in .cp_closing_title strong:nth-of-type(1) {
-  animation: cp_light_sweep 0.9s ease-in-out 0.5s forwards;
-}
+.cp_closing.cp_in .cp_closing_sub   { animation: cp_closing_reveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards; }
+.cp_closing.cp_in .cp_closing_title { animation: cp_closing_reveal 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.65s forwards; }
+.cp_closing.cp_in .cp_closing_cta   { animation: cp_closing_reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.35s forwards; }
 
-/* 디자인: 성장 빛이 빠진 뒤 이어서 통과 */
-.cp_closing.cp_in .cp_closing_title strong:nth-of-type(2) {
-  animation: cp_light_sweep 0.9s ease-in-out 0.95s forwards;
-}
-
-@keyframes cp_light_sweep {
-  /* 0%: 빛(그라디언트 중심 50%)이 오른쪽 밖에 위치 */
-  0%   { background-position-x: 100%; }
-  100% { background-position-x: 0%; }
-}
-
-/* CTA 버튼 */
+/* CTA — 절제된 텍스트 링크 */
 .cp_closing_cta {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
-  font-family: var(--logo_text);
-  font-size: 16px;
+  gap: 12px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.2vw, 15px);
   font-weight: 400;
-  letter-spacing: 0.18em;
-  color: #fff;
-  background: var(--text1);
-  border: 1px solid var(--text1);
-  padding: 20px 52px;
+  letter-spacing: 0.12em;
+  color: var(--text1);
   text-decoration: none;
-  border-radius: 2px;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  border-bottom: 1px solid rgba(21, 31, 52, 0.35);
+  padding-bottom: 6px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .cp_closing_cta:hover {
-  background: transparent;
-  color: var(--text1);
-  border-color: var(--text1);
+  color: var(--gray3);
+  border-color: var(--border);
 }
 
 .cp_closing_arrow {
-  font-size: 18px;
-  transition: transform 0.25s ease;
+  font-size: 14px;
+  transition: transform 0.35s ease;
 }
 
 .cp_closing_cta:hover .cp_closing_arrow {
-  transform: translateX(6px);
+  transform: translateX(5px);
 }
 
 /* ═══════════════════════════════════
@@ -819,6 +879,7 @@
   .cp_work_item--wide { grid-column: auto; aspect-ratio: 16 / 7; }
   .cp_work_overlay { padding: 14px; }
 
-  /* CLOSING CTA 버튼 패딩 축소 */
-  .cp_closing_cta { padding: 16px 32px; }
+  /* CLOSING: 모바일 배경 요소 축소 */
+  .cp_closing_fabric { width: 90%; opacity: 0.15; }
+  .cp_closing_steps { width: 80px; height: 48px; }
 }
