@@ -1,0 +1,96 @@
+/* ─────────────────────────────────────
+   포트폴리오 프로젝트 공통 데이터
+   portfolio.js · view.js 에서 공유
+───────────────────────────────────── */
+window.NOVASM_PROJECTS = [
+  {
+    id: 'bls',
+    num: '01',
+    category: 'medical',
+    categoryLabel: '의료미용 업계 마케팅 사례',
+    topDesc: '한국 메디컬 브랜드의 중국 시장 진출과\n브랜드 인지도 확대를 위한 마케팅 프로젝트',
+    image: './img/portfolio1.png',
+    name: 'BLS CLINIC',
+    sub: '중국 마케팅 & 브랜딩 프로젝트',
+    tags: ['중국 시장 진출', '브랜드 인지도', 'SNS 마케팅'],
+    overview:
+      'BLS CLINIC의 중국 시장 진출을 위해 브랜드 아이덴티티를 재정립하고, 현지 타깃에 맞춘 SNS·콘텐츠 마케팅 전략을 수립·실행한 프로젝트입니다.',
+    challenge:
+      '중국 내 의료미용 시장에서의 브랜드 인지도 부족과 현지 소비자에게 신뢰를 전달할 수 있는 채널 구축이 필요했습니다.',
+    solution:
+      '현지 플랫폼 특성에 맞춘 콘텐츠 기획, 브랜드 톤앤매너 가이드 수립, 인플루언서 협업 및 SNS 채널 운영을 통합적으로 진행했습니다.',
+    results: [
+      '중국 SNS 채널 팔로워 및 참여율 상승',
+      '브랜드 인지도 및 문의 전환율 개선',
+      '현지 시장 맞춤형 콘텐츠 체계 구축',
+    ],
+    services: ['SNS 채널 운영', '브랜드 전략', '콘텐츠 마케팅', 'KOL 마케팅'],
+    contents: [
+      { type: 'image', src: './img/portfolio1.png', label: 'SNS', caption: '중국 SNS 채널 피드 콘텐츠' },
+      { type: 'video', src: './img/medical_1.mp4', label: '영상', caption: '브랜드 소개 영상' },
+      { type: 'image', src: './img/work1.png', label: 'SNS', caption: '인플루언서 협업 콘텐츠' },
+      { type: 'image', src: './img/work2.png', label: '디자인', caption: '브랜드 비주얼 가이드' },
+      { type: 'video', src: './img/medical_2.mp4', label: '영상', caption: '시술 소개 숏폼' },
+    ],
+  },
+  {
+    id: 'toxnfill',
+    num: '02',
+    category: 'clinic',
+    categoryLabel: '피부과 운영 사례',
+    topDesc: '피부과 운영 사례',
+    image: './img/portfolio2.png',
+    name: 'TOXNFILL',
+    sub: '피부과 운영 & 브랜딩 프로젝트',
+    tags: ['피부과 운영', '브랜드 성장', '콘텐츠 마케팅'],
+    overview:
+      'TOXNFILL 피부과의 브랜드 성장과 환자 유입을 위해 운영 전략, 콘텐츠 마케팅, 채널 최적화를 함께 진행한 통합 프로젝트입니다.',
+    challenge:
+      '경쟁이 치열한 피부과 시장에서 차별화된 브랜드 포지셔닝과 지속적인 환자 유입 채널 확보가 과제였습니다.',
+    solution:
+      '브랜드 메시지 정립, 시술·전문성 기반 콘텐츠 제작, SNS·영상 채널 운영을 연계해 신뢰도와 접점을 동시에 강화했습니다.',
+    results: [
+      '브랜드 인지도 및 온라인 문의 증가',
+      '콘텐츠 기반 환자 유입 채널 안정화',
+      '피부과 운영·마케팅 프로세스 체계화',
+    ],
+    services: ['피부과 운영 컨설팅', 'SNS 채널 운영', '영상 콘텐츠 제작', '브랜드 전략'],
+    contents: [
+      { type: 'image', src: './img/portfolio2.png', label: 'SNS', caption: '피부과 SNS 채널 운영 콘텐츠' },
+      { type: 'video', src: './img/medical_3.mp4', label: '영상', caption: '시술 안내 영상' },
+      { type: 'image', src: './img/work3.png', label: 'SNS', caption: '환자 후기·전후 콘텐츠' },
+      { type: 'image', src: './img/work4.png', label: '디자인', caption: '클리닉 브랜딩 디자인' },
+      { type: 'video', src: './img/medical_4.mp4', label: '영상', caption: '전문의 인터뷰 영상' },
+    ],
+  },
+  {
+    id: 'maison',
+    num: '03',
+    category: 'brand',
+    categoryLabel: '브랜드 마케팅 사례',
+    topDesc: '브랜드 운영 전략과 콘텐츠 마케팅을 통해\n지속 가능한 성장을 이끌어낸 사례',
+    image: './img/portfolio4.png',
+    name: 'MAISON DE MOI',
+    sub: '브랜드 운영 및 콘텐츠 마케팅 프로젝트',
+    tags: ['브랜드 전략', '콘텐츠 마케팅', '지속 가능한 성장'],
+    overview:
+      'MAISON DE MOI의 브랜드 아이덴티티를 강화하고, 콘텐츠 마케팅을 통해 장기적인 브랜드 성장 기반을 마련한 프로젝트입니다.',
+    challenge:
+      '프리미엄 브랜드 이미지를 유지하면서도 지속 가능한 콘텐츠 생산과 고객과의 깊은 연결이 필요했습니다.',
+    solution:
+      '브랜드 스토리 중심의 콘텐츠 전략, 비주얼 아이덴티티 정립, SNS·영상 채널을 아우르는 통합 마케팅을 설계했습니다.',
+    results: [
+      '브랜드 일관성 및 프리미엄 이미지 강화',
+      '콘텐츠 참여율 및 재방문율 향상',
+      '장기 성장을 위한 마케팅 운영 체계 구축',
+    ],
+    services: ['브랜드 전략', '콘텐츠 마케팅', '크리에이티브 디자인', 'SNS 채널 운영'],
+    contents: [
+      { type: 'image', src: './img/portfolio4.png', label: 'SNS', caption: '브랜드 SNS 피드 콘텐츠' },
+      { type: 'image', src: './img/portfolio3.png', label: '디자인', caption: '브랜드 룩북 비주얼' },
+      { type: 'video', src: './img/seoul_intro.mp4', label: '영상', caption: '브랜드 필름' },
+      { type: 'image', src: './img/work5.png', label: 'SNS', caption: '라이프스타일 콘텐츠' },
+      { type: 'image', src: './img/work6.png', label: '디자인', caption: '패키지·굿즈 디자인' },
+    ],
+  },
+];

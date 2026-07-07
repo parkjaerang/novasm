@@ -4,100 +4,7 @@
 ───────────────────────────────────── */
 (function () {
 
-  /* 프로젝트 카드 데이터
-     category: 필터 키 ('all' | 'medical' | 'clinic' | 'video' | 'brand') */
-  const PROJECTS = [
-    {
-      id: 'bls',
-      num: '01',
-      category: 'medical',
-      topDesc: '한국 메디컬 브랜드의 중국 시장 진출과\n브랜드 인지도 확대를 위한 마케팅 프로젝트',
-      image: './img/portfolio1.png',
-      name: 'BLS CLINIC',
-      sub: '중국 마케팅 & 브랜딩 프로젝트',
-      tags: ['중국 시장 진출', '브랜드 인지도', 'SNS 마케팅'],
-    },
-    {
-      id: 'toxnfill',
-      num: '02',
-      category: 'clinic',
-      topDesc: '피부과 운영 사례',
-      image: './img/portfolio2.png',
-      name: 'TOXNFILL',
-      sub: '피부과 운영 & 브랜딩 프로젝트',
-      tags: ['피부과 운영', '브랜드 성장', '콘텐츠 마케팅'],
-    },
-    {
-      id: 'maison',
-      num: '03',
-      category: 'brand',
-      topDesc: '브랜드 운영 전략과 콘텐츠 마케팅을 통해\n지속 가능한 성장을 이끌어낸 사례',
-      image: './img/portfolio4.png',
-      name: 'MAISON DE MOI',
-      sub: '브랜드 운영 및 콘텐츠 마케팅 프로젝트',
-      tags: ['브랜드 전략', '콘텐츠 마케팅', '지속 가능한 성장'],
-    },
-    // {
-    //   id: 'video1',
-    //   num: '04',
-    //   category: 'video',
-    //   topDesc: '의료 시술 영상 콘텐츠 제작 및 SNS 채널 바이럴 캠페인',
-    //   image: './img/portfolio1.png',
-    //   name: 'CLINIC VIDEO',
-    //   sub: '영상 콘텐츠 제작 프로젝트',
-    //   tags: ['영상 제작', 'SNS 바이럴', '시술 콘텐츠'],
-    // },
-    // {
-    //   id: 'medical2',
-    //   num: '05',
-    //   category: 'medical',
-    //   topDesc: '의료미용 브랜드 런칭 전략 수립 및 통합 마케팅 실행 사례',
-    //   image: './img/portfolio2.png',
-    //   name: 'MEDSKIN LAB',
-    //   sub: '의료미용 런칭 마케팅 프로젝트',
-    //   tags: ['브랜드 런칭', '통합 마케팅', '의료미용'],
-    // },
-    // {
-    //   id: 'brand2',
-    //   num: '06',
-    //   category: 'brand',
-    //   topDesc: '프리미엄 스킨케어 브랜드의 아이덴티티 구축과 장기 성장 전략 사례',
-    //   image: './img/portfolio3.png',
-    //   name: 'LUMINE SKIN',
-    //   sub: '프리미엄 브랜드 마케팅 프로젝트',
-    //   tags: ['브랜드 아이덴티티', '프리미엄 전략', '스킨케어'],
-    // },
-    // {
-    //   id: 'clinic2',
-    //   num: '07',
-    //   category: 'clinic',
-    //   topDesc: '피부과 신규 개원 컨설팅 및 환자 유입 채널 최적화 프로젝트',
-    //   image: './img/portfolio4.png',
-    //   name: 'DERMA PLUS',
-    //   sub: '피부과 개원 & 운영 컨설팅',
-    //   tags: ['개원 컨설팅', '환자 유입', '채널 최적화'],
-    // },
-    // {
-    //   id: 'video2',
-    //   num: '08',
-    //   category: 'video',
-    //   topDesc: '브랜드 필름 및 숏폼 콘텐츠 시리즈 제작으로 인지도 극대화',
-    //   image: './img/work1.png',
-    //   name: 'NOVA FILMS',
-    //   sub: '브랜드 필름 & 숏폼 제작 프로젝트',
-    //   tags: ['브랜드 필름', '숏폼 콘텐츠', '인지도 상승'],
-    // },
-    // {
-    //   id: 'medical3',
-    //   num: '09',
-    //   category: 'medical',
-    //   topDesc: 'KOL / KOC 마케팅을 활용한 의료미용 업계 신뢰도 상승 캠페인',
-    //   image: './img/work2.png',
-    //   name: 'KOL CAMPAIGN',
-    //   sub: 'KOL·KOC 인플루언서 마케팅',
-    //   tags: ['KOL 마케팅', 'KOC', '신뢰도 캠페인'],
-    // },
-  ];
+  const PROJECTS = window.NOVASM_PROJECTS || [];
   /* 필터 카테고리 정의 */
   const FILTERS = [
     { key: 'all',     label: '전체' },
@@ -127,7 +34,7 @@
               <p class="pf_card_name">${p.name}</p>
               <p class="pf_card_sub">${p.sub}</p>
             </div>
-            <span class="pf_card_arrow" aria-label="자세히 보기">›</span>
+            <a class="pf_card_arrow" href="./view.html?id=${p.id}" aria-label="자세히 보기">›</a>
           </div>
           <div class="pf_card_tags">
             ${p.tags.map(t => `<span class="pf_card_tag">${t}</span>`).join('')}
@@ -216,6 +123,15 @@
         this.classList.add('pf_filter_btn--active');
         /* 필터 적용 */
         applyFilter(this.dataset.filter);
+      });
+    });
+
+    /* 카드 클릭 시 상세 페이지 이동 */
+    document.querySelectorAll('.pf_card').forEach(card => {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('.pf_card_arrow')) return;
+        const id = this.dataset.id;
+        if (id) location.href = `./view.html?id=${id}`;
       });
     });
 

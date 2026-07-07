@@ -301,7 +301,14 @@
   margin-top: 50px;
   opacity: 0;
 }
-.cp_strength.cp_in .cp_map_wrap { animation: cp_fade_in 1s ease 0.4s forwards; }
+.cp_strength.cp_in .cp_map_wrap {
+  animation: cp_map_wrap_in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+@keyframes cp_map_wrap_in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* SVG 지도 */
 .cp_map_svg {
@@ -313,82 +320,93 @@
 
 /* 한국 허브 */
 .cp_hub {
-  fill: #fff;
+  fill: #fffef8;
 }
 
 .cp_hub_glow {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 @keyframes cp_pulse {
-  0%   { r: 11; opacity: 0.75; }
-  70%  { r: 18; opacity: 0; }
-  100% { r: 18; opacity: 0; }
+  0%   { r: 12; opacity: 0.8; }
+  70%  { r: 22; opacity: 0; }
+  100% { r: 22; opacity: 0; }
 }
 .cp_hub_ring {
   fill: none;
   stroke: #fff;
   stroke-width: 1.5;
-  animation: cp_pulse 2.4s ease-out infinite;
+  animation: cp_pulse 2.8s ease-out infinite;
 }
 
-/* 중국 도시 노드 */
+/* 도시 노드 */
 .cp_city {
-  fill: #fff;
-  opacity: 0.92;
+  fill: #fffef5;
+  opacity: 0;
+}
+.cp_strength.cp_in .cp_city {
+  animation: cp_city_in 0.6s ease forwards;
 }
 .cp_city--sm {
-  opacity: 0.65;
+  opacity: 0;
+}
+.cp_strength.cp_in .cp_city--sm {
+  animation: cp_city_sm_in 0.6s ease forwards;
 }
 
-/* 중국 내부 네트워크 */
-.cp_internal_line {
-  stroke: #fff;
-  stroke-width: 0.8;
-  fill: none;
-  opacity: 0;
-  stroke-linecap: round;
+.cp_cities .cp_city:nth-child(1)  { animation-delay: 0.45s; }
+.cp_cities .cp_city:nth-child(2)  { animation-delay: 0.52s; }
+.cp_cities .cp_city:nth-child(3)  { animation-delay: 0.58s; }
+.cp_cities .cp_city:nth-child(4)  { animation-delay: 0.64s; }
+.cp_cities .cp_city:nth-child(5)  { animation-delay: 0.70s; }
+.cp_cities .cp_city:nth-child(6)  { animation-delay: 0.76s; }
+.cp_cities .cp_city:nth-child(7)  { animation-delay: 0.82s; }
+.cp_cities .cp_city:nth-child(8)  { animation-delay: 0.88s; }
+.cp_cities .cp_city:nth-child(9)  { animation-delay: 0.94s; }
+.cp_cities .cp_city:nth-child(10) { animation-delay: 1.00s; }
+.cp_cities .cp_city:nth-child(11) { animation-delay: 1.06s; }
+
+.cp_kr_nodes .cp_city:nth-child(1) { animation-delay: 0.62s; }
+.cp_kr_nodes .cp_city:nth-child(2) { animation-delay: 0.72s; }
+
+@keyframes cp_city_in {
+  from { opacity: 0; }
+  to   { opacity: 0.95; }
 }
-.cp_strength.cp_in .cp_internal_line {
-  animation: cp_internal_fade 1.2s ease forwards;
-}
-@keyframes cp_internal_fade {
-  to { opacity: 0.28; }
+@keyframes cp_city_sm_in {
+  from { opacity: 0; }
+  to   { opacity: 0.7; }
 }
 
 /* 국제 연결선 (JS에서 생성) */
 .cp_line {
   stroke: url(#cp_arc_grad);
-  stroke-width: 1.2;
+  stroke-width: 1.4;
   fill: none;
   stroke-linecap: round;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.7));
+  opacity: 0.9;
 }
 
 /* 이동 포인트 (JS에서 생성) */
 .cp_mover {
-  fill: #fff;
-  opacity: 0.9;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
-}
-
-#cp_movers {
+  fill: #fffef8;
   opacity: 0;
 }
-.cp_strength.cp_in #cp_movers {
-  opacity: 1;
-  transition: opacity 0.6s ease 1.2s;
+.cp_strength.cp_in .cp_mover {
+  opacity: 0.95;
+  transition: opacity 0.5s ease 1.4s;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cp_hub_ring,
-  .cp_internal_line {
+  .cp_city,
+  .cp_city--sm {
     animation: none !important;
+    opacity: 0.95 !important;
   }
-  .cp_internal_line { opacity: 0.28; }
+  .cp_city--sm { opacity: 0.7 !important; }
   .cp_line { stroke-dashoffset: 0 !important; transition: none !important; }
-  #cp_movers { opacity: 1; transition: none; }
+  .cp_mover { opacity: 0.95; transition: none; }
 }
 
 /* ══════════════════════════════

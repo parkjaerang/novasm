@@ -15,23 +15,25 @@
   }
 
   /**
-   * 모바일·태블릿에서 빔이 화면 밖으로 완전히 빠지도록
-   * beam_travel 키프레임용 CSS 변수를 설정한다.
+   * 빔·플레어 반경을 기준으로 시작/끝 X를 계산해
+   * 화면 밖으로 완전히 들어오고 나가도록 CSS 변수를 설정한다.
    * @param {HTMLElement} overlay
    */
   function applyBeamTravelVars(overlay) {
     var w = window.innerWidth;
+    var scale = introScale();
 
-    if (w < 480) {
-      overlay.style.setProperty('--beam-start-x', '-100vw');
-      overlay.style.setProperty('--beam-end-x', '265vw');
-    } else if (w < 768) {
-      overlay.style.setProperty('--beam-start-x', '-82vw');
-      overlay.style.setProperty('--beam-end-x', '230vw');
-    } else if (w < 1024) {
-      overlay.style.setProperty('--beam-start-x', '-58vw');
-      overlay.style.setProperty('--beam-end-x', '175vw');
-    }
+    var anamorphicHalf = w * 0.8;
+    var beamLineHalf = Math.min(1100, w * 1.45) / 2;
+    var ghostLineHalf = Math.min(700, w * 0.95) / 2;
+    var rayHalf = (1400 * scale) / 2;
+    var glowPad = Math.max(32, w * 0.06);
+
+    var halfExtent = Math.max(anamorphicHalf, beamLineHalf, ghostLineHalf, rayHalf) + glowPad;
+
+    overlay.style.setProperty('--beam-start-x', (-halfExtent) + 'px');
+    overlay.style.setProperty('--beam-end-x', (w + halfExtent) + 'px');
+    overlay.style.setProperty('--beam-mid-x', (w / 2) + 'px');
   }
 
   /** 화면 크기별 파티클 수 조절 */
@@ -154,31 +156,63 @@
     });
   }
 
+  /** 최종 씬 파티클 수렴 시작 시각 (CSS final_show와 동기) */
+  var FINAL_SCENE_START = 19.0;
+
+  /** 최종 수렴 파티클 수 — 모바일에서도 밀도 유지 */
+  function introConvergeParticleCount(base) {
+    if (window.innerWidth < 480) return Math.round(base * 0.55);
+    if (window.innerWidth < 768) return Math.round(base * 0.72);
+    if (window.innerWidth < 1024) return Math.round(base * 0.88);
+    return base;
+  }
+
   /**
-   * 최종 씬에서 사방에 흩어진 파티클이 중앙으로 수렴하는 효과 생성
+   * 최종 씬: 화면 사방·이전 씬 잔광 파티클이 중앙으로 모여 로고 형성
    * @param {HTMLElement} container
    * @param {number} count
    */
   function spawnConvergeParticles(container, count) {
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    const total = introParticleCount(count);
+    var cx = window.innerWidth / 2;
+    var cy = window.innerHeight / 2;
+    var total = introConvergeParticleCount(count);
 
-    for (let i = 0; i < total; i++) {
-      const p = document.createElement('div');
-      p.className = 'intro_converge_particle';
+    for (var i = 0; i < total; i++) {
+      var isStreak = i % 7 === 0;
+      var isBright = !isStreak && i % 2 === 0;
+      var cls = 'intro_converge_particle';
+      if (isStreak) cls += ' intro_converge_particle--streak';
+      else if (isBright) cls += ' intro_converge_particle--bright';
+      var p = document.createElement('div');
+      p.className = cls;
 
-      /* 무작위 시작 위치 */
-      const startX = Math.random() * 100;  /* vw */
-      const startY = Math.random() * 100;  /* vh */
+      /* 화면 가장자리·무작위에서 시작 — 모이는 느낌 강화 */
+      var edge = i % 5;
+      var startX;
+      var startY;
 
-      /* 중앙까지의 이동 벡터 */
-      const sx = startX / 100 * window.innerWidth;
-      const sy = startY / 100 * window.innerHeight;
-      const dx = cx - sx;
-      const dy = cy - sy;
+      if (edge === 0) {
+        startX = Math.random() * 100;
+        startY = -4 - Math.random() * 8;
+      } else if (edge === 1) {
+        startX = 104 + Math.random() * 8;
+        startY = Math.random() * 100;
+      } else if (edge === 2) {
+        startX = Math.random() * 100;
+        startY = 104 + Math.random() * 8;
+      } else if (edge === 3) {
+        startX = -4 - Math.random() * 8;
+        startY = Math.random() * 100;
+      } else {
+        startX = Math.random() * 100;
+        startY = Math.random() * 100;
+      }
 
-      const size = (Math.random() * 5 + 2) * Math.max(introScale(), 0.65);
+      var sx = startX / 100 * window.innerWidth;
+      var sy = startY / 100 * window.innerHeight;
+      var dx = cx - sx;
+      var dy = cy - sy;
+      var size = (Math.random() * 3 + 3) * Math.max(introScale(), 0.7);
 
       p.style.cssText = `
         --sz: ${size}px;
@@ -186,7 +220,8 @@
         --py: ${startY}vh;
         --cx: ${dx}px;
         --cy: ${dy}px;
-        --cd: ${19.5 + Math.random() * 0.6}s;
+        --cd: ${FINAL_SCENE_START + Math.random() * 0.18}s;
+        --dur: ${0.55 + Math.random() * 0.35}s;
       `;
       container.appendChild(p);
     }
@@ -355,7 +390,7 @@
 
     /* 수렴 파티클 — 최종 씬 컨테이너에 삽입 */
     const finalEl = document.getElementById('introFinal');
-    spawnConvergeParticles(finalEl, 90);
+    spawnConvergeParticles(finalEl, 220);
 
     /* 건너뛰기 버튼 */
     overlay.insertAdjacentHTML('beforeend', `

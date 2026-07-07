@@ -35,7 +35,7 @@
   /* 한국 허브 좌표 (서울, viewBox 1407×802 기준) */
   const HUB = { x: 1270, y: 485 };
 
-  /* 중국 주요 도시 — 서울로 연결되는 아크 */
+  /* 중국 주요 도시 — 서울에서 뻗는 아크 (참고 시안 7개) */
   const CITIES = [
     { x: 760, y: 308 }, /* 베이징 */
     { x: 451, y: 496 }, /* 시안 */
@@ -44,49 +44,18 @@
     { x: 708, y: 538 }, /* 상하이 */
     { x: 506, y: 602 }, /* 청두 */
     { x: 647, y: 664 }, /* 광저우 */
-    { x: 850, y: 198 }, /* 하얼빈 */
-    { x: 820, y: 268 }, /* 선양 */
-    { x: 740, y: 558 }, /* 항저우 */
-  ];
-
-  /* 중국 내부 네트워크 */
-  const INTERNAL = [
-    [850, 198, 820, 268],
-    [820, 268, 760, 308],
-    [760, 308, 780, 348],
-    [780, 348, 690, 444],
-    [690, 444, 708, 538],
-    [708, 538, 740, 558],
-    [740, 558, 594, 600],
-    [594, 600, 647, 664],
-    [451, 496, 690, 444],
-    [506, 602, 594, 600],
-    [690, 444, 594, 600],
   ];
 
   const svgNS = 'http://www.w3.org/2000/svg';
-  const internalGroup = document.getElementById('cp_internal');
-  const linesGroup    = document.getElementById('cp_lines');
-  const moversGroup   = document.getElementById('cp_movers');
-
-  /* 중국 내부 연결선 */
-  INTERNAL.forEach(([x1, y1, x2, y2], i) => {
-    const seg = document.createElementNS(svgNS, 'line');
-    seg.setAttribute('x1', x1);
-    seg.setAttribute('y1', y1);
-    seg.setAttribute('x2', x2);
-    seg.setAttribute('y2', y2);
-    seg.setAttribute('class', 'cp_internal_line');
-    seg.style.animationDelay = `${0.15 + i * 0.05}s`;
-    internalGroup.appendChild(seg);
-  });
+  const linesGroup  = document.getElementById('cp_lines');
+  const moversGroup = document.getElementById('cp_movers');
 
   /* 각 도시 — 서울에서 중국으로 뻗는 곡선 + 이동 포인트 */
   CITIES.forEach((city, i) => {
     const line = document.createElementNS(svgNS, 'path');
     /* 곡선: 서울 → 제어점(위쪽 아크) → 중국 도시 */
-    const cx = (HUB.x + city.x) / 2 + 30;
-    const cy = Math.min(HUB.y, city.y) - 90 - (i % 3) * 15;
+    const cx = (HUB.x + city.x) / 2 + 20;
+    const cy = Math.min(HUB.y, city.y) - 100 - (i % 3) * 18;
     line.setAttribute('d', `M${HUB.x},${HUB.y} Q${cx},${cy} ${city.x},${city.y}`);
     line.setAttribute('class', 'cp_line');
     linesGroup.appendChild(line);

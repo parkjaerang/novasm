@@ -15,13 +15,15 @@
     return page === filename.toLowerCase() ? ' ms_nav_link--active' : '';
   }
 
+  const portfolioActive = page === 'portfolio.html' || page === 'view.html';
+
   header.innerHTML = `
     <div class="ms_header_i">
       <a class="ms_logo" href="./index.html">NOVASM</a>
       <nav class="ms_nav" id="msNav">
         <a class="ms_nav_link${active('company.html')}" href="./company.html">Company</a>
         <a class="ms_nav_link${active('service.html')}" href="./service.html">Services</a>
-        <a class="ms_nav_link${active('portfolio.html')}" href="./portfolio.html">Portfolio</a>
+        <a class="ms_nav_link${portfolioActive ? ' ms_nav_link--active' : ''}" href="./portfolio.html">Portfolio</a>
         <a class="ms_nav_link${active('whynovasm.html')}" href="./whynovasm.html">WHY NOVA SM</a>
       </nav>
       <!-- 모바일 햄버거 버튼 (640px 이하에서만 표시) -->

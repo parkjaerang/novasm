@@ -28,10 +28,10 @@
   --intro-logo-burst: clamp(260px, 88vmin, 600px);
   --intro-v-core: clamp(36px, 11vw, 80px);
   --intro-final-glow: clamp(140px, 42vmin, 300px);
-  /* beam_travel — JS에서 모바일 값 덮어씀 */
-  --beam-start-x: -35vw;
+  /* beam_travel — JS에서 뷰포트별로 덮어씀 */
+  --beam-start-x: -120vw;
   --beam-mid-x: 50vw;
-  --beam-end-x: 135vw;
+  --beam-end-x: 220vw;
 }
 
 /* 인트로 전체 래퍼: 화면 전체를 덮음 */
@@ -115,12 +115,14 @@
   height: 0;
   pointer-events: none;
   z-index: 4;
+  transform: translate(var(--beam-start-x), 50vh);
   animation: beam_travel 2.6s cubic-bezier(0.42, 0, 0.2, 1) 0.15s forwards;
 }
 
 @keyframes beam_travel {
   0%   { transform: translate(var(--beam-start-x), 50vh); }
-  45%  { transform: translate(var(--beam-mid-x),  50vh); }
+  22%  { transform: translate(var(--beam-mid-x),  50vh); }
+  48%  { transform: translate(var(--beam-end-x), 50vh); }
   100% { transform: translate(var(--beam-end-x), 50vh); }
 }
 
@@ -284,6 +286,7 @@
   height: 0;
   pointer-events: none;
   z-index: 3;
+  transform: translate(var(--beam-start-x), 50vh);
   animation: beam_travel var(--ghost-dur, 2.6s) cubic-bezier(0.42, 0, 0.2, 1) var(--ghost-delay, 0.4s) forwards;
 }
 
@@ -757,11 +760,17 @@
   align-items: stretch;
   opacity: 0;
   pointer-events: none;
-  animation: med_show 0.4s ease forwards 11.2s;
+  animation:
+    med_show 0.4s ease forwards 11.2s,
+    med_hide 0.55s ease forwards 18.6s;
 }
 
 @keyframes med_show {
   to { opacity: 1; }
+}
+
+@keyframes med_hide {
+  to { opacity: 0; visibility: hidden; }
 }
 
 .intro_med_panel {
@@ -828,11 +837,17 @@
   background: radial-gradient(ellipse 85% 75% at 50% 42%, #f0f0f0 0%, #e0e0e0 100%);
   opacity: 0;
   pointer-events: none;
-  animation: map_show 0.8s ease forwards 13.2s;
+  animation:
+    map_show 0.8s ease forwards 13.2s,
+    map_hide 0.65s ease forwards 18.8s;
 }
 
 @keyframes map_show {
   to { opacity: 1; }
+}
+
+@keyframes map_hide {
+  to { opacity: 0; visibility: hidden; }
 }
 
 /* SVG 지도 래퍼 */
@@ -950,7 +965,7 @@
   100% { opacity: 1; letter-spacing: 0.4em; }
 }
 
-/* ─── 최종 로고 씬: 모든 파티클이 중앙으로 모여 로고 형성 ── */
+/* ─── 최종 로고 씬: 파티클 수렴 → 로고 형성 ── */
 .intro_final {
   position: absolute;
   inset: 0;
@@ -961,7 +976,7 @@
   background: #ececec;
   opacity: 0;
   pointer-events: none;
-  animation: final_show 1s ease forwards 19.5s;
+  animation: final_show 0.7s ease forwards 19.0s;
 }
 
 .intro_final_logo_wrap {
@@ -983,7 +998,7 @@
   line-height: 1.5;
   color: color-mix(in srgb, var(--border) 80%, #333);
   opacity: 0;
-  animation: final_tagline_in 0.8s ease forwards 20.3s;
+  animation: final_tagline_in 0.8s ease forwards 20.75s;
 }
 
 @keyframes final_tagline_in {
@@ -995,20 +1010,21 @@
   to { opacity: 1; }
 }
 
-/* 최종 로고 */
+/* 최종 로고 — 파티클 수렴 완료 후 등장 */
 .intro_final_logo {
   width: clamp(160px, 62vw, 460px);
   max-width: 100%;
   height: auto;
   opacity: 0;
-  transform: scale(0.7);
-  animation: final_logo_in 1.2s cubic-bezier(0.2, 0, 0.1, 1) forwards 19.8s;
+  transform: scale(0.82);
+  filter: blur(10px);
+  animation: final_logo_in 1s cubic-bezier(0.2, 0, 0.1, 1) forwards 20.05s;
 }
 
 @keyframes final_logo_in {
-  0%   { opacity: 0; transform: scale(0.7); filter: blur(12px); }
-  50%  { filter: blur(0); }
-  100% { opacity: 1; transform: scale(1); }
+  0%   { opacity: 0; transform: scale(0.82); filter: blur(10px); }
+  45%  { opacity: 0.85; filter: blur(2px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
 /* 최종 파티클 수렴 효과 */
@@ -1017,21 +1033,47 @@
   border-radius: 50%;
   width: var(--sz, 4px);
   height: var(--sz, 4px);
-  background: radial-gradient(circle, color-mix(in srgb, var(--border) 140%, #fff), var(--border));
+  background: radial-gradient(circle, #ffffff 0%, #f5e6a8 38%, #c9a84c 100%);
   top: var(--py, 50%);
   left: var(--px, 50%);
   opacity: 0;
-  animation: converge_move 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards var(--cd, 19.6s);
+  z-index: 3;
+  box-shadow: 0 0 4px 1px rgba(255, 248, 210, 0.95);
+  animation: converge_move var(--dur, 0.85s) cubic-bezier(0.58, 0, 0.92, 0.32) forwards var(--cd, 19.0s);
   pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.intro_converge_particle--bright {
+  background: radial-gradient(circle, #ffffff 0%, #fff8d0 28%, #e8c96a 62%, #b8943a 100%);
+  box-shadow:
+    0 0 6px 2px rgba(255, 252, 230, 1),
+    0 0 12px 3px rgba(232, 201, 106, 0.55);
+}
+
+.intro_converge_particle--streak {
+  border-radius: 999px;
+  width: calc(var(--sz) * 5);
+  height: max(2px, calc(var(--sz) * 0.45));
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 248, 200, 0.5) 30%,
+    #fffef0 50%,
+    rgba(255, 248, 200, 0.5) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 5px 1px rgba(255, 252, 220, 0.9);
 }
 
 @keyframes converge_move {
-  0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
-  80%  { opacity: 0.6; }
-  100% { opacity: 0; transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(0.1); }
+  0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+  6%   { opacity: 1; }
+  88%  { opacity: 0.98; }
+  100% { opacity: 0; transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(0.02); }
 }
 
-/* 최종 글로우 버스트 */
+/* 최종 글로우 버스트 — 파티클이 모인 직후 */
 .intro_final_glow {
   position: absolute;
   width: var(--intro-final-glow);
@@ -1039,7 +1081,8 @@
   border-radius: 50%;
   background: radial-gradient(circle, var(--g60) 0%, transparent 70%);
   opacity: 0;
-  animation: glow_burst 1.4s ease-out forwards 19.7s;
+  z-index: 1;
+  animation: glow_burst 1.2s ease-out forwards 19.95s;
   pointer-events: none;
 }
 

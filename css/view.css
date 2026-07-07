@@ -1,0 +1,679 @@
+@import url(./common.css);
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--mainbg);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════
+   PORTFOLIO VIEW PAGE
+═══════════════════════════════════ */
+
+.pv_detail {
+  animation: pv_fade_up 0.6s ease both;
+}
+
+/* ── 히어로 ── */
+.pv_hero {
+  padding: 80px var(--page-pad-x) 56px;
+  position: relative;
+}
+
+.pv_back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--logo_text);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--text2);
+  text-decoration: none;
+  margin-bottom: 40px;
+  transition: color 0.22s ease;
+}
+
+.pv_back:hover {
+  color: var(--border);
+}
+
+.pv_label {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--border);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.pv_divider {
+  width: 60px;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 32px;
+}
+
+.pv_hero_meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.pv_num {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 14px;
+  line-height: 1.6;
+}
+
+.pv_category {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: var(--text2);
+  letter-spacing: 0.04em;
+}
+
+.pv_title {
+  font-family: var(--logo_text);
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text1);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.pv_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--text2);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.pv_tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pv_tag {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 12px;
+  color: var(--text2);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+/* ── 메인 비주얼 ── */
+.pv_visual {
+  margin: 0 var(--page-pad-x) 72px;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 7;
+  background: var(--subbg);
+  box-shadow: 0 12px 48px rgba(21, 31, 52, 0.08);
+}
+
+.pv_visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── 본문 콘텐츠 ── */
+.pv_content {
+  padding: 0 var(--page-pad-x) 80px;
+}
+
+.pv_section {
+  margin-bottom: 48px;
+}
+
+.pv_section_title {
+  font-family: var(--logo_text);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--border);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.pv_section_text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+}
+
+.pv_split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.pv_results {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pv_results li {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.7;
+  padding-left: 20px;
+  position: relative;
+}
+
+.pv_results li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.pv_services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pv_service {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: var(--text1);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--gray2);
+  padding: 10px 18px;
+  border-radius: 100px;
+}
+
+/* ── 제작 콘텐츠 갤러리 ── */
+.pv_contents {
+  padding: 0 var(--page-pad-x) 88px;
+  border-top: 1px solid var(--gray2);
+  margin-top: 16px;
+  padding-top: 72px;
+}
+
+.pv_contents_head {
+  margin-bottom: 36px;
+}
+
+.pv_contents_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 500;
+  color: var(--text1);
+  margin-top: 12px;
+}
+
+.pv_contents_desc {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  color: var(--text2);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+.pv_contents_filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.pv_contents_tab {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: var(--text2);
+  background: transparent;
+  border: 1px solid var(--gray2);
+  padding: 8px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+}
+
+.pv_contents_tab:hover {
+  border-color: var(--border);
+  color: var(--text1);
+}
+
+.pv_contents_tab--active {
+  background: var(--text1);
+  color: #fff;
+  border-color: var(--text1);
+}
+
+.pv_contents_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.pv_content_card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(21, 31, 52, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pv_content_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(21, 31, 52, 0.1);
+}
+
+.pv_content_card--hidden {
+  display: none;
+}
+
+.pv_content_thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--subbg);
+}
+
+.pv_content_thumb img,
+.pv_content_thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.pv_content_card:hover .pv_content_thumb img,
+.pv_content_card:hover .pv_content_thumb video {
+  transform: scale(1.04);
+}
+
+.pv_content_play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(21, 31, 52, 0.35);
+  pointer-events: none;
+  transition: background 0.22s ease;
+}
+
+.pv_content_card--video:hover .pv_content_play {
+  background: rgba(21, 31, 52, 0.5);
+}
+
+.pv_content_info {
+  padding: 18px 20px 20px;
+}
+
+.pv_content_label {
+  font-family: var(--logo_text);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--border);
+  text-transform: uppercase;
+}
+
+.pv_content_caption {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-top: 6px;
+}
+
+/* ── 라이트박스 ── */
+body.pv_lightbox_open {
+  overflow: hidden;
+}
+
+.pv_lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pv_lightbox[hidden] {
+  display: none;
+}
+
+.pv_lightbox_backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(21, 31, 52, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.pv_lightbox_panel {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 960px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pv_lightbox_close {
+  position: absolute;
+  top: -48px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.22s ease;
+}
+
+.pv_lightbox_close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pv_lightbox_nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.22s ease;
+}
+
+.pv_lightbox_nav:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.pv_lightbox_prev { left: -60px; }
+.pv_lightbox_next { right: -60px; }
+
+.pv_lightbox_media {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.pv_lightbox_media img,
+.pv_lightbox_media video {
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+
+.pv_lightbox_footer {
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pv_lightbox_label {
+  font-family: var(--logo_text);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--border);
+}
+
+.pv_lightbox_caption {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  color: #fff;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.pv_lightbox_count {
+  display: block;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 8px;
+}
+
+/* ── 관련 프로젝트 ── */
+.pv_related {
+  padding: 72px var(--page-pad-x) 0;
+  border-top: 1px solid var(--gray2);
+}
+
+.pv_related_head {
+  margin-bottom: 36px;
+}
+
+.pv_related_title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 500;
+  color: var(--text1);
+  margin-top: 12px;
+}
+
+.pv_related_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  padding-bottom: 48px;
+}
+
+.pv_related_card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(21, 31, 52, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pv_related_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(21, 31, 52, 0.1);
+}
+
+.pv_related_img {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.pv_related_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.pv_related_card:hover .pv_related_img img {
+  transform: scale(1.04);
+}
+
+.pv_related_body {
+  padding: 22px 24px 24px;
+}
+
+.pv_related_num {
+  font-family: var(--logo_text);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--border);
+}
+
+.pv_related_name {
+  font-family: var(--logo_text);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text1);
+  margin-top: 8px;
+}
+
+.pv_related_sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 4px;
+}
+
+/* ── 하단 링크 바 ── */
+.pv_footer_bar {
+  border-top: 1px solid var(--gray2);
+  padding: 28px var(--page-pad-x) 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pv_footer_link {
+  font-family: var(--logo_text);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--text2);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.22s ease;
+}
+
+.pv_footer_link:hover {
+  color: var(--border);
+}
+
+.pv_footer_arrow {
+  transition: transform 0.22s ease;
+}
+
+.pv_footer_link:hover .pv_footer_arrow {
+  transform: translateX(4px);
+}
+
+/* ── 404 ── */
+.pv_notfound {
+  padding: 120px var(--page-pad-x) 160px;
+  text-align: center;
+}
+
+.pv_notfound .pv_title {
+  margin-bottom: 16px;
+}
+
+.pv_notfound .pv_section_text {
+  margin-bottom: 40px;
+}
+
+.pv_back_btn {
+  display: inline-block;
+  font-family: var(--logo_text);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: #fff;
+  background: var(--text1);
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 100px;
+  transition: background 0.22s ease;
+}
+
+.pv_back_btn:hover {
+  background: var(--border);
+}
+
+@keyframes pv_fade_up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════
+   반응형
+═══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .pv_hero { padding: 72px var(--page-pad-x-tab) 48px; }
+  .pv_visual { margin: 0 var(--page-pad-x-tab) 60px; }
+  .pv_content { padding: 0 var(--page-pad-x-tab) 64px; }
+  .pv_contents { padding: 60px var(--page-pad-x-tab) 72px; }
+  .pv_contents_grid { grid-template-columns: repeat(2, 1fr); }
+  .pv_related { padding: 60px var(--page-pad-x-tab) 0; }
+  .pv_footer_bar { padding: 28px var(--page-pad-x-tab) 80px; }
+  .pv_lightbox_prev { left: 8px; }
+  .pv_lightbox_next { right: 8px; }
+}
+
+@media (max-width: 768px) {
+  .pv_hero { padding: 60px var(--page-pad-x-mob) 40px; }
+  .pv_visual {
+    margin: 0 var(--page-pad-x-mob) 48px;
+    aspect-ratio: 4 / 3;
+  }
+  .pv_content { padding: 0 var(--page-pad-x-mob) 56px; }
+  .pv_contents { padding: 48px var(--page-pad-x-mob) 64px; }
+  .pv_contents_grid { gap: 18px; }
+  .pv_split {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+  .pv_related { padding: 48px var(--page-pad-x-mob) 0; }
+  .pv_related_grid { gap: 20px; }
+  .pv_footer_bar { padding: 24px var(--page-pad-x-mob) 64px; }
+  .pv_notfound { padding: 80px var(--page-pad-x-mob) 100px; }
+}
+
+@media (max-width: 640px) {
+  .pv_hero { padding: 48px var(--page-pad-x-mob-sm) 32px; }
+  .pv_visual { margin: 0 var(--page-pad-x-mob-sm) 40px; }
+  .pv_content { padding: 0 var(--page-pad-x-mob-sm) 48px; }
+  .pv_contents { padding: 40px var(--page-pad-x-mob-sm) 56px; }
+  .pv_contents_grid { grid-template-columns: 1fr; }
+  .pv_related { padding: 40px var(--page-pad-x-mob-sm) 0; }
+  .pv_related_grid { grid-template-columns: 1fr; }
+  .pv_footer_bar { padding: 20px var(--page-pad-x-mob-sm) 56px; }
+}
