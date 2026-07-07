@@ -16,7 +16,7 @@ body {
   min-height: calc(100vh - 118px); /* 헤더 높이 제외 */
   display: flex;
   align-items: flex-start; /* sticky가 작동하려면 flex-start 필요 */
-  padding: 80px 100px;
+  padding: 80px var(--page-pad-x);
   gap: 150px;
   background: var(--mainbg);
 }
@@ -71,7 +71,7 @@ body {
 
 /* 골드 구분선 */
 .sv_divider {
-  width: 32px;
+  width: 36px;
   height: 1.5px;
   background: var(--border);
   margin: 4px 0;
@@ -188,7 +188,7 @@ body {
 @media (max-width: 900px) {
   .sv_hero {
     flex-direction: column;
-    padding: 48px 24px;
+    padding: 48px var(--page-pad-x-mob-sm);
     gap: 40px;
     align-items: flex-start;
   }

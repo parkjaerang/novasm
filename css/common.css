@@ -11,6 +11,10 @@
     --text2 : #494F59;
     --logo_text: "Playfair", serif;
     --ms-header-h: 96px;
+    --page-pad-x: clamp(32px, 8vw, 140px);
+    --page-pad-x-tab: 80px;
+    --page-pad-x-mob: 44px;
+    --page-pad-x-mob-sm: 28px;
 }
 
 /* ═══════════════════════════════════
@@ -22,7 +26,7 @@
   top: 0;
   z-index: 100;
   height: var(--ms-header-h);
-  padding: 0 clamp(20px, 6vw, 100px);
+  padding: 0 var(--page-pad-x);
   display: flex;
   align-items: center;
   background: var(--mainbg);
@@ -82,9 +86,13 @@
 .ms_nav_link:hover { color: var(--gray3); }
 .ms_nav_link:hover::after { width: 100%; }
 
-/* 현재 페이지 활성 상태 — 호버와 동일한 스타일 유지 */
-.ms_nav_link--active { color: var(--gray3); }
-.ms_nav_link--active::after { width: 100%; }
+/* 현재 페이지 활성 상태 — --border 색 텍스트 + 밑줄 */
+.ms_nav_link--active {
+  color: var(--border);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+}
+.ms_nav_link--active::after { display: none; }
 
 /* ═══════════════════════════════════
    FOOTER — NOVA SM
@@ -95,7 +103,7 @@
   background: var(--text1);           /* #151F34 — 딥 네이비 다크 배경 */
   color: var(--gray2);
   /* 좌우 패딩을 뷰포트에 따라 자동 조정 */
-  padding: clamp(40px, 6vw, 80px) clamp(20px, 6vw, 100px) clamp(24px, 3vw, 40px);
+  padding: clamp(40px, 6vw, 80px) var(--page-pad-x) clamp(24px, 3vw, 40px);
 }
 
 /* ── 상단 콘텐츠 영역 (로고 + 링크 + 문의) ── */
@@ -359,7 +367,7 @@
   /* 각 링크 — 대형 세리프 스타일 */
   .ms_nav_link {
     font-family: var(--logo_text);
-    font-size: clamp(28px, 8vw, 48px);
+    font-size: clamp(28px, 5vw, 52px);
     font-weight: 400;
     letter-spacing: 0.06em;
     color: #fff;
@@ -390,7 +398,11 @@
   .ms_nav_link:hover { color: var(--border); }
 
   /* 활성 링크: 골드 */
-  .ms_nav_link--active { color: var(--border) !important; }
+  .ms_nav_link--active {
+    color: var(--border) !important;
+    border-bottom-color: var(--border);
+    padding-bottom: 18px;
+  }
   .ms_nav_link--active::after { display: none; }
 
   /* 첫 번째 링크 위 골드 구분선 */

@@ -27,7 +27,7 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: calc(100vh - 100px); /* 뷰포트에서 헤더 높이 제외, min-height로 내용 넘침 허용 */
-  padding: clamp(40px, 6vw, 80px) clamp(20px, 6vw, 100px) clamp(40px, 5vw, 60px);
+  padding: clamp(40px, 6vw, 80px) var(--page-pad-x) clamp(40px, 5vw, 60px);
   position: relative;
 }
 
@@ -74,7 +74,7 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 50vh;
-  padding: clamp(48px, 7vw, 90px) clamp(20px, 6vw, 100px);
+  padding: clamp(48px, 7vw, 90px) var(--page-pad-x);
   background: var(--subbg);
   overflow: hidden;
   position: relative;
@@ -180,7 +180,7 @@ body {
 ═══════════════════════════════════ */
 .ms_services {
   background: var(--mainbg);  /* mainbg로 통일 */
-  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px) clamp(60px, 8vw, 120px);
+  padding: clamp(48px, 7vw, 100px) var(--page-pad-x) clamp(60px, 8vw, 120px);
   /* 고정 높이 제거 — 모바일에서 2열/1열 전환 시 내용이 잘리지 않도록 */
   min-height: calc(100vh - 100px);
 }
@@ -316,7 +316,7 @@ body {
 ═══════════════════════════════════ */
 .ms_partner {
   background: var(--mainbg);
-  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  padding: clamp(48px, 7vw, 100px) var(--page-pad-x);
   min-height: 60vh;
   display: flex;
   align-items: center;
@@ -515,7 +515,7 @@ body {
 ═══════════════════════════════════ */
 .ms_portfolio {
   background: var(--mainbg);
-  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  padding: clamp(48px, 7vw, 100px) var(--page-pad-x);
   min-height: 72vh; /* 카드가 충분히 표시되도록 높이 확보 */
   display: flex;
   align-items: center;
@@ -653,7 +653,7 @@ body {
 ═══════════════════════════════════ */
 .ms_contact {
   background: var(--mainbg);
-  padding: clamp(48px, 7vw, 100px) clamp(20px, 6vw, 100px);
+  padding: clamp(48px, 7vw, 100px) var(--page-pad-x);
   display: flex;
   align-items: flex-start;
   gap: clamp(32px, 5vw, 80px);

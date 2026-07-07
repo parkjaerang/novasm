@@ -3,13 +3,6 @@
    index.css / common.css 변수 그대로 활용
 ═══════════════════════════════════════════════ */
 
-/* 현재 페이지 네비 활성 표시 */
-.ms_nav_link--active {
-  color: var(--border);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-}
-
 /* 메인 컨테이너 */
 .cp_main {
   background: var(--mainbg);
@@ -59,7 +52,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x);
   display: flex;
   align-items: center;
   gap: clamp(32px, 5vw, 80px);
@@ -146,7 +139,7 @@
 ══════════════════════════════ */
 .cp_why {
   background: var(--mainbg);
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x);
   min-height: 90vh;
   display: flex;
   align-items: center;
@@ -156,7 +149,7 @@
   width: 100%;
   display: flex;
   align-items: flex-start;
-  gap: clamp(40px, 8vw, 260px);
+  gap: clamp(150px, 14vw, 260px);
 }
 
 /* 좌: 제목 블록 */
@@ -237,7 +230,7 @@
 .cp_strength {
   min-height: calc(100vh - 100px); /* 고정 height → min-height, 모바일에서 내용 넘침 방지 */
   background: var(--subbg);
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px) clamp(48px, 6vw, 80px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x) clamp(48px, 6vw, 80px);
   overflow: hidden;
 }
 
@@ -403,7 +396,7 @@
 ══════════════════════════════ */
 .cp_work {
   background: var(--mainbg);
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x);
 }
 
 .cp_work_inner {
@@ -481,7 +474,7 @@
   inset: 0;
   display: flex;
   align-items: flex-start;
-  padding: 28px;
+  padding: 50px;
 }
 
 /* 카드 높이 고정 (이미지 없어도 형태 유지) */
@@ -494,7 +487,7 @@
 
 .cp_work_name {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(14px, 1.3vw, 18px);
+  font-size: clamp(14px, 2vw, 20px);
   color: var(--text1);
   line-height: 1.7;
   letter-spacing: 0.03em;
@@ -505,7 +498,7 @@
 ══════════════════════════════ */
 .cp_story {
   background: var(--subbg);
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x);
 }
 
 .cp_story_inner {
@@ -575,7 +568,7 @@
 ══════════════════════════════ */
 .cp_space {
   background: var(--mainbg);
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 6vw, 100px);
+  padding: clamp(60px, 8vw, 120px) var(--page-pad-x);
 }
 
 .cp_space_inner {
@@ -657,7 +650,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: clamp(80px, 10vw, 140px) clamp(20px, 6vw, 100px);
+  padding: clamp(80px, 10vw, 140px) var(--page-pad-x);
   background: linear-gradient(160deg, #EDECE9 0%, #F5F4F2 45%, #E6E4E0 100%);
 }
 

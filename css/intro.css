@@ -825,7 +825,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ececec;
+  background: radial-gradient(ellipse 85% 75% at 50% 42%, #f0f0f0 0%, #e0e0e0 100%);
   opacity: 0;
   pointer-events: none;
   animation: map_show 0.8s ease forwards 13.2s;
@@ -835,51 +835,79 @@
   to { opacity: 1; }
 }
 
-/* 이미지 + SVG를 함께 감싸는 래퍼 — SVG가 이미지 위에 정확히 겹치도록 */
+/* SVG 지도 래퍼 */
 .intro_map_figure {
   position: relative;
-  width: clamp(280px, 55vw, 820px);
+  width: clamp(300px, 58vw, 900px);
 }
 
-.intro_map_img {
-  /* 래퍼 너비에 맞춰 자동 비율 유지 */
+/* 통합 SVG 지도 — 네이티브 1407×802 해상도로 선명하게 렌더 */
+.intro_map_svg {
   width: 100%;
   height: auto;
   display: block;
   opacity: 0;
+  shape-rendering: geometricPrecision;
   animation: map_img_in 1s ease forwards 13.5s;
 }
 
 @keyframes map_img_in {
-  0%   { opacity: 0; transform: scale(0.92); }
+  0%   { opacity: 0; transform: scale(0.94); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* 골드 연결 라인 SVG — .intro_map_figure 기준으로 오버레이 */
-.intro_map_line_svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
+/* 골드 연결선 — 글로우 레이어 */
+.intro_map_gold_glow {
+  stroke-dasharray: 620;
+  stroke-dashoffset: 620;
+  filter: blur(4px);
+  animation:
+    map_glow_in 0.6s ease forwards 15.6s,
+    draw_line   1.6s ease forwards 15.8s;
 }
 
+@keyframes map_glow_in {
+  to { opacity: 0.35; }
+}
+
+/* 골드 연결선 — 메인 레이어 */
 .intro_map_gold_path {
   fill: none;
-  stroke: url(#goldGrad);
-  stroke-width: 2.5;
+  stroke: url(#introGoldGrad);
+  stroke-width: 2.8;
   stroke-linecap: round;
-  /* 새 좌표계(820×461)에서 경로 길이 약 320 → 여유값 350 사용 */
-  stroke-dasharray: 350;
-  stroke-dashoffset: 350;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--border) 60%, transparent));
-  /* 점(15.0s) 등장 후 0.4s 뒤에 곡선 그리기 시작 */
-  animation: draw_line 1.5s ease forwards 15.8s;
+  stroke-dasharray: 620;
+  stroke-dashoffset: 620;
+  filter: drop-shadow(0 1px 2px rgba(138, 112, 64, 0.35))
+          drop-shadow(0 0 8px color-mix(in srgb, var(--border) 50%, transparent));
+  animation: draw_line 1.6s ease forwards 15.8s;
 }
 
 @keyframes draw_line {
   to { stroke-dashoffset: 0; }
+}
+
+/* 연결 노드 — 서울·베이징 */
+.intro_map_dot {
+  animation: map_dot 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards 15.4s;
+}
+
+.intro_map_dot_glow {
+  animation: map_dot_glow 0.5s ease forwards 15.4s;
+}
+
+.intro_map_dot_ring {
+  animation: map_dot_ring 0.5s ease forwards 15.5s;
+}
+
+@keyframes map_dot_glow {
+  0%   { opacity: 0; r: 4; }
+  100% { opacity: 0.25; r: 14; }
+}
+
+@keyframes map_dot_ring {
+  0%   { opacity: 0; r: 5; }
+  100% { opacity: 0.6; r: 11; }
 }
 
 /* 지도 하단 텍스트 */
@@ -890,27 +918,31 @@
   transform: translateX(-50%);
   font-family: "Playfair", serif;
   font-size: clamp(13px, 2vw, 22px);
-  letter-spacing: 0.35em;
-  line-height: 1.8;
+  font-weight: 400;
+  letter-spacing: 0.38em;
+  line-height: 1.85;
   text-align: center;
   color: transparent;
   background: linear-gradient(
     110deg,
     var(--metal-dark) 0%,
-    var(--metal-dark) 42%,
-    var(--metal-bright) 50%,
-    var(--metal-dark) 58%,
+    var(--metal-dark) 38%,
+    var(--metal-bright) 48%,
+    #c9a84c 52%,
+    var(--metal-dark) 62%,
     var(--metal-dark) 100%
   );
-  background-size: 220% 100%;
+  background-size: 240% 100%;
   background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   white-space: normal;
   opacity: 0;
   animation:
-    tagline_in  0.8s ease        forwards 14.0s,
-    metal_shine 2.4s ease-in-out 1    14.6s forwards;
+    tagline_in  0.8s ease             forwards 14.0s,
+    metal_shine 2.6s ease-in-out 1    forwards 14.6s;
 }
 
 @keyframes tagline_in {
@@ -1020,6 +1052,7 @@
 /* 지도 마커 점 나타나기 */
 @keyframes map_dot {
   0%   { opacity: 0; r: 2; }
+  70%  { opacity: 1; r: 6; }
   100% { opacity: 1; r: 5; }
 }
 

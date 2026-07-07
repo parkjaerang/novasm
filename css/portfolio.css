@@ -14,7 +14,7 @@ body {
 
 /* ── 히어로 섹션 ── */
 .pf_hero {
-  padding: 100px 100px 80px;
+  padding: 100px var(--page-pad-x) 80px;
   position: relative;
   overflow: hidden;
 }
@@ -94,7 +94,7 @@ body {
 
 /* ── 필터 바 ── */
 .pf_filter {
-  padding: 0 100px 60px;
+  padding: 0 var(--page-pad-x) 60px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -137,7 +137,7 @@ body {
 
 /* ── 프로젝트 그리드 ── */
 .pf_grid_section {
-  padding: 0 100px 120px;
+  padding: 0 var(--page-pad-x) 120px;
 }
 
 /* 3열 카드 그리드 */
@@ -149,14 +149,17 @@ body {
 
 /* ── 개별 프로젝트 카드 ── */
 .pf_card {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(21, 31, 52, 0.07);
+  box-shadow: 0 4px 24px rgba(21, 31, 52, 0.06);
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.35s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.35s ease, background 0.3s ease;
   opacity: 1;
 }
 
@@ -167,7 +170,8 @@ body {
 
 .pf_card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 48px rgba(21, 31, 52, 0.13);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 16px 48px rgba(21, 31, 52, 0.1);
 }
 
 /* 카드 상단: 번호 + 설명 */
@@ -279,7 +283,7 @@ body {
   flex-shrink: 0;
   transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
   text-decoration: none;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
 }
 
 .pf_card_arrow:hover {
@@ -302,10 +306,10 @@ body {
   font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--text2);
-  background: var(--mainbg);
+  background: rgba(255, 255, 255, 0.45);
   padding: 4px 12px;
   border-radius: 100px;
-  border: 1px solid var(--gray2);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   white-space: nowrap;
 }
 
@@ -327,7 +331,7 @@ body {
 /* ── "VIEW ALL PROJECTS" 하단 링크 바 ── */
 .pf_viewall {
   border-top: 1px solid var(--gray2);
-  padding: 28px 100px;
+  padding: 28px var(--page-pad-x);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -386,17 +390,17 @@ body {
 @media (max-width: 1024px) {
   /* 히어로 패딩 축소 */
   .pf_hero {
-    padding: 80px 60px 60px;
+    padding: 80px var(--page-pad-x-tab) 60px;
   }
 
   /* 필터 패딩 축소 */
   .pf_filter {
-    padding: 0 60px 48px;
+    padding: 0 var(--page-pad-x-tab) 48px;
   }
 
   /* 그리드 섹션 패딩 축소 */
   .pf_grid_section {
-    padding: 0 60px 100px;
+    padding: 0 var(--page-pad-x-tab) 100px;
   }
 
   /* 2열 그리드로 전환 */
@@ -407,7 +411,7 @@ body {
 
   /* VIEW ALL 패딩 축소 */
   .pf_viewall {
-    padding: 28px 60px;
+    padding: 28px var(--page-pad-x-tab);
   }
 }
 
@@ -417,7 +421,7 @@ body {
 @media (max-width: 768px) {
   /* 히어로 패딩 및 헤드라인 크기 조정 */
   .pf_hero {
-    padding: 60px 32px 48px;
+    padding: 60px var(--page-pad-x-mob) 48px;
   }
 
   /* 워터마크 크기 축소 */
@@ -429,13 +433,13 @@ body {
 
   /* 필터 패딩 */
   .pf_filter {
-    padding: 0 32px 40px;
+    padding: 0 var(--page-pad-x-mob) 40px;
     gap: 8px;
   }
 
   /* 그리드 섹션 패딩 */
   .pf_grid_section {
-    padding: 0 32px 80px;
+    padding: 0 var(--page-pad-x-mob) 80px;
   }
 
   /* 2열 유지, 간격 축소 */
@@ -445,7 +449,7 @@ body {
 
   /* VIEW ALL 패딩 */
   .pf_viewall {
-    padding: 24px 32px;
+    padding: 24px var(--page-pad-x-mob);
   }
 }
 
@@ -455,7 +459,7 @@ body {
 @media (max-width: 640px) {
   /* 히어로 패딩 최소화 */
   .pf_hero {
-    padding: 48px 20px 40px;
+    padding: 48px var(--page-pad-x-mob-sm) 40px;
   }
 
   /* 워터마크 숨김 (좁은 화면에서 레이아웃 방해) */
@@ -465,7 +469,7 @@ body {
 
   /* 필터 패딩 */
   .pf_filter {
-    padding: 0 20px 32px;
+    padding: 0 var(--page-pad-x-mob-sm) 32px;
     gap: 8px;
   }
 
@@ -477,7 +481,7 @@ body {
 
   /* 그리드 섹션 패딩 */
   .pf_grid_section {
-    padding: 0 20px 60px;
+    padding: 0 var(--page-pad-x-mob-sm) 60px;
   }
 
   /* 1열 그리드로 전환 */
@@ -499,6 +503,6 @@ body {
 
   /* VIEW ALL 바 */
   .pf_viewall {
-    padding: 20px 20px;
+    padding: 20px var(--page-pad-x-mob-sm);
   }
 }

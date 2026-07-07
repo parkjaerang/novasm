@@ -270,34 +270,72 @@
       </div>
     `);
 
-    /* 한중 지도 */
+    /* 한중 지도 — 네이티브 해상도 SVG (1407×802) + 필터·골드 라인 통합 */
     overlay.insertAdjacentHTML('beforeend', `
       <div class="intro_map" id="introMap">
-        <!-- 이미지 위에 SVG를 정확히 겹치기 위한 래퍼 -->
         <div class="intro_map_figure">
-          <img class="intro_map_img" src="./img/한중지도.png" alt="한국-중국 연결 지도">
-          <!-- 골드 연결 라인 SVG — viewBox를 이미지 비율(820×461)에 맞춰 좌표 재계산 -->
-          <!-- 서울: 이미지 내 90.2%, 60.8% → (740, 280) / 베이징: 54.3%, 38.1% → (445, 176) -->
-          <svg class="intro_map_line_svg" viewBox="0 0 820 461" preserveAspectRatio="xMidYMid meet">
+          <svg class="intro_map_svg" viewBox="0 0 1407 802" preserveAspectRatio="xMidYMid meet" role="img" aria-label="한국-중국 연결 지도">
             <defs>
-              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#8a7040"/>
-                <stop offset="40%"  stop-color="#d4af5e"/>
-                <stop offset="60%"  stop-color="#fff8d6"/>
+              <!-- 육지 실루엣: 선명도 + 종이 질감 그림자 -->
+              <filter id="intro_land_filter" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0.35" result="sharp_blur"/>
+                <feComposite in="SourceGraphic" in2="sharp_blur" operator="arithmetic" k2="1.15" k3="-0.15" result="sharpened"/>
+                <feDropShadow in="sharpened" dx="0" dy="2" stdDeviation="5" flood-color="#fff" flood-opacity="0.55" result="lit"/>
+                <feDropShadow in="lit" dx="1" dy="10" stdDeviation="20" flood-color="#151F34" flood-opacity="0.10"/>
+              </filter>
+
+              <!-- 골드 라인 메탈릭 그라데이션 (서울→베이징) -->
+              <linearGradient id="introGoldGrad" gradientUnits="userSpaceOnUse" x1="1270" y1="485" x2="762" y2="306">
+                <stop offset="0%"   stop-color="#9a7a3a"/>
+                <stop offset="25%"  stop-color="#d4af5e"/>
+                <stop offset="45%"  stop-color="#fff8d6"/>
+                <stop offset="55%"  stop-color="#fffef0"/>
+                <stop offset="75%"  stop-color="#d4af5e"/>
                 <stop offset="100%" stop-color="#8a7040"/>
               </linearGradient>
+
+              <!-- 노드 글로우 -->
+              <filter id="intro_node_glow" x="-120%" y="-120%" width="340%" height="340%">
+                <feGaussianBlur stdDeviation="3.5" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+
+              <!-- 노드 코어 그라데이션 -->
+              <radialGradient id="introDotGrad" cx="35%" cy="30%" r="65%">
+                <stop offset="0%"   stop-color="#fffef5"/>
+                <stop offset="55%"  stop-color="#e8c96a"/>
+                <stop offset="100%" stop-color="#a88840"/>
+              </radialGradient>
             </defs>
-            <!-- 서울(740, 280) → 베이징(445, 176) 곡선 연결 -->
-            <path class="intro_map_gold_path"
-              d="M 740 280 C 690 201, 490 161, 445 176"/>
-            <!-- 서울 마커 -->
-            <circle cx="740" cy="280" r="3" fill="#d4af5e" opacity="0"
-              style="animation: map_dot 0.3s ease forwards 15.4s;">
-            </circle>
-            <!-- 베이징 마커 -->
-            <circle cx="445" cy="176" r="3" fill="#d4af5e" opacity="0"
-              style="animation: map_dot 0.3s ease forwards 15.4s;">
-            </circle>
+
+            <!-- 지도 실루엣 (원본 PNG 네이티브 해상도) -->
+            <image class="intro_map_land" href="./img/한중지도.png" width="1407" height="802" filter="url(#intro_land_filter)"/>
+
+            <!-- 골드 연결선: 글로우 레이어 -->
+            <path class="intro_map_gold_glow" pathLength="620"
+              d="M 1270 485 C 1183 350, 840 280, 762 306"
+              fill="none" stroke="#d4af5e" stroke-width="6" stroke-linecap="round" opacity="0"/>
+
+            <!-- 골드 연결선: 메인 레이어 -->
+            <path class="intro_map_gold_path" pathLength="620"
+              d="M 1270 485 C 1183 350, 840 280, 762 306"/>
+
+            <!-- 서울 노드 -->
+            <g class="intro_map_node" filter="url(#intro_node_glow)">
+              <circle class="intro_map_dot_ring" cx="1270" cy="485" r="9" fill="none" stroke="#d4af5e" stroke-width="1" opacity="0"/>
+              <circle class="intro_map_dot_glow" cx="1270" cy="485" r="10" fill="#d4af5e" opacity="0"/>
+              <circle class="intro_map_dot" cx="1270" cy="485" r="5" fill="url(#introDotGrad)" opacity="0"/>
+            </g>
+
+            <!-- 베이징 노드 -->
+            <g class="intro_map_node" filter="url(#intro_node_glow)">
+              <circle class="intro_map_dot_ring" cx="762" cy="306" r="9" fill="none" stroke="#d4af5e" stroke-width="1" opacity="0"/>
+              <circle class="intro_map_dot_glow" cx="762" cy="306" r="10" fill="#d4af5e" opacity="0"/>
+              <circle class="intro_map_dot" cx="762" cy="306" r="5" fill="url(#introDotGrad)" opacity="0"/>
+            </g>
           </svg>
         </div>
         <span class="intro_map_tagline">CONNECT KOREA<br>EXPAND CHINA</span>
