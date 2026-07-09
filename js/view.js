@@ -130,7 +130,7 @@
 
           <div class="pv_split">
             <section class="pv_section">
-              <h2 class="pv_section_title">과제 &amp; 목표</h2>
+              <h2 class="pv_section_title">과제 / 목표</h2>
               <p class="pv_section_text">${project.challenge}</p>
             </section>
             <section class="pv_section">

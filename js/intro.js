@@ -320,7 +320,7 @@
               </filter>
 
               <!-- 골드 라인 메탈릭 그라데이션 (서울→베이징) -->
-              <linearGradient id="introGoldGrad" gradientUnits="userSpaceOnUse" x1="1270" y1="485" x2="762" y2="306">
+              <linearGradient id="introGoldGrad" gradientUnits="userSpaceOnUse" x1="1217" y1="486" x2="707" y2="312">
                 <stop offset="0%"   stop-color="#9a7a3a"/>
                 <stop offset="25%"  stop-color="#d4af5e"/>
                 <stop offset="45%"  stop-color="#fff8d6"/>
@@ -338,7 +338,7 @@
                 </feMerge>
               </filter>
 
-              <!-- 노드 코어 그라데이션 -->
+              <!-- 서울 노드 코어 그라데이션 -->
               <radialGradient id="introDotGrad" cx="35%" cy="30%" r="65%">
                 <stop offset="0%"   stop-color="#fffef5"/>
                 <stop offset="55%"  stop-color="#e8c96a"/>
@@ -351,25 +351,23 @@
 
             <!-- 골드 연결선: 글로우 레이어 -->
             <path class="intro_map_gold_glow" pathLength="620"
-              d="M 1270 485 C 1183 350, 840 280, 762 306"
+              d="M 1217 486 C 1130 355, 835 278, 707 312"
               fill="none" stroke="#d4af5e" stroke-width="6" stroke-linecap="round" opacity="0"/>
 
             <!-- 골드 연결선: 메인 레이어 -->
             <path class="intro_map_gold_path" pathLength="620"
-              d="M 1270 485 C 1183 350, 840 280, 762 306"/>
+              d="M 1217 486 C 1130 355, 835 278, 707 312"/>
 
             <!-- 서울 노드 -->
             <g class="intro_map_node" filter="url(#intro_node_glow)">
-              <circle class="intro_map_dot_ring" cx="1270" cy="485" r="9" fill="none" stroke="#d4af5e" stroke-width="1" opacity="0"/>
-              <circle class="intro_map_dot_glow" cx="1270" cy="485" r="10" fill="#d4af5e" opacity="0"/>
-              <circle class="intro_map_dot" cx="1270" cy="485" r="5" fill="url(#introDotGrad)" opacity="0"/>
+              <circle class="intro_map_dot_ring" cx="1217" cy="486" r="9" fill="none" stroke="#d4af5e" stroke-width="1" opacity="0"/>
+              <circle class="intro_map_dot_glow" cx="1217" cy="486" r="10" fill="#d4af5e" opacity="0"/>
+              <circle class="intro_map_dot" cx="1217" cy="486" r="5" fill="url(#introDotGrad)" opacity="0"/>
             </g>
 
-            <!-- 베이징 노드 -->
+            <!-- 베이징 노드 (company 도시 노드 스타일 · 골드) -->
             <g class="intro_map_node" filter="url(#intro_node_glow)">
-              <circle class="intro_map_dot_ring" cx="762" cy="306" r="9" fill="none" stroke="#d4af5e" stroke-width="1" opacity="0"/>
-              <circle class="intro_map_dot_glow" cx="762" cy="306" r="10" fill="#d4af5e" opacity="0"/>
-              <circle class="intro_map_dot" cx="762" cy="306" r="5" fill="url(#introDotGrad)" opacity="0"/>
+              <circle class="intro_map_city_dot" cx="707" cy="312" r="6.5" fill="url(#introDotGrad)" opacity="0"/>
             </g>
           </svg>
         </div>
