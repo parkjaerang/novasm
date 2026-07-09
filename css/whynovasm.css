@@ -305,7 +305,8 @@
 .wn_card--1 { grid-column: 1; grid-row: 1; z-index: 2; }
 .wn_card--2 { grid-column: 3; grid-row: 1; z-index: 2; }
 .wn_card--3 { grid-column: 1; grid-row: 2 / 4; z-index: 2; }
-.wn_card--4 { grid-column: 3; grid-row: 2; z-index: 2; }
+.wn_card--4 { grid-column: 3; grid-row: 2; z-index: 2; transform: translateX(80px) translateY(24px); }
+.wn_card--4.wn_visible { transform: translateX(80px) translateY(0); }
 .wn_card--5 { grid-column: 3; grid-row: 3; z-index: 2; }
 
 /* 왼쪽 카드(1, 3)의 텍스트박스: 사이즈 유지하고 오른쪽으로 이동 */
@@ -352,6 +353,10 @@
   .wn_card--3 { grid-column: 1; grid-row: 3; }
   .wn_card--4 { grid-column: 2; grid-row: 3; }
   .wn_card--5 { grid-column: 1 / 3; grid-row: 4; min-height: 240px; }
+
+  /* 4번 카드 오프셋 초기화 */
+  .wn_card--4 { transform: translateY(24px); }
+  .wn_card--4.wn_visible { transform: translateY(0); }
 
   /* 텍스트 박스 위치 정상화 */
   .wn_card--1 .wn_card_body,
@@ -439,6 +444,10 @@
   .wn_card--3 { grid-column: 1; grid-row: 4; min-height: 220px; }
   .wn_card--4 { grid-column: 1; grid-row: 5; min-height: 220px; }
   .wn_card--5 { grid-column: 1; grid-row: 6; min-height: 220px; }
+
+  /* 4번 카드 오프셋 초기화 */
+  .wn_card--4 { transform: translateY(24px); }
+  .wn_card--4.wn_visible { transform: translateY(0); }
 
   /* 텍스트 박스: 오프셋 완전 제거 */
   .wn_card--1 .wn_card_body,
