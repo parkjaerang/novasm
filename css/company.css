@@ -316,6 +316,7 @@
   width: 100%;
   height: auto;
   pointer-events: none;
+  filter: contrast(1.07) brightness(1.09);
 }
 
 /* 한국 허브 */
@@ -324,7 +325,7 @@
 }
 
 .cp_hub_glow {
-  opacity: 0.85;
+  opacity: 0.82;
 }
 
 @keyframes cp_pulse {
@@ -334,14 +335,14 @@
 }
 .cp_hub_ring {
   fill: none;
-  stroke: #fff;
-  stroke-width: 1.5;
+  stroke: #fffef8;
+  stroke-width: 1.7;
   animation: cp_pulse 2.8s ease-out infinite;
 }
 
 /* 도시 노드 */
 .cp_city {
-  fill: #fffef5;
+  fill: #fffef8;
   opacity: 0;
 }
 .cp_strength.cp_in .cp_city {
@@ -381,19 +382,19 @@
 /* 국제 연결선 (JS에서 생성) */
 .cp_line {
   stroke: url(#cp_arc_grad);
-  stroke-width: 1.4;
+  stroke-width: 1.7;
   fill: none;
   stroke-linecap: round;
-  opacity: 0.9;
+  opacity: 0.88;
 }
 
 /* 이동 포인트 (JS에서 생성) */
 .cp_mover {
-  fill: #fffef8;
+  fill: #fff;
   opacity: 0;
 }
 .cp_strength.cp_in .cp_mover {
-  opacity: 0.95;
+  opacity: 0.82;
   transition: opacity 0.5s ease 1.4s;
 }
 
@@ -681,8 +682,7 @@
 }
 
 .cp_closing_shadow,
-.cp_closing_glow,
-.cp_closing_steps {
+.cp_closing_glow {
   transition: transform 0.12s ease-out;
 }
 
@@ -714,19 +714,6 @@
     rgba(255, 255, 255, 0.2) 40%,
     transparent 72%
   );
-}
-
-/* 좌하단 계단 형태 */
-.cp_closing_steps {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: clamp(120px, 18vw, 240px);
-  height: clamp(60px, 10vw, 120px);
-  background:
-    linear-gradient(to top, rgba(255,255,255,0.55), transparent 70%),
-    linear-gradient(to top, rgba(230,228,224,0.9) 0%, rgba(230,228,224,0.9) 28%, transparent 28%),
-    linear-gradient(to top, rgba(220,218,214,0.7) 0%, rgba(220,218,214,0.7) 55%, transparent 55%);
 }
 
 /* 우하단 유동적 패브릭 */
@@ -920,5 +907,4 @@
 
   /* CLOSING: 모바일 배경 요소 축소 */
   .cp_closing_fabric { width: 90%; opacity: 0.15; }
-  .cp_closing_steps { width: 80px; height: 48px; }
 }

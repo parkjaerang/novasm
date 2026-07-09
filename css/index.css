@@ -283,7 +283,7 @@ body {
 /* 짧은 서비스 설명 */
 .ms_svc_desc {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(12px, 1.1vw, 14px);
+  font-size: clamp(11px, 1.1vw, 13px);
   color: var(--text2);
   line-height: 1.85;
   letter-spacing: 0.02em;

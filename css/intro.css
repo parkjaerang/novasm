@@ -902,7 +902,7 @@
   to { stroke-dashoffset: 0; }
 }
 
-/* 연결 노드 — 서울·베이징 */
+/* 서울 노드 — 링 + 글로우 + 코어 */
 .intro_map_dot {
   animation: map_dot 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards 15.4s;
 }
@@ -913,6 +913,16 @@
 
 .intro_map_dot_ring {
   animation: map_dot_ring 0.5s ease forwards 15.5s;
+}
+
+/* 베이징 노드 — company 도시 노드 스타일 (골드) */
+.intro_map_city_dot {
+  animation: intro_city_dot_in 0.55s ease forwards 15.45s;
+}
+
+@keyframes intro_city_dot_in {
+  from { opacity: 0; }
+  to   { opacity: 0.95; }
 }
 
 @keyframes map_dot_glow {
