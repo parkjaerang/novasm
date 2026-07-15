@@ -1,0 +1,18 @@
+{
+  "name": "nova-sm-admin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NOVA SM portfolio site + admin API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^2.2.0"
+  }
+}

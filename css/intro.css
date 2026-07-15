@@ -100,6 +100,12 @@
   100%     { opacity: 0; }
 }
 
+/* 인트로 재생 중 — 페이지 스크롤/스크롤바 숨김 */
+html.intro-active,
+html.intro-active body {
+  overflow: hidden;
+}
+
 /* 인트로가 끝나면 js가 이 클래스를 붙임 */
 #intro_overlay.intro--done {
   opacity: 0;

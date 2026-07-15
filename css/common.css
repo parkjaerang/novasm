@@ -46,14 +46,17 @@
 }
 
 .ms_logo {
-  font-family: var(--logo_text);
-  font-size: 48px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--text1);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   text-decoration: none;
-  text-transform: uppercase;
+  line-height: 0;
+}
+
+.ms_logo img {
+  height: calc(var(--ms-header-h) * 0.55);
+  width: auto;
+  display: block;
 }
 
 /* ── 수평 네비게이션 ── */
@@ -334,8 +337,8 @@
     --ms-header-h: 64px;
   }
 
-  .ms_logo {
-    font-size: 28px;
+  .ms_logo img {
+    height: calc(var(--ms-header-h) * 0.46);
   }
 
   .ms_hamburger { display: flex; }

@@ -69,7 +69,7 @@ body {
 
 /* 히어로 골드 구분선 */
 .pf_hero_divider {
-  width: 60px;
+  width: 80px;
   height: 2px;
   background: var(--border);
   margin-bottom: 40px;
@@ -201,7 +201,7 @@ body {
 /* 카드 상단 설명 텍스트 */
 .pf_card_desc {
   font-family: 'Noto Serif KR', serif;
-  font-size: 13px;
+  font-size: clamp(11px, 1.4vw, 14px);
   font-weight: 400;
   color: var(--text2);
   line-height: 1.7;

@@ -1,15 +1,6 @@
 /* ═══════════════════════════════════════════════
    COMPANY PAGE — company.js
 ═══════════════════════════════════════════════ */
-
-/* ── 1. 헤더 스크롤 축소 ── */
-(function () {
-  const header = document.getElementById('cp_header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('ms_scrolled', window.scrollY > 40);
-  }, { passive: true });
-})();
-
 /* ── 2. IntersectionObserver: 섹션별 cp_in 클래스 부여 ── */
 (function () {
   /* 관찰 대상 섹션들 */

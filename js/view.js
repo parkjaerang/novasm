@@ -1,16 +1,9 @@
-/* ─────────────────────────────────────
-   포트폴리오 상세 뷰 페이지
-   URL: view.html?id={projectId}
-───────────────────────────────────── */
+/* 포트폴리오 상세 — view.html?id={projectId} */
 (function () {
-
   const PROJECTS = window.NOVASM_PROJECTS || [];
   let lightboxItems = [];
   let lightboxIndex = 0;
-
-  function getProjectId() {
-    return new URLSearchParams(location.search).get('id');
-  }
+  let lightbox = null;
 
   function buildContentCard(item, index) {
     const isVideo = item.type === 'video';
@@ -39,7 +32,7 @@
     const contents = project.contents || [];
     if (!contents.length) return '';
 
-    const labels = [...new Set(contents.map(c => c.label))];
+    const labels = [...new Set(contents.map((c) => c.label))];
 
     return `
       <section class="pv_contents" aria-label="제작 콘텐츠">
@@ -48,14 +41,10 @@
           <h2 class="pv_contents_title">제작 콘텐츠</h2>
           <p class="pv_contents_desc">프로젝트에서 제작·운영한 실제 콘텐츠입니다.</p>
         </div>
-
         <div class="pv_contents_filter" role="group" aria-label="콘텐츠 필터">
           <button class="pv_contents_tab pv_contents_tab--active" type="button" data-filter="all">전체</button>
-          ${labels.map(l => `
-            <button class="pv_contents_tab" type="button" data-filter="${l}">${l}</button>
-          `).join('')}
+          ${labels.map((l) => `<button class="pv_contents_tab" type="button" data-filter="${l}">${l}</button>`).join('')}
         </div>
-
         <div class="pv_contents_grid">
           ${contents.map(buildContentCard).join('')}
         </div>
@@ -98,7 +87,7 @@
   }
 
   function buildDetail(project) {
-    const related = PROJECTS.filter(p => p.id !== project.id).slice(0, 2);
+    const related = PROJECTS.filter((p) => p.id !== project.id).slice(0, 2);
     lightboxItems = project.contents || [];
 
     return `
@@ -114,20 +103,17 @@
           <h1 class="pv_title">${project.name}</h1>
           <p class="pv_sub">${project.sub}</p>
           <div class="pv_tags">
-            ${project.tags.map(t => `<span class="pv_tag">${t}</span>`).join('')}
+            ${project.tags.map((t) => `<span class="pv_tag">${t}</span>`).join('')}
           </div>
         </div>
-
         <div class="pv_visual">
           <img src="${project.image}" alt="${project.name}">
         </div>
-
         <div class="pv_content">
           <section class="pv_section">
             <h2 class="pv_section_title">프로젝트 개요</h2>
             <p class="pv_section_text">${project.overview}</p>
           </section>
-
           <div class="pv_split">
             <section class="pv_section">
               <h2 class="pv_section_title">과제 / 목표</h2>
@@ -138,24 +124,20 @@
               <p class="pv_section_text">${project.solution}</p>
             </section>
           </div>
-
           <section class="pv_section">
             <h2 class="pv_section_title">주요 성과</h2>
             <ul class="pv_results">
-              ${project.results.map(r => `<li>${r}</li>`).join('')}
+              ${project.results.map((r) => `<li>${r}</li>`).join('')}
             </ul>
           </section>
-
           <section class="pv_section">
             <h2 class="pv_section_title">제공 서비스</h2>
             <div class="pv_services">
-              ${project.services.map(s => `<span class="pv_service">${s}</span>`).join('')}
+              ${project.services.map((s) => `<span class="pv_service">${s}</span>`).join('')}
             </div>
           </section>
         </div>
-
         ${buildContentsSection(project)}
-
         ${related.length ? `
           <section class="pv_related">
             <div class="pv_related_head">
@@ -167,7 +149,6 @@
             </div>
           </section>
         ` : ''}
-
         <div class="pv_footer_bar">
           <a class="pv_footer_link" href="./portfolio.html">
             전체 프로젝트 보기
@@ -193,101 +174,89 @@
 
   function getVisibleIndices() {
     return [...document.querySelectorAll('.pv_content_card:not(.pv_content_card--hidden)')]
-      .map(card => Number(card.dataset.index));
+      .map((card) => Number(card.dataset.index));
   }
 
   function renderLightbox(index) {
     const item = lightboxItems[index];
-    if (!item) return;
+    if (!item || !lightbox) return;
 
     lightboxIndex = index;
-    const media = document.getElementById('pvLightboxMedia');
-    const label = document.getElementById('pvLightboxLabel');
-    const caption = document.getElementById('pvLightboxCaption');
-    const count = document.getElementById('pvLightboxCount');
     const visible = getVisibleIndices();
     const pos = visible.indexOf(index);
 
-    if (item.type === 'video') {
-      media.innerHTML = `<video src="${item.src}" controls autoplay playsinline></video>`;
-    } else {
-      media.innerHTML = `<img src="${item.src}" alt="${item.caption}">`;
-    }
-
-    label.textContent = item.label;
-    caption.textContent = item.caption;
-    count.textContent = pos >= 0 ? `${pos + 1} / ${visible.length}` : '';
+    lightbox.media.innerHTML = item.type === 'video'
+      ? `<video src="${item.src}" controls autoplay playsinline></video>`
+      : `<img src="${item.src}" alt="${item.caption}">`;
+    lightbox.label.textContent = item.label;
+    lightbox.caption.textContent = item.caption;
+    lightbox.count.textContent = pos >= 0 ? `${pos + 1} / ${visible.length}` : '';
   }
 
   function openLightbox(index) {
-    const box = document.getElementById('pvLightbox');
-    if (!box) return;
-
-    box.hidden = false;
-    box.setAttribute('aria-hidden', 'false');
+    if (!lightbox?.box) return;
+    lightbox.box.hidden = false;
+    lightbox.box.setAttribute('aria-hidden', 'false');
     document.body.classList.add('pv_lightbox_open');
     renderLightbox(index);
   }
 
   function closeLightbox() {
-    const box = document.getElementById('pvLightbox');
-    if (!box) return;
-
-    const video = box.querySelector('video');
-    if (video) video.pause();
-
-    box.hidden = true;
-    box.setAttribute('aria-hidden', 'true');
+    if (!lightbox?.box) return;
+    lightbox.box.querySelector('video')?.pause();
+    lightbox.box.hidden = true;
+    lightbox.box.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('pv_lightbox_open');
-    document.getElementById('pvLightboxMedia').innerHTML = '';
+    lightbox.media.innerHTML = '';
   }
 
   function stepLightbox(dir) {
     const visible = getVisibleIndices();
     if (!visible.length) return;
-
     const pos = visible.indexOf(lightboxIndex);
-    const next = visible[(pos + dir + visible.length) % visible.length];
-    renderLightbox(next);
+    renderLightbox(visible[(pos + dir + visible.length) % visible.length]);
+  }
+
+  function applyContentFilter(filter) {
+    document.querySelectorAll('.pv_contents_tab').forEach((tab) => {
+      tab.classList.toggle('pv_contents_tab--active', tab.dataset.filter === filter);
+    });
+    document.querySelectorAll('.pv_content_card').forEach((card) => {
+      const item = lightboxItems[Number(card.dataset.index)];
+      card.classList.toggle('pv_content_card--hidden', filter !== 'all' && item.label !== filter);
+    });
   }
 
   function bindContents() {
-    const grid = document.querySelector('.pv_contents_grid');
-    if (!grid) return;
-
-    grid.addEventListener('click', function (e) {
-      const card = e.target.closest('.pv_content_card');
-      if (!card || card.classList.contains('pv_content_card--hidden')) return;
-      openLightbox(Number(card.dataset.index));
-    });
-
-    document.querySelectorAll('.pv_contents_tab').forEach(tab => {
-      tab.addEventListener('click', function () {
-        const filter = this.dataset.filter;
-
-        document.querySelectorAll('.pv_contents_tab').forEach(t => {
-          t.classList.toggle('pv_contents_tab--active', t === this);
-        });
-
-        document.querySelectorAll('.pv_content_card').forEach(card => {
-          const item = lightboxItems[Number(card.dataset.index)];
-          const match = filter === 'all' || item.label === filter;
-          card.classList.toggle('pv_content_card--hidden', !match);
-        });
-      });
-    });
-
+    const section = document.querySelector('.pv_contents');
     const box = document.getElementById('pvLightbox');
-    if (!box) return;
+    if (!section || !box) return;
 
-    box.querySelectorAll('[data-close]').forEach(el => {
-      el.addEventListener('click', closeLightbox);
+    lightbox = {
+      box,
+      media: document.getElementById('pvLightboxMedia'),
+      label: document.getElementById('pvLightboxLabel'),
+      caption: document.getElementById('pvLightboxCaption'),
+      count: document.getElementById('pvLightboxCount'),
+    };
+
+    section.addEventListener('click', (e) => {
+      const tab = e.target.closest('.pv_contents_tab');
+      if (tab) {
+        applyContentFilter(tab.dataset.filter);
+        return;
+      }
+      const card = e.target.closest('.pv_content_card');
+      if (card && !card.classList.contains('pv_content_card--hidden')) {
+        openLightbox(Number(card.dataset.index));
+      }
     });
 
+    box.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeLightbox));
     box.querySelector('.pv_lightbox_prev').addEventListener('click', () => stepLightbox(-1));
     box.querySelector('.pv_lightbox_next').addEventListener('click', () => stepLightbox(1));
 
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', (e) => {
       if (box.hidden) return;
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') stepLightbox(-1);
@@ -295,21 +264,17 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const main = document.querySelector('main');
-    if (!main) return;
+  const main = document.querySelector('main');
+  if (!main) return;
 
-    const id = getProjectId();
-    const project = PROJECTS.find(p => p.id === id);
+  const project = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('id'));
 
-    if (project) {
-      document.title = `${project.name} | NOVA SM`;
-      main.innerHTML = buildDetail(project);
-      bindContents();
-    } else {
-      document.title = '프로젝트를 찾을 수 없습니다 | NOVA SM';
-      main.innerHTML = buildNotFound();
-    }
-  });
-
+  if (project) {
+    document.title = `${project.name} | NOVA SM`;
+    main.innerHTML = buildDetail(project);
+    bindContents();
+  } else {
+    document.title = '프로젝트를 찾을 수 없습니다 | NOVA SM';
+    main.innerHTML = buildNotFound();
+  }
 })();

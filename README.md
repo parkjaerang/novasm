@@ -40,21 +40,34 @@ NOVA SM 브랜드 웹사이트 정적 프로젝트입니다.
 
 ## 로컬 실행 방법
 
-정적 파일 프로젝트이므로 간단한 로컬 서버로 실행합니다.
+### 권장: Admin API 서버 (Node)
 
-### 1) Python 사용
+포트폴리오 관리(`admin.html`)에서 **저장** 시 `js/projects-data.js`와 `img/`에 바로 반영됩니다.
+
+```bash
+npm install
+npm start
+```
+
+브라우저에서:
+
+- [http://localhost:5500/admin.html](http://localhost:5500/admin.html)
+- [http://localhost:5500/portfolio.html](http://localhost:5500/portfolio.html)
+
+쓰기 API 보호가 필요하면:
+
+```bash
+set ADMIN_PASSWORD=your-secret
+npm start
+```
+
+### 정적만 보기 (Python)
 
 ```bash
 python -m http.server 5500
 ```
 
-브라우저에서 아래 주소로 접속:
-
-- [http://localhost:5500/index.html](http://localhost:5500/index.html)
-
-### 2) VS Code / Cursor Live Server 사용
-
-- 프로젝트 루트에서 `index.html`을 Live Server로 실행
+이 경우 어드민 **저장**은 브라우저에만 남고, 파일에는 자동 반영되지 않습니다.
 
 ## 데이터 수정 가이드 (포트폴리오)
 

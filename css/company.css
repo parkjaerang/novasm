@@ -189,7 +189,7 @@
 .cp_why_card {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 80px;
   opacity: 0;
   transition: transform 0.3s ease;
 }
@@ -205,7 +205,7 @@
 /* 카드 이미지 */
 .cp_why_card_img {
   flex: 0 0 220px;
-  width: 250px;
+  width: 300px;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: center;
@@ -854,6 +854,8 @@
 
 /* ── 768px 이하: 태블릿 세로 ── */
 @media (max-width: 768px) {
+  /* 강점 설명 줄바꿈 제거 */
+  .cp_strength_p1 br { display: none; }
   /* WHO: 좌우 → 상하 */
   .cp_who_inner { flex-direction: column; align-items: flex-start; gap: 40px; }
 

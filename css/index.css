@@ -57,7 +57,7 @@ body {
 /* 본문: 약간 위에서 내려오며 등장 */
 .ms_body {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(13px, 2vw, 18px);
+  font-size: clamp(11px, 2vw, 18px);
   color: var(--text2);
   line-height: 2;
   letter-spacing: 0.02em;
@@ -156,7 +156,7 @@ body {
 /* 하단 서브 텍스트 */
 .ms_who_sub {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(13px, 1.4vw, 17px);
+  font-size: clamp(11px, 1.4vw, 17px);
   color: var(--text2); /* 밝은 배경 위 중간 톤 */
   line-height: 2;
   letter-spacing: 0.03em;
@@ -283,7 +283,7 @@ body {
 /* 짧은 서비스 설명 */
 .ms_svc_desc {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(11px, 1.1vw, 13px);
+  font-size: clamp(8px, 1.1vw, 13px);
   color: var(--text2);
   line-height: 1.85;
   letter-spacing: 0.02em;
@@ -551,7 +551,7 @@ body {
 /* 섹션 대제목 */
 .ms_pf_title {
   font-family: 'Noto Serif KR', serif;
-  font-size: clamp(28px, 3vw, 46px);
+  font-size: clamp(24px, 3vw, 46px);
   font-weight: 500;
   color: var(--text1);
   line-height: 1.45;
@@ -942,6 +942,8 @@ body {
 
 /* ── 768px 이하: 태블릿 세로 ── */
 @media (max-width: 768px) {
+  /* 서비스 설명 줄바꿈 제거 */
+  .ms_svc_desc br { display: none; }
   /* WHO 섹션: WE 옆 태그 숨김 (공간 부족) */
   .ms_ww_tag { display: none; }
 

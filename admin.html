@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="./img/novasm.png">
+  <script src="./js/projects-data.js" defer></script>
+  <script src="./js/admin.js" defer></script>
+  <title>Portfolio Admin | NOVA SM</title>
+</head>
+<body>
+  <div class="admin">
+    <aside class="admin_sidebar">
+      <div class="admin_brand">
+        <img src="./img/novasm_logo_navy.png" alt="NOVA SM" class="admin_logo">
+        <div>
+          <p class="admin_brand_label">ADMIN</p>
+          <h1 class="admin_brand_title">Portfolio</h1>
+        </div>
+      </div>
+
+      <div class="admin_sidebar_actions">
+        <button type="button" class="admin_btn admin_btn--primary" id="btnAdd">+ 새 프로젝트</button>
+        <button type="button" class="admin_btn" id="btnSave">저장</button>
+        <button type="button" class="admin_btn" id="btnExport">배포용 파일 받기</button>
+        <button type="button" class="admin_btn admin_btn--ghost" id="btnReset">처음부터 다시</button>
+      </div>
+
+      <div class="admin_list_head">
+        <span>프로젝트 목록 <em style="opacity:.55;font-style:normal;font-weight:400;">(드래그로 순서)</em></span>
+        <span id="projectCount">0</span>
+      </div>
+      <ul class="admin_list" id="projectList"></ul>
+
+      <div class="admin_sidebar_foot">
+        <a href="./portfolio.html" target="_blank" rel="noopener">사이트에서 미리보기 →</a>
+        <p class="admin_hint" id="saveStatus">변경 사항 없음</p>
+      </div>
+    </aside>
+
+    <main class="admin_main">
+      <div class="admin_guide" id="adminGuide">
+        <strong>사용 방법</strong>
+        <ol>
+          <li>터미널에서 <code>npm start</code>로 서버를 켠 뒤 이 페이지를 엽니다.</li>
+          <li>왼쪽에서 프로젝트를 고르거나 <em>새 프로젝트</em>를 만듭니다.</li>
+          <li>이미지는 <em>파일 첨부</em> 또는 <em>보유 이미지에서 고르기</em>로 넣습니다.</li>
+          <li><em>이 프로젝트 적용</em> → <em>저장</em> 하면 <code>img</code> 업로드와 <code>projects-data.js</code>가 자동 반영됩니다.</li>
+        </ol>
+      </div>
+
+      <div class="admin_empty" id="emptyState">
+        <p>왼쪽에서 프로젝트를 선택하거나<br>새 프로젝트를 추가하세요.</p>
+      </div>
+
+      <form class="admin_form" id="projectForm" hidden>
+        <header class="admin_form_head">
+          <div>
+            <p class="admin_form_eyebrow">PROJECT EDIT</p>
+            <h2 class="admin_form_title" id="formTitle">프로젝트 편집</h2>
+          </div>
+          <div class="admin_form_head_actions">
+            <a class="admin_btn admin_btn--ghost" id="btnPreview" href="#" target="_blank" rel="noopener">상세 미리보기</a>
+            <button type="button" class="admin_btn admin_btn--danger" id="btnDelete">삭제</button>
+          </div>
+        </header>
+
+        <section class="admin_section">
+          <h3 class="admin_section_title">기본 정보</h3>
+          <div class="admin_grid">
+            <label class="admin_field admin_field--wide">
+              <span>프로젝트명</span>
+              <input type="text" name="name" required placeholder="예: BLS CLINIC">
+            </label>
+            <label class="admin_field admin_field--wide">
+              <span>한 줄 소개</span>
+              <input type="text" name="sub" required placeholder="예: 중국 마케팅 &amp; 브랜딩 프로젝트">
+            </label>
+            <label class="admin_field">
+              <span>카테고리</span>
+              <select name="category" required>
+                <option value="medical">의료미용 업계 마케팅 사례</option>
+                <option value="clinic">피부과 운영 사례</option>
+                <option value="video">영상콘텐츠 제작사례</option>
+                <option value="brand">브랜드 마케팅 사례</option>
+              </select>
+            </label>
+            <label class="admin_field">
+              <span>목록 번호 <em>(자동)</em></span>
+              <input type="text" name="num" required readonly>
+            </label>
+            <label class="admin_field admin_field--wide">
+              <span>카드에 보이는 짧은 설명 <em>(줄바꿈 가능)</em></span>
+              <textarea name="topDesc" rows="2" required placeholder="목록 카드에 노출되는 짧은 설명"></textarea>
+            </label>
+
+            <div class="admin_field admin_field--wide">
+              <span>대표 이미지</span>
+              <div class="admin_media" data-media="hero">
+                <input type="hidden" name="image" required>
+                <div class="admin_media_preview" id="heroPreview">
+                  <span class="admin_media_placeholder">이미지를 선택해 주세요</span>
+                </div>
+                <div class="admin_media_actions">
+                  <label class="admin_btn admin_btn--file">
+                    파일 첨부
+                    <input type="file" accept="image/*" data-file-for="hero" hidden>
+                  </label>
+                  <button type="button" class="admin_btn" data-pick-library="hero">보유 이미지에서 고르기</button>
+                </div>
+                <p class="admin_media_name" id="heroFileName"></p>
+                <p class="admin_media_tip" id="heroTip" hidden></p>
+              </div>
+            </div>
+
+            <details class="admin_advanced admin_field--wide">
+              <summary>고급 설정 (보통 수정할 필요 없음)</summary>
+              <div class="admin_grid" style="margin-top:12px">
+                <label class="admin_field">
+                  <span>주소용 ID <em>(영문·자동 생성)</em></span>
+                  <input type="text" name="id" required pattern="[a-z0-9\-]+" title="소문자, 숫자, 하이픈만">
+                </label>
+                <label class="admin_field">
+                  <span>카테고리 표시명</span>
+                  <input type="text" name="categoryLabel" required>
+                </label>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="admin_section">
+          <h3 class="admin_section_title">태그</h3>
+          <div class="admin_chips" id="tagsEditor" data-field="tags"></div>
+          <div class="admin_chip_add">
+            <input type="text" id="tagInput" placeholder="태그 입력 후 Enter (예: SNS, 브랜딩)">
+            <button type="button" class="admin_btn" data-add-chip="tags">추가</button>
+          </div>
+        </section>
+
+        <section class="admin_section">
+          <h3 class="admin_section_title">상세 본문</h3>
+          <div class="admin_grid">
+            <label class="admin_field admin_field--wide">
+              <span>프로젝트 개요</span>
+              <textarea name="overview" rows="3" required placeholder="어떤 프로젝트인지 간단히"></textarea>
+            </label>
+            <label class="admin_field admin_field--wide">
+              <span>과제 / 목표</span>
+              <textarea name="challenge" rows="3" required placeholder="무엇을 해결하려 했는지"></textarea>
+            </label>
+            <label class="admin_field admin_field--wide">
+              <span>솔루션</span>
+              <textarea name="solution" rows="3" required placeholder="어떻게 해결했는지"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section class="admin_section">
+          <h3 class="admin_section_title">주요 성과</h3>
+          <div class="admin_chips" id="resultsEditor" data-field="results"></div>
+          <div class="admin_chip_add">
+            <input type="text" id="resultInput" placeholder="성과 한 줄 입력 후 Enter">
+            <button type="button" class="admin_btn" data-add-chip="results">추가</button>
+          </div>
+        </section>
+
+        <section class="admin_section">
+          <h3 class="admin_section_title">제공 서비스</h3>
+          <div class="admin_chips" id="servicesEditor" data-field="services"></div>
+          <div class="admin_chip_add">
+            <input type="text" id="serviceInput" placeholder="서비스명 입력 후 Enter">
+            <button type="button" class="admin_btn" data-add-chip="services">추가</button>
+          </div>
+        </section>
+
+        <section class="admin_section">
+          <div class="admin_section_head">
+            <h3 class="admin_section_title">제작 콘텐츠</h3>
+            <button type="button" class="admin_btn" id="btnAddContent">+ 콘텐츠 추가</button>
+          </div>
+          <div class="admin_contents" id="contentsEditor"></div>
+        </section>
+
+        <footer class="admin_form_foot">
+          <button type="submit" class="admin_btn admin_btn--primary">이 프로젝트 적용</button>
+          <p class="admin_hint">적용 후 왼쪽 <strong>저장</strong>을 누르면 서버에 바로 반영됩니다. 백업이 필요할 때만 <strong>배포용 파일 받기</strong>를 사용하세요.</p>
+        </footer>
+      </form>
+    </main>
+  </div>
+
+  <!-- 보유 미디어 선택 모달 -->
+  <div class="admin_modal" id="mediaModal" hidden>
+    <div class="admin_modal_backdrop" data-close-modal></div>
+    <div class="admin_modal_panel" role="dialog" aria-labelledby="mediaModalTitle">
+      <header class="admin_modal_head">
+        <h3 id="mediaModalTitle">보유 이미지에서 고르기</h3>
+        <button type="button" class="admin_modal_close" data-close-modal aria-label="닫기">×</button>
+      </header>
+      <div class="admin_modal_tabs">
+        <button type="button" class="is-active" data-media-tab="image">사진</button>
+        <button type="button" data-media-tab="video">영상</button>
+      </div>
+      <div class="admin_modal_grid" id="mediaModalGrid"></div>
+    </div>
+  </div>
+</body>
+</html>

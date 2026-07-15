@@ -1,5 +1,4 @@
-/* 포트폴리오 프로젝트 데이터 — portfolio.js · view.js 공유 */
-window.NOVASM_PROJECTS = [
+[
   {
     "id": "bls",
     "num": "01",
@@ -200,15 +199,4 @@ window.NOVASM_PROJECTS = [
     "services": [],
     "contents": []
   }
-];
-
-/* Admin 원본 백업 + localStorage 오버라이드 (오프라인 미리보기용) */
-window.NOVASM_PROJECTS_BASE = window.NOVASM_PROJECTS;
-(function applyProjectsOverride() {
-  try {
-    const raw = localStorage.getItem('NOVASM_PROJECTS_OVERRIDE');
-    if (!raw) return;
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) window.NOVASM_PROJECTS = parsed;
-  } catch (_) { /* ignore corrupt override */ }
-})();
+]
