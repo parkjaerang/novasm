@@ -2,6 +2,8 @@
 (function () {
   const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const email = 'contact@naver.com';
+  const previewMode = Boolean(window.NOVASM_PREVIEW_MODE);
+  const portfolioHref = window.NOVASM_PORTFOLIO_URL || './portfolio.html';
 
   function active(...files) {
     return files.some((f) => page === f.toLowerCase()) ? ' ms_nav_link--active' : '';
@@ -11,11 +13,11 @@
   if (header) {
     header.innerHTML = `
       <div class="ms_header_i">
-        <a class="ms_logo" href="./index.html"><img src="./img/novasm_logo_navy.png" alt="novasm logo"></a>
+        <a class="ms_logo" href="${previewMode ? portfolioHref : './index.html'}"><img src="./img/novasm_logo_navy.png" alt="novasm logo"></a>
         <nav class="ms_nav">
           <a class="ms_nav_link${active('company.html')}" href="./company.html">Company</a>
           <a class="ms_nav_link${active('service.html')}" href="./service.html">Services</a>
-          <a class="ms_nav_link${active('portfolio.html', 'view.html')}" href="./portfolio.html">Portfolio</a>
+          <a class="ms_nav_link${active('portfolio.html', 'view.html', 'preview-portfolio.html', 'preview-view.html')}" href="${portfolioHref}">Portfolio</a>
           <a class="ms_nav_link${active('whynovasm.html')}" href="./whynovasm.html">WHY NOVA SM</a>
         </nav>
         <button class="ms_hamburger" aria-label="메뉴" aria-expanded="false">
@@ -59,7 +61,7 @@
           </div>
           <div class="ms_footer_nav_col">
             <span class="ms_footer_nav_title">More</span>
-            <a class="ms_footer_nav_link" href="./portfolio.html">Portfolio</a>
+            <a class="ms_footer_nav_link" href="${portfolioHref}">Portfolio</a>
             <a class="ms_footer_nav_link" href="./whynovasm.html">WHY NOVA SM</a>
             <a class="ms_footer_nav_link" href="./index.html#contact">Contact</a>
           </div>

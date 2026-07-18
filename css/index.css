@@ -809,6 +809,27 @@ body {
   transform: translateX(5px);
 }
 
+.ms_ct_submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ms_ct_status {
+  margin-top: 16px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.ms_ct_status--ok {
+  color: #2f6b4f;
+}
+
+.ms_ct_status--error {
+  color: #a33a3a;
+}
+
 /* ── 진입 애니메이션 활성화 ── */
 #main_site.ms_visible .ms_divider  { width: 100px; }
 #main_site.ms_visible .ms_headline { opacity: 1; transform: translateY(0); }

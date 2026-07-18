@@ -182,23 +182,6 @@ window.NOVASM_PROJECTS = [
         "caption": "패키지·굿즈 디자인"
       }
     ]
-  },
-  {
-    "id": "project-4",
-    "num": "04",
-    "category": "medical",
-    "categoryLabel": "의료미용 업계 마케팅 사례",
-    "topDesc": "",
-    "image": "./img/portfolio1.png",
-    "name": "새 프로젝트",
-    "sub": "",
-    "tags": [],
-    "overview": "",
-    "challenge": "",
-    "solution": "",
-    "results": [],
-    "services": [],
-    "contents": []
   }
 ];
 

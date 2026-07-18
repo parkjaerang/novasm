@@ -1,6 +1,11 @@
 /* 포트폴리오 — 목록 렌더링, 카테고리 필터, 카드 애니메이션 */
 (function () {
   const PROJECTS = window.NOVASM_PROJECTS || [];
+  const viewUrl = (id) => (
+    typeof window.NOVASM_VIEW_URL === 'function'
+      ? window.NOVASM_VIEW_URL(id)
+      : `./view.html?id=${id}`
+  );
 
   const FILTERS = [
     { key: 'all',     label: '전체' },
@@ -26,7 +31,7 @@
               <p class="pf_card_name">${p.name}</p>
               <p class="pf_card_sub">${p.sub}</p>
             </div>
-            <a class="pf_card_arrow" href="./view.html?id=${p.id}" aria-label="자세히 보기">›</a>
+            <a class="pf_card_arrow" href="${viewUrl(p.id)}" aria-label="자세히 보기">›</a>
           </div>
           <div class="pf_card_tags">
             ${p.tags.map((t) => `<span class="pf_card_tag">${t}</span>`).join('')}
@@ -100,7 +105,7 @@
     const card = e.target.closest('.pf_card');
     if (card && !e.target.closest('.pf_card_arrow')) {
       const id = card.dataset.id;
-      if (id) location.href = `./view.html?id=${id}`;
+      if (id) location.href = viewUrl(id);
     }
   });
 

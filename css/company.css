@@ -154,7 +154,7 @@
 
 /* 좌: 제목 블록 */
 .cp_why_title_block {
-  flex: 0 0 260px;
+  flex: 0 0 320px;
   display: flex;
   gap: 28px;
   opacity: 0;

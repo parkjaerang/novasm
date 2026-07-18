@@ -1,9 +1,19 @@
 /* 포트폴리오 상세 — view.html?id={projectId} */
 (function () {
   const PROJECTS = window.NOVASM_PROJECTS || [];
+  const portfolioUrl = window.NOVASM_PORTFOLIO_URL || './portfolio.html';
+  const viewUrl = (id) => (
+    typeof window.NOVASM_VIEW_URL === 'function'
+      ? window.NOVASM_VIEW_URL(id)
+      : `./view.html?id=${id}`
+  );
   let lightboxItems = [];
   let lightboxIndex = 0;
   let lightbox = null;
+
+  function withBreaks(text) {
+    return String(text || '').replace(/\r\n/g, '\n').replace(/\n/g, '<br>');
+  }
 
   function buildContentCard(item, index) {
     const isVideo = item.type === 'video';
@@ -54,7 +64,7 @@
 
   function buildRelatedCard(p) {
     return `
-      <a class="pv_related_card" href="./view.html?id=${p.id}">
+      <a class="pv_related_card" href="${viewUrl(p.id)}">
         <div class="pv_related_img">
           <img src="${p.image}" alt="${p.name}" loading="lazy">
         </div>
@@ -93,7 +103,7 @@
     return `
       <article class="pv_detail">
         <div class="pv_hero">
-          <a class="pv_back" href="./portfolio.html">← Portfolio</a>
+          <a class="pv_back" href="${portfolioUrl}">← Portfolio</a>
           <span class="pv_label">PROJECT DETAIL</span>
           <div class="pv_divider"></div>
           <div class="pv_hero_meta">
@@ -112,16 +122,16 @@
         <div class="pv_content">
           <section class="pv_section">
             <h2 class="pv_section_title">프로젝트 개요</h2>
-            <p class="pv_section_text">${project.overview}</p>
+            <p class="pv_section_text">${withBreaks(project.overview)}</p>
           </section>
           <div class="pv_split">
             <section class="pv_section">
               <h2 class="pv_section_title">과제 / 목표</h2>
-              <p class="pv_section_text">${project.challenge}</p>
+              <p class="pv_section_text">${withBreaks(project.challenge)}</p>
             </section>
             <section class="pv_section">
               <h2 class="pv_section_title">솔루션</h2>
-              <p class="pv_section_text">${project.solution}</p>
+              <p class="pv_section_text">${withBreaks(project.solution)}</p>
             </section>
           </div>
           <section class="pv_section">
@@ -150,7 +160,7 @@
           </section>
         ` : ''}
         <div class="pv_footer_bar">
-          <a class="pv_footer_link" href="./portfolio.html">
+          <a class="pv_footer_link" href="${portfolioUrl}">
             전체 프로젝트 보기
             <span class="pv_footer_arrow">→</span>
           </a>
@@ -167,7 +177,7 @@
         <div class="pv_divider"></div>
         <h1 class="pv_title">프로젝트를 찾을 수 없습니다</h1>
         <p class="pv_section_text">요청하신 프로젝트가 존재하지 않거나 삭제되었습니다.</p>
-        <a class="pv_back_btn" href="./portfolio.html">포트폴리오로 돌아가기</a>
+        <a class="pv_back_btn" href="${portfolioUrl}">포트폴리오로 돌아가기</a>
       </section>
     `;
   }

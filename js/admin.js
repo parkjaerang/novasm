@@ -1,4 +1,4 @@
-/* Portfolio Admin — CRUD · file upload · server save · localStorage fallback */
+/* Portfolio Admin — CRUD · file upload · server save */
 (function () {
   const STORAGE_KEY = 'NOVASM_PROJECTS_OVERRIDE';
   const TOKEN_KEY = 'NOVASM_ADMIN_TOKEN';
@@ -55,6 +55,7 @@
     servicesEditor: document.getElementById('servicesEditor'),
     contentsEditor: document.getElementById('contentsEditor'),
     preview: document.getElementById('btnPreview'),
+    sitePreview: document.getElementById('btnSitePreview'),
     status: document.getElementById('saveStatus'),
     heroPreview: document.getElementById('heroPreview'),
     heroFileName: document.getElementById('heroFileName'),
@@ -111,17 +112,15 @@
       els.status.textContent = '저장 중…';
       return;
     }
+    if (!serverReady) {
+      els.status.textContent = '서버에 연결할 수 없습니다';
+      return;
+    }
     if (dirty) {
       els.status.textContent = '아직 저장하지 않은 변경이 있어요';
       return;
     }
-    if (serverReady) {
-      els.status.textContent = '서버에 저장됨 (사이트에 바로 반영)';
-      return;
-    }
-    els.status.textContent = localStorage.getItem(STORAGE_KEY)
-      ? '이 브라우저에만 저장됨 (서버 미연결)'
-      : '원본 데이터 사용 중';
+    els.status.textContent = '서버에 저장됨 (사이트에 바로 반영)';
   }
 
   function toast(message) {
@@ -206,7 +205,7 @@
     if (!serverReady) {
       persistLocal();
       setDirty(false);
-      toast('브라우저에만 저장됨. npm start로 서버를 켜면 사이트에 바로 반영됩니다');
+      toast('서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요');
       return;
     }
 
@@ -267,10 +266,11 @@
       await refreshMediaLibrary();
       setDirty(false);
       renderList();
-      toast('서버 연결됨 — 저장 시 img·데이터 파일에 바로 반영됩니다');
+      toast('서버에 연결되었습니다');
     } catch (_) {
       serverReady = false;
-      setDirty(Boolean(localStorage.getItem(STORAGE_KEY)));
+      setDirty(false);
+      toast('서버에 연결할 수 없습니다');
     }
   }
 
@@ -404,9 +404,7 @@
     const pending = pendingFiles.has(src);
     els.heroTip.hidden = !pending;
     if (pending) {
-      els.heroTip.textContent = serverReady
-        ? `"${fileNameFromPath(src)}" — 저장 시 서버 img 폴더에 자동 업로드됩니다.`
-        : `"${fileNameFromPath(src)}" 파일을 img 폴더에 넣거나, npm start 후 저장해 주세요.`;
+      els.heroTip.textContent = `"${fileNameFromPath(src)}" — 저장 시 서버에 자동 업로드됩니다.`;
     }
   }
 
@@ -442,7 +440,7 @@
                 </label>
                 <button type="button" class="admin_btn" data-pick-library="content" data-index="${i}">보유 파일에서 고르기</button>
               </div>
-              ${pending ? `<p class="admin_media_tip">"${escapeHtml(fileNameFromPath(item.src))}" — 저장 시 ${serverReady ? '자동 업로드' : '수동 복사 또는 서버 저장'}됩니다.</p>` : ''}
+              ${pending ? `<p class="admin_media_tip">"${escapeHtml(fileNameFromPath(item.src))}" — 저장 시 서버에 자동 업로드됩니다.</p>` : ''}
             </div>
           </div>
           <label class="admin_field admin_field--full">
@@ -542,7 +540,7 @@
     els.empty.hidden = true;
     els.form.hidden = false;
     els.formTitle.textContent = project.name || '프로젝트 편집';
-    els.preview.href = `./view.html?id=${encodeURIComponent(project.id)}`;
+    els.preview.href = `./preview-view.html?id=${encodeURIComponent(project.id)}`;
 
     const fields = ['id', 'num', 'category', 'categoryLabel', 'name', 'sub', 'topDesc', 'image', 'overview', 'challenge', 'solution'];
     fields.forEach((key) => {
@@ -581,9 +579,9 @@
       sub: els.form.sub.value.trim(),
       topDesc: els.form.topDesc.value.replace(/\r\n/g, '\n').trim(),
       image: els.form.image.value.trim(),
-      overview: els.form.overview.value.trim(),
-      challenge: els.form.challenge.value.trim(),
-      solution: els.form.solution.value.trim(),
+      overview: els.form.overview.value.replace(/\r\n/g, '\n').trim(),
+      challenge: els.form.challenge.value.replace(/\r\n/g, '\n').trim(),
+      solution: els.form.solution.value.replace(/\r\n/g, '\n').trim(),
       tags: [...lists.tags],
       results: [...lists.results],
       services: [...lists.services],
@@ -601,6 +599,22 @@
     if (!text) return;
     if (!lists[field].includes(text)) lists[field].push(text);
     renderChips(field);
+  }
+
+  function preparePreviewDraft() {
+    if (selectedId) readFormIntoProject();
+    localStorage.setItem('NOVASM_PREVIEW_PROJECTS', JSON.stringify(projects));
+    const blobs = {};
+    blobUrls.forEach((url, path) => {
+      blobs[path] = url;
+    });
+    localStorage.setItem('NOVASM_PREVIEW_BLOBS', JSON.stringify(blobs));
+    localStorage.setItem('NOVASM_PREVIEW_AT', String(Date.now()));
+  }
+
+  function openPreview(url) {
+    preparePreviewDraft();
+    window.open(url, '_blank', 'noopener');
   }
 
   function exportJsFile() {
@@ -718,7 +732,7 @@
   });
 
   document.getElementById('btnReset').addEventListener('click', async () => {
-    if (!confirm('이 브라우저에만 저장된 변경을 지우고, 서버(또는 원본) 데이터로 돌아갈까요?')) return;
+    if (!confirm('저장하지 않은 변경을 취소하고 서버 데이터로 돌아갈까요?')) return;
     localStorage.removeItem(STORAGE_KEY);
     pendingFiles.clear();
     blobUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -738,7 +752,7 @@
     els.empty.hidden = false;
     setDirty(false);
     renderList();
-    toast('원본 상태로 돌아갔습니다');
+    toast('서버 데이터로 되돌렸습니다');
   });
 
   document.getElementById('btnDelete').addEventListener('click', () => {
@@ -904,6 +918,24 @@
     e.preventDefault();
     e.returnValue = '';
   });
+
+  els.preview.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!selectedId) {
+      toast('미리볼 프로젝트를 먼저 선택해 주세요');
+      return;
+    }
+    const updated = readFormIntoProject();
+    const id = updated?.id || selectedId;
+    openPreview(`./preview-view.html?id=${encodeURIComponent(id)}`);
+  });
+
+  if (els.sitePreview) {
+    els.sitePreview.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPreview('./preview-portfolio.html');
+    });
+  }
 
   /* init */
   setDirty(false);

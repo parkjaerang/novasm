@@ -1,0 +1,30 @@
+/* Admin 미리보기 전용 배너 */
+.preview_banner {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  background: #162033;
+  color: #f3f6fb;
+  text-align: center;
+  padding: 11px 20px;
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.preview_banner strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.preview_banner a {
+  color: #9ec5ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-left: 6px;
+}
+
+.preview_banner a:hover {
+  color: #c8ddff;
+}
