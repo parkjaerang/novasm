@@ -302,7 +302,7 @@ button, input, select, textarea {
 
 /* ── Main ── */
 .admin_main {
-  padding: 32px clamp(20px, 4vw, 48px) 64px;
+  padding: 32px clamp(20px, 4vw, 48px) 140px;
   overflow-y: auto;
   max-height: 100vh;
 }
@@ -806,11 +806,20 @@ button, input, select, textarea {
 }
 
 .admin_form_foot {
+  position: fixed;
+  left: 320px;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
-  margin-top: 8px;
+  margin: 0;
+  padding: 16px clamp(20px, 4vw, 48px) 20px;
+  background: var(--admin-bg);
+  border-top: 1px solid var(--admin-border);
+  box-shadow: 0 -10px 28px rgba(21, 31, 52, 0.06);
 }
 
 .admin_form_foot .admin_hint {
@@ -821,7 +830,7 @@ button, input, select, textarea {
 .admin_toast {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 110px;
   background: var(--admin-text);
   color: #fff;
   padding: 12px 18px;
@@ -857,6 +866,11 @@ button, input, select, textarea {
 
   .admin_main {
     max-height: none;
+    padding-bottom: 140px;
+  }
+
+  .admin_form_foot {
+    left: 0;
   }
 
   .admin_grid,
