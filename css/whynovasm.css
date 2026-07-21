@@ -75,7 +75,7 @@
 /* 대형 원형 테두리 — 카드 이미지 뒤 레이어 */
 .wn_center_circle {
   position: absolute;
-  top: 44%;
+  top: 48%;
   left: 50%;
   width: clamp(500px, 56vw, 720px);
   aspect-ratio: 1;
