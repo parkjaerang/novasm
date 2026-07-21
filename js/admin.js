@@ -2,12 +2,284 @@
 (function () {
   const STORAGE_KEY = 'NOVASM_PROJECTS_OVERRIDE';
   const TOKEN_KEY = 'NOVASM_ADMIN_TOKEN';
-  const CATEGORY_LABELS = {
-    medical: '의료미용 업계 마케팅 사례',
-    clinic: '피부과 운영 사례',
-    video: '영상콘텐츠 제작사례',
-    brand: '브랜드 마케팅 사례',
+  const LANG_KEY = 'NOVASM_ADMIN_LANG';
+
+  const I18N = {
+    ko: {
+      btnAdd: '+ 새 프로젝트',
+      btnSave: '저장',
+      btnReset: '처음부터 다시',
+      listHead: '프로젝트 목록 <span class="admin_list_hint">(드래그로 순서)</span>',
+      previewSite: '미리보기 사이트 →',
+      statusIdle: '변경 사항 없음',
+      statusSaving: '저장 중…',
+      statusOffline: '서버에 연결할 수 없습니다',
+      statusDirty: '아직 저장하지 않은 변경이 있어요',
+      statusSaved: '서버에 저장됨 (사이트에 바로 반영)',
+      guideTitle: '사용 방법',
+      guide1: '왼쪽에서 프로젝트를 고르거나 <em>새 프로젝트</em>를 만듭니다.',
+      guide2: '이미지는 <em>파일 첨부</em> 또는 <em>보유 이미지에서 고르기</em>로 넣습니다.',
+      guide3: '<em>이 프로젝트 적용</em> → <em>저장</em> 하면 <code>img</code> 업로드가 됩니다.',
+      guide4: '<em>상세 미리보기</em> / <em>미리보기 사이트</em>로 저장 전에 확인할 수 있습니다.',
+      emptyState: '왼쪽에서 프로젝트를 선택하거나<br>새 프로젝트를 추가하세요.',
+      formTitle: '프로젝트 편집',
+      btnPreview: '상세 미리보기',
+      btnDelete: '삭제',
+      sectionBasic: '기본 정보',
+      fieldName: '프로젝트명',
+      fieldSub: '한 줄 소개',
+      fieldCategory: '카테고리',
+      fieldNum: '목록 번호 <em>(자동)</em>',
+      fieldTopDesc: '카드에 보이는 짧은 설명 <em>(줄바꿈 가능)</em>',
+      fieldHero: '대표 이미지',
+      phHero: '이미지를 선택해 주세요',
+      btnAttach: '파일 첨부',
+      btnPickImage: '보유 이미지에서 고르기',
+      advancedSummary: '고급 설정 (보통 수정할 필요 없음)',
+      fieldId: '주소용 ID <em>(영문·자동 생성)</em>',
+      idTitle: '소문자, 숫자, 하이픈만',
+      fieldCatLabel: '카테고리 표시명',
+      sectionTags: '태그',
+      phTag: '태그 입력 후 Enter (예: SNS, 브랜딩)',
+      btnChipAdd: '추가',
+      sectionDetail: '상세 본문',
+      fieldOverview: '프로젝트 개요',
+      fieldChallenge: '과제 / 목표',
+      fieldSolution: '솔루션',
+      sectionResults: '주요 성과',
+      phResult: '성과 한 줄 입력 후 Enter',
+      sectionServices: '제공 서비스',
+      phService: '서비스명 입력 후 Enter',
+      sectionContents: '제작 콘텐츠',
+      btnAddContent: '+ 콘텐츠 추가',
+      btnApply: '이 프로젝트 적용',
+      formFootHint: '적용 후 왼쪽 <strong>저장</strong>을 누르면 서버에 바로 반영됩니다.',
+      mediaModalTitle: '보유 이미지에서 고르기',
+      close: '닫기',
+      langGroup: '언어 선택',
+      tabImage: '사진',
+      tabVideo: '영상',
+      catMedical: '의료미용 업계 마케팅 사례',
+      catClinic: '피부과 운영 사례',
+      catVideo: '영상콘텐츠 제작사례',
+      catBrand: '브랜드 마케팅 사례',
+      phName: '예: BLS CLINIC',
+      phSub: '예: 중국 마케팅 & 브랜딩 프로젝트',
+      phTopDesc: '목록 카드에 노출되는 짧은 설명',
+      phOverview: '어떤 프로젝트인지 간단히',
+      phChallenge: '무엇을 해결하려 했는지',
+      phSolution: '어떻게 해결했는지',
+      newProject: '새 프로젝트',
+      dragReorder: '드래그해서 순서 변경',
+      moveUp: '위로',
+      moveDown: '아래로',
+      remove: '삭제',
+      chipEmpty: '아직 없어요. 아래에서 추가해 주세요.',
+      pickFile: '파일을 선택해 주세요',
+      uploadTip: '"{name}" — 저장 시 서버에 자동 업로드됩니다.',
+      contentType: '종류',
+      contentLabel: '라벨',
+      contentFile: '파일',
+      contentCaption: '설명 (캡션)',
+      noFileSelected: '선택한 파일 없음',
+      btnPickFile: '보유 파일에서 고르기',
+      phContentLabel: '예: SNS, 영상',
+      phCaption: '짧게 설명해 주세요',
+      contentsEmpty: '제작 콘텐츠가 없습니다. <strong>+ 콘텐츠 추가</strong>를 눌러 주세요.',
+      mediaEmpty: '표시할 파일이 없습니다.',
+      videoBadge: '영상',
+      authPrompt: '관리자 비밀번호를 입력하세요',
+      toastBadPassword: '비밀번호가 올바르지 않습니다',
+      toastOfflineSave: '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요',
+      toastSaved: '서버에 저장되었습니다. 사이트에 바로 반영됩니다',
+      toastAuthRequired: '인증이 필요합니다. 다시 저장해 주세요',
+      toastSaveFail: '저장에 실패했습니다',
+      toastConnected: '서버에 연결되었습니다',
+      toastOffline: '서버에 연결할 수 없습니다',
+      toastHeroAttached: '대표 이미지가 첨부되었습니다',
+      toastContentAttached: '콘텐츠 파일이 첨부되었습니다',
+      toastReordered: '순서가 변경되었습니다',
+      confirmReset: '저장하지 않은 변경을 취소하고 서버 데이터로 돌아갈까요?',
+      toastReset: '서버 데이터로 되돌렸습니다',
+      confirmDelete: '"{name}" 프로젝트를 삭제할까요?',
+      toastApplied: '반영됐습니다. 왼쪽 저장을 눌러 주세요',
+      toastFilePicked: '파일이 선택되었습니다',
+      requestFailed: '요청 실패 ({status})',
+    },
+    zh: {
+      btnAdd: '+ 新建项目',
+      btnSave: '保存',
+      btnReset: '恢复初始',
+      listHead: '项目列表 <span class="admin_list_hint">(拖拽排序)</span>',
+      previewSite: '预览网站 →',
+      statusIdle: '暂无更改',
+      statusSaving: '保存中…',
+      statusOffline: '无法连接服务器',
+      statusDirty: '还有未保存的更改',
+      statusSaved: '已保存到服务器（网站立即生效）',
+      guideTitle: '使用方法',
+      guide1: '从左侧选择项目，或创建 <em>新建项目</em>。',
+      guide2: '图片可通过 <em>上传文件</em> 或 <em>从已有图片选择</em> 添加。',
+      guide3: '点击 <em>应用此项目</em> → <em>保存</em> 即可上传到 <code>img</code>。',
+      guide4: '保存前可通过 <em>详情预览</em> / <em>预览网站</em> 查看效果。',
+      emptyState: '请从左侧选择项目<br>或添加新项目。',
+      formTitle: '编辑项目',
+      btnPreview: '详情预览',
+      btnDelete: '删除',
+      sectionBasic: '基本信息',
+      fieldName: '项目名称',
+      fieldSub: '一句话介绍',
+      fieldCategory: '分类',
+      fieldNum: '列表编号 <em>(自动)</em>',
+      fieldTopDesc: '卡片短描述 <em>(可换行)</em>',
+      fieldHero: '主图',
+      phHero: '请选择图片',
+      btnAttach: '上传文件',
+      btnPickImage: '从已有图片选择',
+      advancedSummary: '高级设置（通常无需修改）',
+      fieldId: '地址 ID <em>(英文·自动生成)</em>',
+      idTitle: '仅限小写字母、数字和连字符',
+      fieldCatLabel: '分类显示名',
+      sectionTags: '标签',
+      phTag: '输入标签后按 Enter（例：SNS、品牌）',
+      btnChipAdd: '添加',
+      sectionDetail: '详细正文',
+      fieldOverview: '项目概述',
+      fieldChallenge: '课题 / 目标',
+      fieldSolution: '解决方案',
+      sectionResults: '主要成果',
+      phResult: '输入一行成果后按 Enter',
+      sectionServices: '提供服务',
+      phService: '输入服务名后按 Enter',
+      sectionContents: '制作内容',
+      btnAddContent: '+ 添加内容',
+      btnApply: '应用此项目',
+      formFootHint: '应用后点击左侧 <strong>保存</strong> 即可立即同步到服务器。',
+      mediaModalTitle: '从已有图片选择',
+      close: '关闭',
+      langGroup: '语言选择',
+      tabImage: '图片',
+      tabVideo: '视频',
+      catMedical: '医疗美容行业营销案例',
+      catClinic: '皮肤科运营案例',
+      catVideo: '影像内容制作案例',
+      catBrand: '品牌营销案例',
+      phName: '例：BLS CLINIC',
+      phSub: '例：中国营销与品牌项目',
+      phTopDesc: '显示在列表卡片上的短描述',
+      phOverview: '简单说明这是什么项目',
+      phChallenge: '想要解决什么问题',
+      phSolution: '如何解决的',
+      newProject: '新建项目',
+      dragReorder: '拖拽更改顺序',
+      moveUp: '上移',
+      moveDown: '下移',
+      remove: '删除',
+      chipEmpty: '还没有内容，请在下方添加。',
+      pickFile: '请选择文件',
+      uploadTip: '"{name}" — 保存时将自动上传到服务器。',
+      contentType: '类型',
+      contentLabel: '标签',
+      contentFile: '文件',
+      contentCaption: '说明（字幕）',
+      noFileSelected: '未选择文件',
+      btnPickFile: '从已有文件选择',
+      phContentLabel: '例：SNS、视频',
+      phCaption: '请简短说明',
+      contentsEmpty: '暂无制作内容。请点击 <strong>+ 添加内容</strong>。',
+      mediaEmpty: '没有可显示的文件。',
+      videoBadge: '视频',
+      authPrompt: '请输入管理员密码',
+      toastBadPassword: '密码不正确',
+      toastOfflineSave: '无法连接服务器，请稍后重试',
+      toastSaved: '已保存到服务器，网站立即生效',
+      toastAuthRequired: '需要验证，请重新保存',
+      toastSaveFail: '保存失败',
+      toastConnected: '已连接服务器',
+      toastOffline: '无法连接服务器',
+      toastHeroAttached: '主图已添加',
+      toastContentAttached: '内容文件已添加',
+      toastReordered: '顺序已更改',
+      confirmReset: '要取消未保存的更改并恢复为服务器数据吗？',
+      toastReset: '已恢复为服务器数据',
+      confirmDelete: '确定删除项目 "{name}" 吗？',
+      toastApplied: '已应用。请点击左侧保存',
+      toastFilePicked: '已选择文件',
+      requestFailed: '请求失败 ({status})',
+    },
   };
+
+  let lang = localStorage.getItem(LANG_KEY) === 'zh' ? 'zh' : 'ko';
+
+  function t(key, vars) {
+    let str = I18N[lang]?.[key] ?? I18N.ko[key] ?? key;
+    if (vars) {
+      Object.entries(vars).forEach(([k, v]) => {
+        str = str.replaceAll(`{${k}}`, String(v));
+      });
+    }
+    return str;
+  }
+
+  function categoryLabels() {
+    return {
+      medical: t('catMedical'),
+      clinic: t('catClinic'),
+      video: t('catVideo'),
+      brand: t('catBrand'),
+    };
+  }
+
+  function isNewProjectName(name) {
+    return name === I18N.ko.newProject || name === I18N.zh.newProject;
+  }
+
+  function applyStaticI18n() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'ko';
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+      el.innerHTML = t(el.dataset.i18nHtml);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      el.placeholder = t(el.dataset.i18nPlaceholder);
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+      el.title = t(el.dataset.i18nTitle);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      el.setAttribute('aria-label', t(el.dataset.i18nAria));
+    });
+    document.querySelectorAll('.admin_lang_btn').forEach((btn) => {
+      const active = btn.dataset.lang === lang;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function applyLang(next) {
+    if (!I18N[next] || next === lang) return;
+    lang = next;
+    localStorage.setItem(LANG_KEY, lang);
+    applyStaticI18n();
+    setDirty(dirty);
+    renderList();
+    if (!els.form.hidden && selectedId) {
+      const project = projects.find((p) => p.id === selectedId);
+      if (project && !els.form.name.value.trim()) {
+        els.formTitle.textContent = t('formTitle');
+      } else if (project) {
+        els.formTitle.textContent = els.form.name.value.trim() || t('formTitle');
+      }
+      renderChips('tags');
+      renderChips('results');
+      renderChips('services');
+      renderContents();
+      renderHeroMedia();
+    }
+    if (!els.mediaModal.hidden) renderMediaModal();
+  }
 
   const FALLBACK_MEDIA = [
     { src: './img/portfolio1.png', type: 'image', label: 'portfolio1' },
@@ -88,7 +360,7 @@
     let data = null;
     try { data = await res.json(); } catch (_) { /* empty */ }
     if (!res.ok) {
-      const err = new Error(data?.error || `요청 실패 (${res.status})`);
+      const err = new Error(data?.error || t('requestFailed', { status: res.status }));
       err.status = res.status;
       throw err;
     }
@@ -109,18 +381,22 @@
   function setDirty(value) {
     dirty = value;
     if (saving) {
-      els.status.textContent = '저장 중…';
+      els.status.textContent = t('statusSaving');
       return;
     }
     if (!serverReady) {
-      els.status.textContent = '서버에 연결할 수 없습니다';
+      els.status.textContent = t('statusOffline');
+      return;
+    }
+    if (!serverReady) {
+      els.status.textContent = t('statusOffline');
       return;
     }
     if (dirty) {
-      els.status.textContent = '아직 저장하지 않은 변경이 있어요';
+      els.status.textContent = t('statusDirty');
       return;
     }
-    els.status.textContent = '서버에 저장됨 (사이트에 바로 반영)';
+    els.status.textContent = t('statusSaved');
   }
 
   function toast(message) {
@@ -150,7 +426,7 @@
   async function ensureAuth() {
     if (!authRequired) return true;
     if (getAdminToken()) return true;
-    const token = window.prompt('관리자 비밀번호를 입력하세요');
+    const token = window.prompt(t('authPrompt'));
     if (token == null) return false;
     try {
       await api('/api/auth/check', {
@@ -161,7 +437,7 @@
       setAdminToken(token);
       return true;
     } catch (_) {
-      toast('비밀번호가 올바르지 않습니다');
+      toast(t('toastBadPassword'));
       return false;
     }
   }
@@ -205,7 +481,7 @@
     if (!serverReady) {
       persistLocal();
       setDirty(false);
-      toast('서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요');
+      toast(t('toastOfflineSave'));
       return;
     }
 
@@ -230,15 +506,15 @@
       await refreshMediaLibrary();
       renderList();
       if (selectedId) selectProject(selectedId);
-      toast('서버에 저장되었습니다. 사이트에 바로 반영됩니다');
+      toast(t('toastSaved'));
     } catch (err) {
       saving = false;
       setDirty(true);
       if (err.status === 401) {
         setAdminToken('');
-        toast('인증이 필요합니다. 다시 저장해 주세요');
+        toast(t('toastAuthRequired'));
       } else {
-        toast(err.message || '저장에 실패했습니다');
+        toast(err.message || t('toastSaveFail'));
       }
     }
   }
@@ -266,11 +542,11 @@
       await refreshMediaLibrary();
       setDirty(false);
       renderList();
-      toast('서버에 연결되었습니다');
+      toast(t('toastConnected'));
     } catch (_) {
       serverReady = false;
       setDirty(false);
-      toast('서버에 연결할 수 없습니다');
+      toast(t('toastOffline'));
     }
   }
 
@@ -327,10 +603,10 @@
       id,
       num: String(projects.length + 1).padStart(2, '0'),
       category: 'medical',
-      categoryLabel: CATEGORY_LABELS.medical,
+      categoryLabel: categoryLabels().medical,
       topDesc: '',
       image: './img/portfolio1.png',
-      name: '새 프로젝트',
+      name: t('newProject'),
       sub: '',
       tags: [],
       overview: '',
@@ -364,15 +640,15 @@
     els.count.textContent = String(projects.length);
     els.list.innerHTML = projects.map((p, index) => `
       <li class="admin_list_item${p.id === selectedId ? ' is-active' : ''}" data-id="${escapeHtml(p.id)}" data-index="${index}" draggable="true">
-        <span class="admin_list_handle" title="드래그해서 순서 변경" aria-hidden="true">⋮⋮</span>
+        <span class="admin_list_handle" title="${escapeHtml(t('dragReorder'))}" aria-hidden="true">⋮⋮</span>
         <div class="admin_list_meta">
           <div class="admin_list_num">${escapeHtml(p.num)}</div>
           <div class="admin_list_name">${escapeHtml(p.name)}</div>
           <div class="admin_list_cat">${escapeHtml(p.categoryLabel || p.category)}</div>
         </div>
         <div class="admin_list_moves">
-          <button type="button" data-move="up" data-index="${index}" aria-label="위로" ${index === 0 ? 'disabled' : ''}>▲</button>
-          <button type="button" data-move="down" data-index="${index}" aria-label="아래로" ${index === projects.length - 1 ? 'disabled' : ''}>▼</button>
+          <button type="button" data-move="up" data-index="${index}" aria-label="${escapeHtml(t('moveUp'))}" ${index === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" data-move="down" data-index="${index}" aria-label="${escapeHtml(t('moveDown'))}" ${index === projects.length - 1 ? 'disabled' : ''}>▼</button>
         </div>
       </li>
     `).join('');
@@ -383,14 +659,14 @@
     editor.innerHTML = lists[field].map((item, i) => `
       <span class="admin_chip">
         ${escapeHtml(item)}
-        <button type="button" data-remove-chip="${field}" data-index="${i}" aria-label="삭제">×</button>
+        <button type="button" data-remove-chip="${field}" data-index="${i}" aria-label="${escapeHtml(t('remove'))}">×</button>
       </span>
-    `).join('') || `<span class="admin_empty_chip">아직 없어요. 아래에서 추가해 주세요.</span>`;
+    `).join('') || `<span class="admin_empty_chip">${escapeHtml(t('chipEmpty'))}</span>`;
   }
 
   function mediaPreviewHtml(src, type) {
     const url = previewSrc(src);
-    if (!src) return '<span class="admin_media_placeholder">파일을 선택해 주세요</span>';
+    if (!src) return `<span class="admin_media_placeholder">${escapeHtml(t('pickFile'))}</span>`;
     if (type === 'video' || isVideoPath(src)) {
       return `<video src="${escapeHtml(url)}" muted playsinline preload="metadata"></video>`;
     }
@@ -404,7 +680,7 @@
     const pending = pendingFiles.has(src);
     els.heroTip.hidden = !pending;
     if (pending) {
-      els.heroTip.textContent = `"${fileNameFromPath(src)}" — 저장 시 서버에 자동 업로드됩니다.`;
+      els.heroTip.textContent = t('uploadTip', { name: fileNameFromPath(src) });
     }
   }
 
@@ -419,42 +695,42 @@
         </div>
         <div class="admin_content_fields">
           <label class="admin_field">
-            <span>종류</span>
+            <span>${escapeHtml(t('contentType'))}</span>
             <select data-content="type" data-index="${i}">
-              <option value="image"${type === 'image' ? ' selected' : ''}>사진</option>
-              <option value="video"${type === 'video' ? ' selected' : ''}>영상</option>
+              <option value="image"${type === 'image' ? ' selected' : ''}>${escapeHtml(t('tabImage'))}</option>
+              <option value="video"${type === 'video' ? ' selected' : ''}>${escapeHtml(t('tabVideo'))}</option>
             </select>
           </label>
           <label class="admin_field">
-            <span>라벨</span>
-            <input type="text" data-content="label" data-index="${i}" value="${escapeHtml(item.label || '')}" placeholder="예: SNS, 영상">
+            <span>${escapeHtml(t('contentLabel'))}</span>
+            <input type="text" data-content="label" data-index="${i}" value="${escapeHtml(item.label || '')}" placeholder="${escapeHtml(t('phContentLabel'))}">
           </label>
           <div class="admin_field admin_field--full">
-            <span>파일</span>
+            <span>${escapeHtml(t('contentFile'))}</span>
             <div class="admin_media admin_media--compact">
-              <p class="admin_media_name">${escapeHtml(fileNameFromPath(item.src) || '선택한 파일 없음')}</p>
+              <p class="admin_media_name">${escapeHtml(fileNameFromPath(item.src) || t('noFileSelected'))}</p>
               <div class="admin_media_actions">
                 <label class="admin_btn admin_btn--file">
-                  파일 첨부
+                  ${escapeHtml(t('btnAttach'))}
                   <input type="file" accept="image/*,video/mp4,video/webm" data-file-for="content" data-index="${i}" hidden>
                 </label>
-                <button type="button" class="admin_btn" data-pick-library="content" data-index="${i}">보유 파일에서 고르기</button>
+                <button type="button" class="admin_btn" data-pick-library="content" data-index="${i}">${escapeHtml(t('btnPickFile'))}</button>
               </div>
-              ${pending ? `<p class="admin_media_tip">"${escapeHtml(fileNameFromPath(item.src))}" — 저장 시 서버에 자동 업로드됩니다.</p>` : ''}
+              ${pending ? `<p class="admin_media_tip">${escapeHtml(t('uploadTip', { name: fileNameFromPath(item.src) }))}</p>` : ''}
             </div>
           </div>
           <label class="admin_field admin_field--full">
-            <span>설명 (캡션)</span>
-            <input type="text" data-content="caption" data-index="${i}" value="${escapeHtml(item.caption || '')}" placeholder="짧게 설명해 주세요">
+            <span>${escapeHtml(t('contentCaption'))}</span>
+            <input type="text" data-content="caption" data-index="${i}" value="${escapeHtml(item.caption || '')}" placeholder="${escapeHtml(t('phCaption'))}">
           </label>
         </div>
         <div class="admin_content_actions">
-          <button type="button" data-content-move="up" data-index="${i}" aria-label="위로">▲</button>
-          <button type="button" data-content-move="down" data-index="${i}" aria-label="아래로">▼</button>
-          <button type="button" data-content-remove="${i}" aria-label="삭제">×</button>
+          <button type="button" data-content-move="up" data-index="${i}" aria-label="${escapeHtml(t('moveUp'))}">▲</button>
+          <button type="button" data-content-move="down" data-index="${i}" aria-label="${escapeHtml(t('moveDown'))}">▼</button>
+          <button type="button" data-content-remove="${i}" aria-label="${escapeHtml(t('remove'))}">×</button>
         </div>
       </div>`;
-    }).join('') || `<p class="admin_empty_chip">제작 콘텐츠가 없습니다. <strong>+ 콘텐츠 추가</strong>를 눌러 주세요.</p>`;
+    }).join('') || `<p class="admin_empty_chip">${t('contentsEmpty')}</p>`;
   }
 
   function openMediaModal(target) {
@@ -477,11 +753,11 @@
     els.mediaModalGrid.innerHTML = items.map((m) => `
       <button type="button" class="admin_media_pick" data-pick-src="${escapeHtml(m.src)}" title="${escapeHtml(m.label)}">
         ${m.type === 'video'
-          ? `<video src="${escapeHtml(m.src)}" muted playsinline preload="metadata"></video><span class="admin_media_badge">영상</span>`
+          ? `<video src="${escapeHtml(m.src)}" muted playsinline preload="metadata"></video><span class="admin_media_badge">${escapeHtml(t('videoBadge'))}</span>`
           : `<img src="${escapeHtml(m.src)}" alt="${escapeHtml(m.label)}">`}
         <span class="admin_media_pick_label">${escapeHtml(m.label)}</span>
       </button>
-    `).join('') || '<p class="admin_empty_chip">표시할 파일이 없습니다.</p>';
+    `).join('') || `<p class="admin_empty_chip">${escapeHtml(t('mediaEmpty'))}</p>`;
   }
 
   function applyMedia(src, opts = {}) {
@@ -514,14 +790,14 @@
     if (target === 'hero') {
       els.form.image.value = path;
       renderHeroMedia();
-      toast('대표 이미지가 첨부되었습니다');
+      toast(t('toastHeroAttached'));
       return;
     }
     if (typeof target === 'number') {
       contents[target].src = path;
       contents[target].type = type;
       renderContents();
-      toast('콘텐츠 파일이 첨부되었습니다');
+      toast(t('toastContentAttached'));
     }
   }
 
@@ -539,7 +815,7 @@
 
     els.empty.hidden = true;
     els.form.hidden = false;
-    els.formTitle.textContent = project.name || '프로젝트 편집';
+    els.formTitle.textContent = project.name || t('formTitle');
     els.preview.href = `./preview-view.html?id=${encodeURIComponent(project.id)}`;
 
     const fields = ['id', 'num', 'category', 'categoryLabel', 'name', 'sub', 'topDesc', 'image', 'overview', 'challenge', 'solution'];
@@ -547,7 +823,7 @@
       if (els.form[key]) els.form[key].value = project[key] ?? '';
     });
     /* 기존 프로젝트는 ID 자동 변경 방지 · 신규만 이름에 맞춰 갱신 */
-    if (/^project(-\d+)?$/.test(project.id) || project.name === '새 프로젝트') {
+    if (/^project(-\d+)?$/.test(project.id) || isNewProjectName(project.name)) {
       delete els.form.id.dataset.locked;
     } else {
       els.form.id.dataset.locked = '1';
@@ -574,7 +850,7 @@
       id: nextId,
       num: els.form.num.value.trim() || projects[index].num,
       category,
-      categoryLabel: els.form.categoryLabel.value.trim() || CATEGORY_LABELS[category] || category,
+      categoryLabel: els.form.categoryLabel.value.trim() || categoryLabels()[category] || category,
       name: els.form.name.value.trim(),
       sub: els.form.sub.value.trim(),
       topDesc: els.form.topDesc.value.replace(/\r\n/g, '\n').trim(),
@@ -615,40 +891,6 @@
   function openPreview(url) {
     preparePreviewDraft();
     window.open(url, '_blank', 'noopener');
-  }
-
-  function exportJsFile() {
-    const body = projects.map((p) => {
-      return '  ' + JSON.stringify(p, null, 2).replace(/\n/g, '\n  ');
-    }).join(',\n');
-
-    const file = [
-      '/* 포트폴리오 프로젝트 데이터 — portfolio.js · view.js 공유 */',
-      'window.NOVASM_PROJECTS = [',
-      body,
-      '];',
-      '',
-      '/* Admin 원본 백업 + localStorage 오버라이드 (admin.html 저장분 미리보기) */',
-      'window.NOVASM_PROJECTS_BASE = window.NOVASM_PROJECTS;',
-      '(function applyProjectsOverride() {',
-      '  try {',
-      "    const raw = localStorage.getItem('NOVASM_PROJECTS_OVERRIDE');",
-      '    if (!raw) return;',
-      '    const parsed = JSON.parse(raw);',
-      '    if (Array.isArray(parsed)) window.NOVASM_PROJECTS = parsed;',
-      "  } catch (_) { /* ignore corrupt override */ }",
-      '})();',
-      '',
-    ].join('\n');
-
-    const blob = new Blob([file], { type: 'application/javascript;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'projects-data.js';
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('projects-data.js 파일을 받았습니다');
   }
 
   /* ── Events ── */
@@ -710,7 +952,7 @@
     const to = Number(item.dataset.index);
     item.classList.remove('is-drag-over');
     moveProject(dragFromIndex, to);
-    toast('순서가 변경되었습니다');
+    toast(t('toastReordered'));
   });
 
   document.getElementById('btnAdd').addEventListener('click', () => {
@@ -726,13 +968,8 @@
     persist();
   });
 
-  document.getElementById('btnExport').addEventListener('click', () => {
-    if (selectedId) readFormIntoProject();
-    exportJsFile();
-  });
-
   document.getElementById('btnReset').addEventListener('click', async () => {
-    if (!confirm('저장하지 않은 변경을 취소하고 서버 데이터로 돌아갈까요?')) return;
+    if (!confirm(t('confirmReset'))) return;
     localStorage.removeItem(STORAGE_KEY);
     pendingFiles.clear();
     blobUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -752,13 +989,13 @@
     els.empty.hidden = false;
     setDirty(false);
     renderList();
-    toast('서버 데이터로 되돌렸습니다');
+    toast(t('toastReset'));
   });
 
   document.getElementById('btnDelete').addEventListener('click', () => {
     if (!selectedId) return;
     const project = projects.find((p) => p.id === selectedId);
-    if (!confirm(`"${project?.name || selectedId}" 프로젝트를 삭제할까요?`)) return;
+    if (!confirm(t('confirmDelete', { name: project?.name || selectedId }))) return;
     projects = projects.filter((p) => p.id !== selectedId);
     renumber();
     selectedId = null;
@@ -774,17 +1011,17 @@
     if (!updated) return;
     renderList();
     selectProject(updated.id);
-    toast('반영됐습니다. 왼쪽 저장을 눌러 주세요');
+    toast(t('toastApplied'));
   });
 
   els.form.category.addEventListener('change', () => {
-    const label = CATEGORY_LABELS[els.form.category.value];
+    const label = categoryLabels()[els.form.category.value];
     if (label) els.form.categoryLabel.value = label;
   });
 
   els.form.name.addEventListener('input', () => {
     const name = els.form.name.value.trim();
-    els.formTitle.textContent = name || '프로젝트 편집';
+    els.formTitle.textContent = name || t('formTitle');
     /* 새 프로젝트처럼 기본 id 패턴이면 자동 갱신 */
     if (!els.form.id.dataset.locked) {
       const auto = uniqueId(slugify(name) || 'project');
@@ -843,7 +1080,7 @@
     if (pick) {
       applyMedia(pick.dataset.pickSrc);
       closeMediaModal();
-      toast('파일이 선택되었습니다');
+      toast(t('toastFilePicked'));
     }
   });
 
@@ -938,6 +1175,10 @@
   }
 
   /* init */
+  applyStaticI18n();
+  document.querySelectorAll('.admin_lang_btn').forEach((btn) => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
   setDirty(false);
   renderList();
   initServer();

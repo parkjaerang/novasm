@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
 
 :root {
   --admin-bg: #eef0f2;
@@ -15,6 +15,10 @@
   --admin-radius: 10px;
   --font-display: 'Playfair Display', serif;
   --font-body: 'Noto Serif KR', serif;
+}
+
+html[lang="zh-CN"] {
+  --font-body: 'Noto Serif SC', 'Noto Serif KR', serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,23 +47,74 @@ button, input, select, textarea {
   color: var(--admin-sidebar-text);
   display: flex;
   flex-direction: column;
-  padding: 28px 20px;
-  gap: 20px;
+  padding: 24px 20px;
+  gap: 0;
   position: sticky;
   top: 0;
   height: 100vh;
   overflow: hidden;
 }
 
+.admin_sidebar_head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .admin_brand {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
+}
+
+.admin_brand_text {
+  min-width: 0;
+}
+
+.admin_lang {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  width: 100%;
+  padding: 4px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(232, 234, 237, 0.12);
+}
+
+.admin_lang_btn {
+  appearance: none;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(232, 234, 237, 0.55);
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.admin_lang_btn:hover:not(.is-active) {
+  color: var(--admin-sidebar-text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.admin_lang_btn.is-active {
+  color: var(--admin-sidebar);
+  background: var(--admin-accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
 
 .admin_logo {
   height: 36px;
   width: auto;
+  flex-shrink: 0;
   filter: brightness(0) invert(1);
 }
 
@@ -75,22 +130,46 @@ button, input, select, textarea {
   font-size: 22px;
   font-weight: 500;
   letter-spacing: 0.04em;
+  line-height: 1.2;
 }
 
 .admin_sidebar_actions {
   display: grid;
   gap: 8px;
+  margin-bottom: 20px;
+}
+
+.admin_list_section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
 }
 
 .admin_list_head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 12px;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(232, 234, 237, 0.55);
-  padding: 4px 2px;
+  padding: 0 2px;
+}
+
+.admin_list_hint {
+  opacity: 0.55;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.admin_list_count {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .admin_list {
@@ -200,8 +279,16 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-top: 8px;
+  padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin_status {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .admin_sidebar_foot a {
@@ -858,10 +945,30 @@ button, input, select, textarea {
     position: relative;
     height: auto;
     max-height: none;
+    padding: 20px 16px;
+  }
+
+  .admin_sidebar_head {
+    gap: 14px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .admin_sidebar_actions {
+    margin-bottom: 16px;
+  }
+
+  .admin_list_section {
+    flex: none;
   }
 
   .admin_list {
     max-height: 240px;
+  }
+
+  .admin_sidebar_foot {
+    margin-top: 12px;
+    padding-top: 12px;
   }
 
   .admin_main {
