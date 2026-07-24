@@ -986,12 +986,45 @@ button, input, select, textarea {
   }
 
   .admin_content_card {
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .admin_content_preview {
+    width: min(140px, 42vw);
+    height: auto;
+    aspect-ratio: 1;
+    justify-self: start;
+  }
+
+  .admin_content_fields {
+    gap: 12px;
+  }
+
+  .admin_media--compact .admin_media_actions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .admin_media--compact .admin_media_actions .admin_btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
   }
 
   .admin_content_actions {
-    grid-column: 1 / -1;
+    grid-column: 1;
     flex-direction: row;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid var(--admin-border);
+  }
+
+  .admin_content_actions button {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
   }
 
   .admin_form_head {

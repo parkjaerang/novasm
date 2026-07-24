@@ -422,3 +422,126 @@
 
   .ms_footer_nav { gap: 32px; }
 }
+
+/* ═══════════════════════════════════
+   FLOAT CONTACT — 하단 CONTACT 버튼 (공통)
+═══════════════════════════════════ */
+.ms_float_contact {
+  position: fixed;
+  right: clamp(20px, 3.5vw, 44px);
+  bottom: clamp(24px, 4vw, 48px);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 14px 16px;
+  background: rgba(240, 240, 240, 0.92);
+  color: var(--text1);
+  text-decoration: none;
+  border: 1px solid rgba(184, 168, 140, 0.55);
+  border-radius: 2px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(21, 31, 52, 0.1);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.ms_float_contact.ms_float_contact--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 인트로 재생 중에는 숨김 */
+html.intro-active .ms_float_contact {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.ms_float_contact_mark {
+  width: 6px;
+  height: 6px;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.ms_float_contact_label {
+  font-family: var(--logo_text);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  padding-left: 2px;
+}
+
+.ms_float_contact_arrow {
+  font-family: var(--logo_text);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--border);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.ms_float_contact:hover {
+  background: var(--text1);
+  color: #fff;
+  border-color: var(--text1);
+  box-shadow: 0 12px 32px rgba(21, 31, 52, 0.18);
+}
+
+.ms_float_contact:hover .ms_float_contact_mark {
+  background: var(--border);
+  transform: scale(1.15);
+}
+
+.ms_float_contact:hover .ms_float_contact_arrow {
+  color: var(--border);
+  transform: translateY(3px);
+}
+
+.ms_float_contact:focus-visible {
+  outline: 2px solid var(--border);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .ms_float_contact {
+    right: 16px;
+    bottom: 18px;
+    padding: 12px 16px 12px 14px;
+    gap: 10px;
+  }
+
+  .ms_float_contact_label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms_float_contact {
+    transition: opacity 0.2s ease;
+    transform: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .ms_float_contact.ms_float_contact--visible {
+    transform: none;
+  }
+
+  .ms_float_contact:hover .ms_float_contact_mark,
+  .ms_float_contact:hover .ms_float_contact_arrow {
+    transform: none;
+  }
+}

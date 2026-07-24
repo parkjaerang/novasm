@@ -108,4 +108,64 @@
       </div>
     `;
   }
+
+  /* 문의하기 플로팅 버튼 — 인트로·관리자 페이지 제외 */
+  const skipFloat = page === 'admin.html' || previewMode;
+  if (!skipFloat) {
+    const isHome = page === '' || page === 'index.html';
+    const contactHref = isHome ? '#contact' : './index.html#contact';
+
+    const btn = document.createElement('a');
+    btn.className = 'ms_float_contact';
+    btn.id = 'floatContact';
+    btn.href = contactHref;
+    btn.setAttribute('aria-label', '문의하기 섹션으로 이동');
+    btn.innerHTML = `
+      <span class="ms_float_contact_mark" aria-hidden="true"></span>
+      <span class="ms_float_contact_label">CONTACT</span>
+      <span class="ms_float_contact_arrow" aria-hidden="true">↓</span>
+    `;
+    document.body.appendChild(btn);
+
+    const contact = document.querySelector('.ms_contact');
+
+    if (isHome && contact && location.hash === '#contact') {
+      contact.classList.add('ms_in');
+    }
+
+    function updateVisibility() {
+      if (document.documentElement.classList.contains('intro-active')) {
+        btn.classList.remove('ms_float_contact--visible');
+        return;
+      }
+
+      const pastTop = window.scrollY > window.innerHeight * 0.35;
+      let contactInView = false;
+      if (contact) {
+        const rect = contact.getBoundingClientRect();
+        contactInView = rect.top < window.innerHeight * 0.72 && rect.bottom > 80;
+      }
+      btn.classList.toggle('ms_float_contact--visible', pastTop && !contactInView);
+    }
+
+    btn.addEventListener('click', (e) => {
+      if (!isHome || !contact) return;
+      e.preventDefault();
+      contact.classList.add('ms_in');
+      contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', '#contact');
+    });
+
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility, { passive: true });
+
+    /* 인트로 종료 후 표시 상태 갱신 */
+    const introObs = new MutationObserver(updateVisibility);
+    introObs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    updateVisibility();
+  }
 })();

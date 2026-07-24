@@ -270,7 +270,7 @@
 /* 골드 세로 구분선 */
 .cp_strength_divider {
   width: 2px;
-  min-height: 70px;
+  min-height: 170px;
   background: var(--border);
   flex-shrink: 0;
   margin-top: 6px;
@@ -645,7 +645,7 @@
 
 /* 골드 구분선 */
 .cp_space_divider {
-  width: 60px;
+  max-width: 600px;
   height: 2px;
   background: var(--border);
   margin-bottom: 28px;
